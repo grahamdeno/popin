@@ -190,13 +190,14 @@ struct SettingsView: View {
                     Text(model.store.isPro ? "Unlocked" : "Unicorn mode, more sounds, desk mode")
                         .font(.footnote).foregroundStyle(Brand.secondary)
                     if typeSize.isAccessibilitySize && !model.store.isPro {
-                        Text(model.store.price).font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink)
+                        Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink)
                     }
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 8)
                 if !model.store.isPro && !typeSize.isAccessibilitySize {
-                    Text(model.store.price).font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink).fixedSize()
+                    Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink).fixedSize()
+                        .accessibilityLabel("\(model.store.price), one-time purchase")
                 }
                 Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Brand.secondary)
             }

@@ -60,7 +60,7 @@ struct ProView: View {
                     }
                     if !store.isPro {   // also shown in the TestFlight free preview
                         Button(store.purchasing ? "One moment…"
-                               : store.betaAccess ? "Test the purchase (free in TestFlight)" : "Unlock for \(store.price)") {
+                               : store.betaAccess ? "Test the purchase (free in TestFlight)" : "Unlock for \(store.price), one time") {
                             Task { await store.buy() }
                         }
                         .buttonStyle(PrimaryButtonStyle(height: 56))
