@@ -200,10 +200,7 @@ final class AppModel {
             // The app icon follows the bubble color (iOS shows a one-line notice when it changes).
             // Each color has a matching app icon named after it (AppIcon-Coral, AppIcon-Moon…); Bubblegum is the main one.
             // Surprise me changes the theme daily; the icon stays put so iOS doesn't show its notice every morning.
-            let icon: String? = surprise ? UIApplication.shared.alternateIconName : !gumColor.hasIcon ? nil : "AppIcon-" + gumColor.rawValue.prefix(1).uppercased() + String(gumColor.rawValue.dropFirst())
-            if UIApplication.shared.alternateIconName != icon {
-                UIApplication.shared.setAlternateIconName(icon) { _ in }
-            }
+            matchIcon()
             alarmService.cancelOwned()
             writeWidgetSnapshot()
             Task { await syncAlarms() }
@@ -226,6 +223,31 @@ final class AppModel {
             }
         }
     }
+    /// The icon this theme wants (nil = the main Bubblegum icon). Surprise me keeps whatever icon is showing.
+    private var wantedIcon: String? {
+        if surprise { return UIApplication.shared.alternateIconName }
+        guard gumColor.hasIcon else { return nil }
+        return "AppIcon-" + gumColor.rawValue.prefix(1).uppercased() + String(gumColor.rawValue.dropFirst())
+    }
+
+    /// Switches the Home Screen icon to the theme's. iOS refuses the change while a sheet is closing (the theme now
+    /// lands as Settings closes, which is why build 1050 never changed it), so this waits a moment, retries once,
+    /// and is checked again whenever Pop In comes to the front.
+    func matchIcon(after delay: Double = 0.8, retry: Bool = true) {
+        guard !ScreenshotMode.isOn, UIApplication.shared.supportsAlternateIcons else { return }
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(delay))
+            let icon = wantedIcon
+            guard UIApplication.shared.alternateIconName != icon,
+                  UIApplication.shared.applicationState == .active else { return }
+            do {
+                try await UIApplication.shared.setAlternateIconName(icon)
+            } catch {
+                if retry { matchIcon(after: 1.5, retry: false) }
+            }
+        }
+    }
+
     var surprise: Bool {
         didSet { prefs.surprise = surprise }
     }
@@ -499,6 +521,7 @@ final class AppModel {
         if ScreenshotMode.isOn { return }
         surpriseIfNewDay()
         endTrialIfOver()
+        matchIcon()
         applyKeepAwake()
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
