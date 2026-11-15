@@ -472,11 +472,17 @@ struct SwatchBall: View {
 /// Absent everywhere else (the App Store build never has a sandbox purchase).
 private struct TestingProMenu: ViewModifier {
     let store: ProStore
+    @AppStorage(GumPalette.previewUpcomingKey, store: UserDefaults(suiteName: "group.com.grahamdeno.promptly")) private var upcoming = false
     func body(content: Content) -> some View {
-        if store.isSandbox && store.purchased {
+        if store.isSandbox {
             content.contextMenu {
-                Button(store.previewFree ? "Back to Pro (testing)" : "Preview the free version (testing)") {
-                    store.previewFree.toggle()
+                if store.purchased {
+                    Button(store.previewFree ? "Back to Pro (testing)" : "Preview the free version (testing)") {
+                        store.previewFree.toggle()
+                    }
+                }
+                Button(upcoming ? "Hide upcoming themes (testing)" : "Show upcoming themes (testing)") {
+                    upcoming.toggle()
                 }
             }
         } else {
