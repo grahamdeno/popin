@@ -330,5 +330,12 @@ final class Journeys: XCTestCase {
             a.shot("pop-for-fun-popped")
         }
         a.accessibility("playground")
+        let round = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Target round")).firstMatch
+        if round.waitForExistence(timeout: 2) {
+            a.tap("Target round", round)
+            a.pause(1.0)
+            a.check("the target is named", a.app.descendants(matching: .any).matching(NSPredicate(format: "label BEGINSWITH %@", "Pop only")).firstMatch.exists, severity: 2)
+            a.shot("pop-for-fun-target")
+        }
     }
 }
