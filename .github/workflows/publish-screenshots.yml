@@ -1,0 +1,33 @@
+name: publish-screenshots
+# Copies a screenshots run's pictures onto the appstore-screenshots branch, so they have plain URLs
+# (raw.githubusercontent.com) that Grok can upload to App Store Connect. Run by hand with the run id.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "screenshots workflow run id"
+        required: true
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: app-store-screenshots-*
+          path: dl
+      - name: Commit to appstore-screenshots
+        run: |
+          mkdir out && cd out
+          git init -q -b appstore-screenshots
+          mkdir iphone ipad
+          cp ../dl/app-store-screenshots-iPhone/*.png iphone/ || true
+          cp ../dl/app-store-screenshots-iPad/*.png ipad/ || true
+          ls -la iphone ipad
+          git add -A
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -qm "App Store screenshots from run ${{ inputs.run_id }}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" appstore-screenshots
