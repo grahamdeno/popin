@@ -42,7 +42,7 @@ FREE, AND IT STAYS FREE
 POP IN PRO ($6.99, ONE TIME)
 • Twelve themes, each with its own pop: Unicorn, Fortune, Gumball, Planet, Soap, Lava lamp, Mood ring, Zen, Fishbowl, Disco, Clock and Marble
 • Every new theme through the year, included
-• Three more alarm sounds: Chimes, Oracle and Sonar
+• Six more alarm sounds: Chimes, Oracle, Sonar, Tick-tock, Bubbles and Groove
 • Ring 10 minutes before
 • Per calendar: always ring, link or not, or keep it quiet
 • Desk mode: keep the screen on while Pop In is open

@@ -13,6 +13,12 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
     case oracle
     /// "Sonar": a friendly radar ping that speeds up, made for Moon (Sounds/sonar_alarm.wav). Pro.
     case sonar
+    /// "Tick-tock": wooden ticks that quicken, then a soft two-note chime; made for Clock (Sounds/tick_tock_alarm.wav). Pro.
+    case tickTock
+    /// "Bubbles": underwater bloops rising faster into a marimba run; for Fishbowl and Soap (Sounds/bubbles_alarm.wav). Pro.
+    case bubbles
+    /// "Groove": a 70s kick, hi-hat and octave bass that builds in; made for Disco (Sounds/groove_alarm.wav). Pro.
+    case groove
     /// "Sleigh bells": jingles and a bell tune, for the holiday themes; held back with them (Sounds/sleigh_alarm.wav). Pro.
     case sleighBells
     /// "Whistle": a referee's whistle, trilling faster; for Soccer and held with it (Sounds/whistle_alarm.wav). Pro.
@@ -39,6 +45,9 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
         case .chimes: "Chimes"
         case .oracle: "Oracle"
         case .sonar: "Sonar"
+        case .tickTock: "Tick-tock"
+        case .bubbles: "Bubbles"
+        case .groove: "Groove"
         case .sleighBells: "Sleigh bells"
         case .whistle: "Whistle"
         case .skates: "Skates"
@@ -52,6 +61,9 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
         case .chimes: "unicorn_chimes_alarm.wav"
         case .oracle: "oracle_alarm.wav"
         case .sonar: "sonar_alarm.wav"
+        case .tickTock: "tick_tock_alarm.wav"
+        case .bubbles: "bubbles_alarm.wav"
+        case .groove: "groove_alarm.wav"
         case .sleighBells: "sleigh_alarm.wav"
         case .whistle: "whistle_alarm.wav"
         case .skates: "skates_alarm.wav"

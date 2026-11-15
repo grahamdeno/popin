@@ -274,6 +274,12 @@ final class FortuneTests: XCTestCase {
         XCTAssertEqual(prefs.popChoice, .star)
         XCTAssertTrue(GumPalette.fortune.isPro)
         XCTAssertTrue(AlarmSoundChoice.oracle.isPro)
+        XCTAssertFalse(AlarmSoundChoice.recorded.isPro, "Popcorn is the free default")
+        for s in [AlarmSoundChoice.tickTock, .bubbles, .groove] {
+            XCTAssertTrue(s.isPro)
+            XCTAssertTrue(AlarmSoundChoice.available.contains(s))
+            XCTAssertTrue(s.fileName.hasSuffix("_alarm.wav"))
+        }
     }
 }
 
