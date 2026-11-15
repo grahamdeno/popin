@@ -269,7 +269,7 @@ final class AppModel {
             guard let self else { return }
             if !self.canUse(self.gumColor) { self.gumColor = .bubblegum }
             guard !self.store.isPro else { return }
-            if self.alarmSound.isPro { self.alarmSound = .bubbleBlow }
+            if self.alarmSound.isPro { self.alarmSound = .recorded }
             if self.popChoice.isPro { self.popChoice = .pop }
             if self.store.ownedPacks.isEmpty { self.surprise = false }
             if self.leadMinutes > 5 { self.leadMinutes = 5 }

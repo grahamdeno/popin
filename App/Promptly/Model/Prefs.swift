@@ -1,13 +1,12 @@
 import Foundation
 
 enum AlarmSoundChoice: String, CaseIterable, Sendable {
-    /// The airy gum pop (#5) repeating in a rhythm that speeds up (Sounds/bubble_blow_alarm.wav). Shown as "Gum pops".
-    case bubbleBlow
+    /// "Popcorn", the default and free: the owner's own recorded pops, cleaned up, evened out and raised to full
+    /// alarm loudness (Sounds/recorded_pops_alarm.wav). It replaced "Gum pops" (owner, 2026-11-14: the speeding-up pops
+    /// felt like impatient knocking); a saved "bubbleBlow" no longer decodes, so those users land here.
+    case recorded
     /// Apple's standard alarm sound. AlarmKit can't pick a named system tone such as Mercury.
     case appleDefault
-    /// "Popcorn": the owner's own recorded pops, cleaned up, evened out and made louder
-    /// (Sounds/recorded_pops_alarm.wav; the raw value and file name stay "recorded" so saved choices keep working). Pro.
-    case recorded
     /// Bright rising chimes for Unicorn mode (Sounds/unicorn_chimes_alarm.wav). Pro.
     case chimes
     /// "Oracle": a humming singing bowl, struck and swelling, made for Fortune (Sounds/oracle_alarm.wav). Pro.
@@ -21,7 +20,7 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
     /// "Skates": blades carving the ice, faster, then a goal horn; for Hockey and held with it (Sounds/skates_alarm.wav). Pro.
     case skates
 
-    var isPro: Bool { !(self == .bubbleBlow || self == .appleDefault) }
+    var isPro: Bool { !(self == .recorded || self == .appleDefault) }
     /// The sounds offered in Settings (seasonal ones wait for their themes).
     /// A theme's own alarm sound appears once its theme is released.
     var theme: GumPalette? {
@@ -36,7 +35,6 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
 
     var label: String {
         switch self {
-        case .bubbleBlow: "Gum pops"
         case .recorded: "Popcorn"
         case .chimes: "Chimes"
         case .oracle: "Oracle"
@@ -48,17 +46,16 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
         }
     }
 
-    /// The bundled file for this sound; Apple's default has none, so Pop In's own ring uses Gum pops for it.
+    /// The bundled file for this sound; Apple's default has none, so Pop In's own ring uses Popcorn for it.
     var fileName: String {
         switch self {
-        case .recorded: "recorded_pops_alarm.wav"
         case .chimes: "unicorn_chimes_alarm.wav"
         case .oracle: "oracle_alarm.wav"
         case .sonar: "sonar_alarm.wav"
         case .sleighBells: "sleigh_alarm.wav"
         case .whistle: "whistle_alarm.wav"
         case .skates: "skates_alarm.wav"
-        default: "bubble_blow_alarm.wav"
+        default: "recorded_pops_alarm.wav"
         }
     }
 }
@@ -314,7 +311,7 @@ final class Prefs: @unchecked Sendable {
     }
 
     var alarmSound: AlarmSoundChoice {
-        get { AlarmSoundChoice(rawValue: defaults.string(forKey: "alarmSound") ?? "") ?? .bubbleBlow }
+        get { AlarmSoundChoice(rawValue: defaults.string(forKey: "alarmSound") ?? "") ?? .recorded }
         set { defaults.set(newValue.rawValue, forKey: "alarmSound") }
     }
 

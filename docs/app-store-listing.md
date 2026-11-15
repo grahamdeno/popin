@@ -36,12 +36,13 @@ FREE, AND IT STAYS FREE
 • One tap to join Zoom, Microsoft Teams (including government clouds), Google Meet, Webex and more
 • Lock Screen and Dynamic Island countdown, and Home Screen widgets
 • Bubblegum or Coral, with a matching app icon
+• Popcorn, an alarm made from real recorded gum pops, or Apple's alarm sound
 • iPhone and iPad, with a calm desk view for an iPad left open all day
 
 POP IN PRO ($6.99, ONE TIME)
 • Twelve themes, each with its own pop: Unicorn, Fortune, Gumball, Planet, Soap, Lava lamp, Mood ring, Zen, Fishbowl, Disco, Clock and Marble
 • Every new theme through the year, included
-• Four more alarm sounds: Popcorn, Chimes, Oracle and Sonar
+• Three more alarm sounds: Chimes, Oracle and Sonar
 • Ring 10 minutes before
 • Per calendar: always ring, link or not, or keep it quiet
 • Desk mode: keep the screen on while Pop In is open
