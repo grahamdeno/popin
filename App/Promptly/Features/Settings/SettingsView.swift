@@ -131,6 +131,9 @@ struct SettingsView: View {
                                     .background(RoundedRectangle(cornerRadius: 14).fill(Brand.accentText.opacity(0.08)))
                                 }
                                 .buttonStyle(.plain)
+                                // One purchase at a time, so a second tap can't stack on an open App Store sheet.
+                                .disabled(model.store.purchasing)
+                                .opacity(model.store.purchasing ? 0.5 : 1)
                                 .accessibilityLabel("Tip \(model.store.tipPrice(i))")
                             }
                         }
