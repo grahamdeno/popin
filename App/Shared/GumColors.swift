@@ -35,13 +35,15 @@ enum GumPalette: String, CaseIterable, Sendable {
     /// (owner, 2026-11-14), unless a tester turns on "Show upcoming themes (testing)" from the Pop In Pro row, which
     /// only TestFlight offers. Set `seasonsInStore` to true to ignore the calendar everywhere.
     static let seasonsInStore = false
-    static let previewUpcomingKey = "previewUpcomingThemes"
+    /// The tester's "Show upcoming themes" switch. Kept in memory only, so relaunching always returns to the real
+    /// calendar (owner, 2026-11-15: held themes showed in build 1054 without the switch knowingly on).
+    nonisolated(unsafe) static var previewUpcoming = false
     static var seasonsReady: Bool {
         if seasonsInStore { return true }
         #if DEBUG
         return true
         #else
-        return UserDefaults(suiteName: "group.com.grahamdeno.promptly")?.bool(forKey: previewUpcomingKey) ?? false
+        return previewUpcoming
         #endif
     }
     var isSeasonal: Bool { [.snowball, .ornament, .pumpkin, .easterEgg, .valentine, .fireworks, .beachBall].contains(self) }

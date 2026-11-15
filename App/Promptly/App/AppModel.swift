@@ -546,6 +546,8 @@ final class AppModel {
     func becameActive() async {
         isForeground = true
         if ScreenshotMode.isOn { return }
+        // The old saved "show upcoming themes" flag (build 1054) is no longer read; clear it.
+        UserDefaults(suiteName: "group.com.grahamdeno.promptly")?.removeObject(forKey: "previewUpcomingThemes")
         surpriseIfNewDay()
         endTrialIfOver()
         matchIcon()
