@@ -11,6 +11,12 @@ struct ThemeGalleryPage: View {
 
     var body: some View {
         SettingsPage {
+            if GumPalette.previewUpcoming {
+                Text("Testing: showing upcoming themes too. Press and hold Pop In Pro to hide them, or relaunch.")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Brand.accentText)
+                    .padding(.horizontal, 18)
+            }
             iconGroup
             SettingsGroup(nil, note: "A different theme each day, picked from the ones you have.") {
                 SettingsToggle(model.store.isPro || !model.store.ownedPacks.isEmpty ? "Surprise me" : "Surprise me ✦", detail: "Changes once a day when you open Pop In",

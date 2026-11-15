@@ -472,7 +472,7 @@ struct SwatchBall: View {
 /// Absent everywhere else (the App Store build never has a sandbox purchase).
 private struct TestingProMenu: ViewModifier {
     let store: ProStore
-    @AppStorage(GumPalette.previewUpcomingKey, store: UserDefaults(suiteName: "group.com.grahamdeno.promptly")) private var upcoming = false
+    @State private var upcoming = GumPalette.previewUpcoming
     func body(content: Content) -> some View {
         if store.isSandbox {
             content.contextMenu {
@@ -483,6 +483,7 @@ private struct TestingProMenu: ViewModifier {
                 }
                 Button(upcoming ? "Hide upcoming themes (testing)" : "Show upcoming themes (testing)") {
                     upcoming.toggle()
+                    GumPalette.previewUpcoming = upcoming
                 }
             }
         } else {
