@@ -274,6 +274,12 @@ final class FortuneTests: XCTestCase {
         XCTAssertEqual(prefs.popChoice, .star)
         XCTAssertTrue(GumPalette.fortune.isPro)
         XCTAssertTrue(AlarmSoundChoice.oracle.isPro)
+        XCTAssertFalse(AlarmSoundChoice.recorded.isPro, "Popcorn is the free default")
+        for s in [AlarmSoundChoice.tickTock, .bubbles, .groove] {
+            XCTAssertTrue(s.isPro)
+            XCTAssertTrue(AlarmSoundChoice.available.contains(s))
+            XCTAssertTrue(s.fileName.hasSuffix("_alarm.wav"))
+        }
     }
 }
 
@@ -292,6 +298,11 @@ final class ThemeTests: XCTestCase {
         let launchSet = GumPalette.allCases.filter { $0.releaseDate == nil }
         XCTAssertEqual(Set(launchSet), [.bubblegum, .coral, .unicorn, .fortune, .gumball, .planet, .soap, .lavaLamp, .moodRing, .zen, .fishbowl, .disco, .clock, .marble])
         XCTAssertTrue(AlarmSoundChoice.available.contains(.sonar))
+        // Held themes' pop sounds stay out of the Pop sound list until their theme lands.
+        if !GumPalette.seasonsReady && GumPalette.moon.isHeld && GumPalette.grenade.isHeld {
+            XCTAssertFalse(PopChoice.available.contains(.bloop))
+            XCTAssertFalse(PopChoice.available.contains(.pinPull))
+        }
     }
 
     func testEachThemeHasItsPopAndIsPro() {
@@ -387,6 +398,13 @@ final class MeetingMergeTests: XCTestCase {
 
 
 final class AlertRulesTests: XCTestCase {
+    func testReviewPromptAsksOnceAfterThirdJoinWithNoAlarmUp() {
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 2, asked: false, alarmShowing: false))
+        XCTAssertTrue(ReviewPrompt.isDue(joins: 3, asked: false, alarmShowing: false))
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 3, asked: false, alarmShowing: true))
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 9, asked: true, alarmShowing: false))
+    }
+
     private var cal: Calendar { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "America/New_York")!; return c }
     private func date(_ y: Int, _ m: Int, _ d: Int, _ h: Int, _ min: Int = 0) -> Date {
         cal.date(from: DateComponents(year: y, month: m, day: d, hour: h, minute: min))!

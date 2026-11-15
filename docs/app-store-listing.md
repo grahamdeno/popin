@@ -1,66 +1,71 @@
-# App Store listing: Pop In: Meeting Alarms
+# App Store listing: Pop In: Meeting Alarms (1.0, owner decisions 2026-11-14)
 
-Paste into App Store Connect (Grok or Graham). Character limits checked.
+Decisions: Pro $6.99 one time; tips only for Pro owners at $1.99 / $4.99 / $9.99; lead with deep focus and privacy (no
+medical claims); EU stays out for 1.0. Character limits checked.
 
 **Name (30):** Pop In: Meeting Alarms
-**Subtitle (30):** Never miss the next meeting  (27)
+**Subtitle (30):** Lose track of time, not calls  (29)
 **Category:** Productivity (secondary: Business)
 **Age rating:** 4+
 **In-app purchase display name:** Pop In Pro
-**In-app purchase description (55):** Unicorn mode, more sounds, earlier alarms, desk mode  (52)
-**Price:** Free, with one in-app purchase: Pop In Pro, $4.99 (com.grahamdeno.promptly.pro)
+**In-app purchase description (55):** Unicorn, Fortune and 10 more themes, sounds, desk mode  (54)
+**Price:** Free, with Pop In Pro at $6.99 one time (com.grahamdeno.promptly.pro). Tips $1.99 / $4.99 / $9.99, shown only to Pro owners.
 
 **Promotional text (170):**
-A real alarm for your next meeting, straight from your iPhone calendar. Watch the bubble grow, then pop it to join.  (115)
+Deep in focus? Pop In keeps time for you. A real alarm for every meeting on your calendar, and one tap to join. Nothing leaves your iPhone.  (139)
 
 **Keywords (100):**
-meeting,alarm,reminder,calendar,zoom,teams,google meet,webex,join,countdown,widget,ipad,schedule  (96)
+reminder,calendar,zoom,teams,google meet,webex,outlook,focus,late,countdown,widget,standup,remote  (97)
 
 **Description:**
-Pop In turns your calendar into alarms you can't sleep through.
+For people who get deep into their work and look up ten minutes late.
 
-It reads the calendars already on your iPhone and rings full screen before each meeting, even when the phone is locked or on silent. A soft gum bubble grows as the meeting gets closer. When it's time, pop the bubble to jump straight into Zoom, Teams, Google Meet or Webex. Not going? Tap "Not going" and it stays quiet.
+Pop In reads the calendars already on your iPhone and rings a real alarm before each meeting, even on silent or in Focus. A soft gum bubble grows as the meeting gets closer. When it's time, pop the bubble to jump straight into Zoom, Teams, Google Meet, Webex and more. Not going? Tap "Not going" and it stays quiet.
+
+When your phone is locked, the alarm fills the screen. When you're using your phone, it shows as a banner at the top; tap it for the bubble.
 
 Running late? The bubble notices. More bubbles bud off until the whole screen is bubble.
 
-WHAT YOU GET, FREE
-• Full-screen alarms for meetings with a video link, gentle notifications for the rest
-• Choose per calendar: Smart or Gentle
-• Ring 1, 2 or 5 minutes before
+FREE, AND IT STAYS FREE
+• Alarms for meetings with a video link, gentle notifications for the rest
+• Pick which calendars ring; Smart alarms for video meetings
+• Ring 1, 2 or 5 minutes before, plus an optional early heads-up
+• Snooze, pause for an hour, two, or the rest of the day, and work hours
+• Only meetings you've accepted, if you like
+• Timed Apple Reminders and your own quick reminders ring too
 • One tap to join Zoom, Microsoft Teams (including government clouds), Google Meet, Webex and more
-• Lock Screen and Dynamic Island countdown
-• Home Screen widgets with the growing bubble
-• Bubblegum or Coral bubble, with a matching app icon
-• Alarm sound: Gum pops or Apple's default
+• Lock Screen and Dynamic Island countdown, and Home Screen widgets
+• Bubblegum or Coral, with a matching app icon
+• Popcorn, an alarm made from real recorded gum pops, or Apple's alarm sound
 • iPhone and iPad, with a calm desk view for an iPad left open all day
 
-POP IN PRO ($4.99, ONE TIME)
-• Unicorn mode: a rainbow bubble that bursts into confetti
-• Fortune: black glass with a violet glow, a light meeting fortune, and a pop of glowing mist
-• Moon: a silver moon that pops into space dust, a UFO and aliens
-• Grenade: pull the pin to join
-• Rainbow unicorn app icon
-• Four more alarm sounds: Popcorn, Chimes, Oracle and Sonar
+POP IN PRO ($6.99, ONE TIME)
+• Twelve themes, each with its own pop: Unicorn, Fortune, Gumball, Planet, Soap, Lava lamp, Mood ring, Zen, Fishbowl, Disco, Clock and Marble
+• Every new theme through the year, included
+• Six more alarm sounds: Chimes, Oracle, Sonar, Tick-tock, Bubbles and Groove
 • Ring 10 minutes before
-• Always alarm for a whole calendar, link or not
+• Per calendar: always ring, link or not, or keep it quiet
 • Desk mode: keep the screen on while Pop In is open
+No subscription. Buy once, keep it.
 
 PRIVATE BY DESIGN
-Pop In only reads your calendar. It never changes it, has no account, no analytics and no network code. Nothing leaves your device.
+Pop In only reads your calendar and reminders. It never changes them, has no account, no analytics and no network code. Nothing leaves your device.
+
+**Review notes:**
+Pop In reads the iPhone's calendars (read only) and sets meeting alarms with AlarmKit. On first launch it asks for Calendar (Full Access) and Alarms permission; please allow both. To see an alarm without waiting for a meeting: tap the gear (top right), then Test the alarm. It rings in 20 seconds. Lock the phone to see the full-screen alarm; with the phone unlocked, iOS shows the alarm as a banner, which opens the bubble when tapped. Pop the bubble to clear it. Apple Reminders access is optional (Settings, off by default) and also read only. No account or sign-in, no network use, no data collection. Pop In Pro is a one-time in-app purchase under the gear, Pop In Pro. The tip jar appears in Settings only after Pro is bought.
 
 **Support URL:** https://popin.tangomike.app/support.html
 **Privacy URL:** https://popin.tangomike.app/privacy.html
 **Marketing URL:** https://popin.tangomike.app
 **Privacy nutrition label:** Data Not Collected
-**Copyright:** 2026 Graham D.
+**Copyright:** 2026 Graham DeNoyer
 
-## Screenshot order (from the screenshots workflow)
-1. Home: next meeting, countdown, growing bubble. Caption: "A bubble that grows as your meeting nears"
-2. Now: the full-screen takeover. Caption: "Rings full screen. Pop to join"
-3. Late: extra bubbles. Caption: "Running late? It notices"
-4. Unicorn mode. Caption: "Unicorn mode, with confetti (Pro)"
-5. Settings: per-calendar rules. Caption: "Smart alarms for each calendar"
-6. Pop mid-burst. Caption: "Pop it. You're in."
+## Screenshot captions (rerun after the owner's go)
+1. Home, growing bubble: "Lose track of time, not calls"
+2. Locked alarm, full screen: "A real alarm, even on silent"
+3. Pop mid-burst: "Pop it. You're in."
+4. Late, extra bubbles: "Running late? It notices"
+5. Theme grid: "Twelve themes, more all year (Pro)"
+6. Settings, per calendar: "Smart alarms. Nothing leaves your iPhone"
 
-Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752), from GitHub's iPhone Pro Max and iPad Pro 13" simulators.
-App Store Connect scales these for smaller devices.
+Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752).

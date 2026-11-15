@@ -11,8 +11,8 @@ struct ProView: View {
         ("moon.stars", "Fortune: black glass, a violet glow and a meeting fortune"),
         ("moon.circle", "Moon and Grenade themes, each with its own pop"),
         ("square.grid.3x3", "Every theme, plus each new one through the year"),
-        ("bell.and.waves.left.and.right", "More alarm sounds: Popcorn, Chimes, Oracle and Sonar"),
-        ("calendar.badge.clock", "Per-calendar alerts: Alarm, Smart or Gentle"),
+        ("bell.and.waves.left.and.right", "Six more alarm sounds, including Tick-tock and Groove"),
+        ("calendar.badge.clock", "Per calendar: always ring, link or not, or keep it quiet"),
         ("clock", "Ring up to 10 minutes early"),
         ("ipad.landscape", "Desk mode: keep the screen on while Pop In is open"),
     ]

@@ -1,19 +1,24 @@
 import Foundation
 
 enum AlarmSoundChoice: String, CaseIterable, Sendable {
-    /// The airy gum pop (#5) repeating in a rhythm that speeds up (Sounds/bubble_blow_alarm.wav). Shown as "Gum pops".
-    case bubbleBlow
+    /// "Popcorn", the default and free: the owner's own recorded pops, cleaned up, evened out and raised to full
+    /// alarm loudness (Sounds/recorded_pops_alarm.wav). It replaced "Gum pops" (owner, 2026-11-14: the speeding-up pops
+    /// felt like impatient knocking); a saved "bubbleBlow" no longer decodes, so those users land here.
+    case recorded
     /// Apple's standard alarm sound. AlarmKit can't pick a named system tone such as Mercury.
     case appleDefault
-    /// "Popcorn": the owner's own recorded pops, cleaned up, evened out and made louder
-    /// (Sounds/recorded_pops_alarm.wav; the raw value and file name stay "recorded" so saved choices keep working). Pro.
-    case recorded
     /// Bright rising chimes for Unicorn mode (Sounds/unicorn_chimes_alarm.wav). Pro.
     case chimes
     /// "Oracle": a humming singing bowl, struck and swelling, made for Fortune (Sounds/oracle_alarm.wav). Pro.
     case oracle
     /// "Sonar": a friendly radar ping that speeds up, made for Moon (Sounds/sonar_alarm.wav). Pro.
     case sonar
+    /// "Tick-tock": wooden ticks that quicken, then a soft two-note chime; made for Clock (Sounds/tick_tock_alarm.wav). Pro.
+    case tickTock
+    /// "Bubbles": underwater bloops rising faster into a marimba run; for Fishbowl and Soap (Sounds/bubbles_alarm.wav). Pro.
+    case bubbles
+    /// "Groove": a 70s kick, hi-hat and octave bass that builds in; made for Disco (Sounds/groove_alarm.wav). Pro.
+    case groove
     /// "Sleigh bells": jingles and a bell tune, for the holiday themes; held back with them (Sounds/sleigh_alarm.wav). Pro.
     case sleighBells
     /// "Whistle": a referee's whistle, trilling faster; for Soccer and held with it (Sounds/whistle_alarm.wav). Pro.
@@ -21,7 +26,7 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
     /// "Skates": blades carving the ice, faster, then a goal horn; for Hockey and held with it (Sounds/skates_alarm.wav). Pro.
     case skates
 
-    var isPro: Bool { !(self == .bubbleBlow || self == .appleDefault) }
+    var isPro: Bool { !(self == .recorded || self == .appleDefault) }
     /// The sounds offered in Settings (seasonal ones wait for their themes).
     /// A theme's own alarm sound appears once its theme is released.
     var theme: GumPalette? {
@@ -36,11 +41,13 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
 
     var label: String {
         switch self {
-        case .bubbleBlow: "Gum pops"
         case .recorded: "Popcorn"
         case .chimes: "Chimes"
         case .oracle: "Oracle"
         case .sonar: "Sonar"
+        case .tickTock: "Tick-tock"
+        case .bubbles: "Bubbles"
+        case .groove: "Groove"
         case .sleighBells: "Sleigh bells"
         case .whistle: "Whistle"
         case .skates: "Skates"
@@ -48,17 +55,19 @@ enum AlarmSoundChoice: String, CaseIterable, Sendable {
         }
     }
 
-    /// The bundled file for this sound; Apple's default has none, so Pop In's own ring uses Gum pops for it.
+    /// The bundled file for this sound; Apple's default has none, so Pop In's own ring uses Popcorn for it.
     var fileName: String {
         switch self {
-        case .recorded: "recorded_pops_alarm.wav"
         case .chimes: "unicorn_chimes_alarm.wav"
         case .oracle: "oracle_alarm.wav"
         case .sonar: "sonar_alarm.wav"
+        case .tickTock: "tick_tock_alarm.wav"
+        case .bubbles: "bubbles_alarm.wav"
+        case .groove: "groove_alarm.wav"
         case .sleighBells: "sleigh_alarm.wav"
         case .whistle: "whistle_alarm.wav"
         case .skates: "skates_alarm.wav"
-        default: "bubble_blow_alarm.wav"
+        default: "recorded_pops_alarm.wav"
         }
     }
 }
@@ -103,7 +112,7 @@ enum PopChoice: String, CaseIterable, Sendable {
     }
     static var available: [PopChoice] {
         allCases.filter { c in
-            let theme: GumPalette? = [.crunch: .snowball, .glassTing: .ornament, .leafThunk: .pumpkin][c]
+            let theme: GumPalette? = [.bloop: .moon, .pinPull: .grenade, .crunch: .snowball, .glassTing: .ornament, .leafThunk: .pumpkin][c]
             return GumPalette.seasonsReady || !(theme?.isHeld ?? false)
         }
     }
@@ -259,6 +268,15 @@ final class Prefs: @unchecked Sendable {
     }
 
     /// Fortune theme: show a light meeting fortune on the card in the last ten minutes.
+    /// Meetings joined from the bubble (counts toward the one-time rating prompt).
+    var joins: Int {
+        get { defaults.integer(forKey: "joins") }
+        set { defaults.set(newValue, forKey: "joins") }
+    }
+    var askedForReview: Bool {
+        get { defaults.bool(forKey: "askedForReview") }
+        set { defaults.set(newValue, forKey: "askedForReview") }
+    }
     var fortunes: Bool {
         get { defaults.object(forKey: "fortunes") as? Bool ?? true }
         set { defaults.set(newValue, forKey: "fortunes") }
@@ -305,7 +323,7 @@ final class Prefs: @unchecked Sendable {
     }
 
     var alarmSound: AlarmSoundChoice {
-        get { AlarmSoundChoice(rawValue: defaults.string(forKey: "alarmSound") ?? "") ?? .bubbleBlow }
+        get { AlarmSoundChoice(rawValue: defaults.string(forKey: "alarmSound") ?? "") ?? .recorded }
         set { defaults.set(newValue.rawValue, forKey: "alarmSound") }
     }
 

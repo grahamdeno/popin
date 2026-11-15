@@ -26,7 +26,7 @@ final class AlarmService {
     var scheduledCount: Int { ((try? manager.alarms) ?? []).count }
 
     /// Cancels meeting alarms that are no longer wanted and schedules the missing ones.
-    var sound: AlarmSoundChoice = .bubbleBlow
+    var sound: AlarmSoundChoice = .recorded
 
     /// Cancels every meeting alarm this service set, so the next sync reschedules them (e.g. after a sound change).
     func cancelOwned() {

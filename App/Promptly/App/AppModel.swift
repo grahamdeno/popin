@@ -269,7 +269,7 @@ final class AppModel {
             guard let self else { return }
             if !self.canUse(self.gumColor) { self.gumColor = .bubblegum }
             guard !self.store.isPro else { return }
-            if self.alarmSound.isPro { self.alarmSound = .bubbleBlow }
+            if self.alarmSound.isPro { self.alarmSound = .recorded }
             if self.popChoice.isPro { self.popChoice = .pop }
             if self.store.ownedPacks.isEmpty { self.surprise = false }
             if self.leadMinutes > 5 { self.leadMinutes = 5 }
@@ -712,7 +712,15 @@ final class AppModel {
     /// Returns the link to open, if any, and clears the meeting so the bubble pops.
     func join(_ meeting: Meeting) -> URL? {
         markCleared(meeting, skipped: false)
+        if meeting.joinURL != nil && !ScreenshotMode.isOn { prefs.joins += 1 }
         return meeting.joinURL
+    }
+
+    /// True once, after the third join, when Pop In is back on screen with no alarm up. The caller asks iOS.
+    func takeReviewTurn() -> Bool {
+        guard ReviewPrompt.isDue(joins: prefs.joins, asked: prefs.askedForReview, alarmShowing: arrived != nil) else { return false }
+        prefs.askedForReview = true
+        return true
     }
 
     /// Not going: cleared with a quiet deflate, not a pop.
