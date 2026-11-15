@@ -89,3 +89,12 @@ enum NewestWins {
         }
     }
 }
+
+/// Apple's rating prompt, asked once: after someone has popped into a few meetings and come back to Pop In, so the
+/// question lands when the app has just worked for them, never while an alarm is ringing or a call is opening.
+enum ReviewPrompt {
+    static let joinsBeforeAsking = 3
+    static func isDue(joins: Int, asked: Bool, alarmShowing: Bool) -> Bool {
+        !asked && !alarmShowing && joins >= joinsBeforeAsking
+    }
+}

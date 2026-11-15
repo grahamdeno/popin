@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 @main
 struct PromptlyApp: App {
@@ -26,6 +27,8 @@ struct PromptlyApp: App {
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.openURL) private var openURL
+    @Environment(\.requestReview) private var requestReview
+    @Environment(\.scenePhase) private var phase
 
     var body: some View {
         @Bindable var model = model
@@ -41,6 +44,14 @@ struct RootView: View {
         .fullScreenCover(item: $model.arrived) { meeting in
             NowView(meeting: meeting)
                 .environment(model)
+        }
+        // Back from a call: after the third join, Apple's rating prompt (iOS decides whether it actually shows).
+        .onChange(of: phase) { _, p in
+            guard p == .active else { return }
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                if model.takeReviewTurn() { requestReview() }
+            }
         }
         .onOpenURL { url in
             Task { await model.open(url) }

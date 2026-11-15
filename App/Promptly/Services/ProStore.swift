@@ -9,9 +9,9 @@ final class ProStore {
     static let productID = "com.grahamdeno.promptly.pro"
     /// Theme packs: each unlocks one group of themes (Pro unlocks everything, packs included).
     static let packIDs: [String] = ThemeGroup.allCases.compactMap(\.packID)
-    /// Tip jar: consumable tips for people who like Pop In but don't need Pro. Tips unlock nothing.
+    /// Tip jar: consumable tips, shown only to Pro owners. Tips unlock nothing.
     static let tipIDs = ["com.grahamdeno.promptly.tip.small", "com.grahamdeno.promptly.tip.medium", "com.grahamdeno.promptly.tip.large"]
-    static let tipFallbackPrices = ["$0.99", "$2.99", "$4.99"]
+    static let tipFallbackPrices = ["$1.99", "$4.99", "$9.99"]
 
     /// True when Pro is unlocked: bought, or a TestFlight / development build (beta access).
     var isPro: Bool { purchased || betaAccess }
@@ -64,7 +64,7 @@ final class ProStore {
     }
 
     /// The displayed price, from the App Store, in the buyer's currency.
-    var price: String { product?.displayPrice ?? "$4.99" }
+    var price: String { product?.displayPrice ?? "$6.99" }
 
     /// Fast first guess before StoreKit answers: TestFlight installs carry a sandbox receipt.
     private static var receiptLooksLikeBeta: Bool {

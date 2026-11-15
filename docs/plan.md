@@ -376,3 +376,11 @@ Code needed after approval (Sonnet): per-theme release dates replacing the singl
 - Apple's prompt now reads: "Meetings ring like an alarm, even in Silent and Focus. Full screen when your phone is locked, a banner at the top when you're using it."
 - First run: the "permission to ring" screen shows both looks (locked full screen, banner over another app) before iOS asks. The separate "When your phone is locked" step is gone, one screen fewer. J1 checks the looks show before the prompt.
 - Follow-up batch (build 1047): Undo on the "Cleared" toast now has a full 44 pt tap area (iPad taps missed the 18 pt word). Alarm-looks captions in ink for contrast. Audit J6 walks the current Settings (scrolls to Sound, Pop sound, Theme; goes back without hitting Done; passes the "Try it" dialog to reach Pro). J3 counts Skip as one tap and taps Undo before pictures.
+
+## Sprint 32: App Store launch prep (owner decisions 2026-11-14)
+- Pro $6.99 one time. Tip jar shown only to Pro owners; tips $1.99 / $4.99 / $9.99 (Grok sets prices). Lead with deep focus and privacy, no medical claims. EU stays out for 1.0 (no DSA trader declaration).
+- App: tips hidden unless Pro; Pro sheet line now "Always ring for a whole calendar, link or not"; Apple's rating prompt once, on return to the app after the third join with no alarm up (ReviewPrompt, unit tested).
+- Privacy page (site/privacy.html) covers Apple Reminders, read only.
+- docs/app-store-listing.md rewritten: subtitle (was blank in App Store Connect), honest locked-vs-unlocked wording, 1.0 theme list, free features added, keywords without words already in the name, review notes.
+- Grok audit (2026-11-14): Paid Apps agreement active; build 1026 selected (needs the newest); four IAPs ready but not attached to 1.0; 7 + 7 screenshots current; privacy label Data Not Collected; age 4+.
+- Next: owner says ship, then the Grok prompt (text, prices, attach IAPs, select newest build), then screenshot rerun, then owner submits.

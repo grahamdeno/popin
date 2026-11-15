@@ -387,6 +387,13 @@ final class MeetingMergeTests: XCTestCase {
 
 
 final class AlertRulesTests: XCTestCase {
+    func testReviewPromptAsksOnceAfterThirdJoinWithNoAlarmUp() {
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 2, asked: false, alarmShowing: false))
+        XCTAssertTrue(ReviewPrompt.isDue(joins: 3, asked: false, alarmShowing: false))
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 3, asked: false, alarmShowing: true))
+        XCTAssertFalse(ReviewPrompt.isDue(joins: 9, asked: true, alarmShowing: false))
+    }
+
     private var cal: Calendar { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "America/New_York")!; return c }
     private func date(_ y: Int, _ m: Int, _ d: Int, _ h: Int, _ min: Int = 0) -> Date {
         cal.date(from: DateComponents(year: y, month: m, day: d, hour: h, minute: min))!

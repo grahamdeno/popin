@@ -259,6 +259,15 @@ final class Prefs: @unchecked Sendable {
     }
 
     /// Fortune theme: show a light meeting fortune on the card in the last ten minutes.
+    /// Meetings joined from the bubble (counts toward the one-time rating prompt).
+    var joins: Int {
+        get { defaults.integer(forKey: "joins") }
+        set { defaults.set(newValue, forKey: "joins") }
+    }
+    var askedForReview: Bool {
+        get { defaults.bool(forKey: "askedForReview") }
+        set { defaults.set(newValue, forKey: "askedForReview") }
+    }
     var fortunes: Bool {
         get { defaults.object(forKey: "fortunes") as? Bool ?? true }
         set { defaults.set(newValue, forKey: "fortunes") }
