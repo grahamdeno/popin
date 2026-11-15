@@ -589,3 +589,59 @@ final class SimulatedDayTests: XCTestCase {
         XCTAssertNil(next.showing)
     }
 }
+
+final class PopGameTests: XCTestCase {
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+
+    func testFreePopsCountAndCombosAddAPoint() {
+        var g = PopGame(mode: .free, started: t0)
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0), 1)
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0.addingTimeInterval(0.5)), 1)
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0.addingTimeInterval(1.0)), 2, "third quick pop is a combo")
+        XCTAssertEqual(g.combo, 3)
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0.addingTimeInterval(5)), 1, "a pause resets the combo")
+        XCTAssertEqual(g.combo, 1)
+        XCTAssertEqual(g.score, 5)
+    }
+
+    func testGoldenIsWorthFive() {
+        var g = PopGame(mode: .target, started: t0)
+        XCTAssertEqual(g.pop(isTarget: false, golden: true, at: t0), 5, "golden counts even when it isn't the target")
+    }
+
+    func testTargetRoundPenalisesWrongPopsButNeverGoesNegative() {
+        var g = PopGame(mode: .target, started: t0)
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0), 0)
+        XCTAssertEqual(g.score, 0)
+        g.pop(isTarget: true, golden: false, at: t0.addingTimeInterval(1))
+        g.pop(isTarget: true, golden: false, at: t0.addingTimeInterval(1.5))
+        XCTAssertEqual(g.pop(isTarget: false, golden: false, at: t0.addingTimeInterval(2)), -1)
+        XCTAssertEqual(g.score, 1)
+        XCTAssertEqual(g.combo, 0)
+    }
+
+    func testRoundTimingAndTargetSlots() {
+        let g = PopGame(mode: .target, started: t0)
+        XCTAssertEqual(g.remaining(at: t0.addingTimeInterval(10)), 20)
+        XCTAssertFalse(g.isOver(at: t0.addingTimeInterval(29)))
+        XCTAssertTrue(g.isOver(at: t0.addingTimeInterval(30)))
+        XCTAssertEqual(g.targetSlot(at: t0.addingTimeInterval(4.9)), 0)
+        XCTAssertEqual(g.targetSlot(at: t0.addingTimeInterval(5)), 1)
+        XCTAssertFalse(PopGame(mode: .free, started: t0).isOver(at: t0.addingTimeInterval(999)))
+    }
+
+    func testNextTargetNeverRepeats() {
+        let pool: [GumPalette] = [.unicorn, .fortune, .planet]
+        for roll in 0..<20 {
+            XCTAssertNotEqual(PopGame.nextTarget(from: pool, after: .fortune, roll: roll), .fortune)
+        }
+        XCTAssertEqual(PopGame.nextTarget(from: [.zen], after: .zen, roll: 3), .zen)
+    }
+
+    func testWaitingRoomPaceAndFinale() {
+        XCTAssertEqual(PopGame.pace(secondsLeft: 600), 1)
+        XCTAssertEqual(PopGame.pace(secondsLeft: 60), 1.8, accuracy: 0.001)
+        XCTAssertTrue(PopGame.isFinale(secondsLeft: 10))
+        XCTAssertFalse(PopGame.isFinale(secondsLeft: 11))
+    }
+}

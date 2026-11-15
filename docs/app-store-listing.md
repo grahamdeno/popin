@@ -37,6 +37,7 @@ FREE, AND IT STAYS FREE
 • Lock Screen and Dynamic Island countdown, and Home Screen widgets
 • Bubblegum or Coral, with a matching app icon
 • Popcorn, an alarm made from real recorded gum pops, or Apple's alarm sound
+• Pop for fun: a 30-second target round, or pop away the minutes before your next meeting
 • iPhone and iPad, with a calm desk view for an iPad left open all day
 
 POP IN PRO ($6.99, ONE TIME)
@@ -52,7 +53,7 @@ PRIVATE BY DESIGN
 Pop In only reads your calendar and reminders. It never changes them, has no account, no analytics and no network code. Nothing leaves your device.
 
 **Review notes:**
-Pop In reads the iPhone's calendars (read only) and sets meeting alarms with AlarmKit. On first launch it asks for Calendar (Full Access) and Alarms permission; please allow both. To see an alarm without waiting for a meeting: tap the gear (top right), then Test the alarm. It rings in 20 seconds. Lock the phone to see the full-screen alarm; with the phone unlocked, iOS shows the alarm as a banner, which opens the bubble when tapped. Pop the bubble to clear it. Apple Reminders access is optional (Settings, off by default) and also read only. No account or sign-in, no network use, no data collection. Pop In Pro is a one-time in-app purchase under the gear, Pop In Pro. The tip jar appears in Settings only after Pro is bought.
+Pop In reads the iPhone's calendars (read only) and sets meeting alarms with AlarmKit. On first launch it asks for Calendar (Full Access) and Alarms permission; please allow both. To see an alarm without waiting for a meeting: tap the gear (top right), then Test the alarm. It rings in 20 seconds. Lock the phone to see the full-screen alarm; with the phone unlocked, iOS shows the alarm as a banner, which opens the bubble when tapped. Pop the bubble to clear it. Apple Reminders access is optional (Settings, off by default) and also read only. No account or sign-in, no network use, no data collection. Pop In Pro is a one-time in-app purchase under the gear, Pop In Pro. The tip jar appears in Settings only after Pro is bought. Additional seasonal bubble themes become available on set dates through the year; they are cosmetic and included with Pop In Pro.
 
 **Support URL:** https://popin.tangomike.app/support.html
 **Privacy URL:** https://popin.tangomike.app/privacy.html

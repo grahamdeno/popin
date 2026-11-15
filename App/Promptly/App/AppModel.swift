@@ -65,7 +65,8 @@ final class AppModel {
 
     /// Whether this theme can be used now: owned, or today's one-day trial.
     func canUse(_ palette: GumPalette) -> Bool {
-        store.unlocks(palette)
+        guard GumPalette.available.contains(palette) else { return false }   // not released yet
+        return store.unlocks(palette)
             || ThemeTrial.active(theme: palette.rawValue, day: ThemeTrial.today(), trialTheme: prefs.trialTheme, trialDay: prefs.trialDay)
     }
 
@@ -98,6 +99,9 @@ final class AppModel {
     /// A trial ends with the day: back to Bubblegum unless the theme is owned.
     func endTrialIfOver() {
         if !canUse(gumColor) { gumColor = .bubblegum }
+        // A sound whose theme isn't out yet (TestFlight testers before the calendar applied to them) falls back too.
+        if !AlarmSoundChoice.available.contains(alarmSound) { alarmSound = .recorded }
+        if !PopChoice.available.contains(popChoice) { popChoice = .pop }
     }
 
     /// Themes for the "New this month" card on Home, or empty when it shouldn't show.

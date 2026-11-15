@@ -82,7 +82,16 @@ struct HomeView: View {
                     ProView().environment(model)
                 }
         }
-        .fullScreenCover(isPresented: $playing) { PopPlayground() }
+        .fullScreenCover(isPresented: $playing) { PopPlayground().environment(model) }
+        // If a meeting's alarm arrived while Pop for fun was up, show its screen once the game steps aside.
+        .onChange(of: playing) { _, open in
+            guard !open, let m = model.arrived else { return }
+            model.arrived = nil
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(450))
+                model.arrived = m
+            }
+        }
         .onAppear { if ScreenshotMode.scene == .playground { playing = true } }
         .sheet(isPresented: $addingReminder) {
             AddReminderSheet().environment(model)

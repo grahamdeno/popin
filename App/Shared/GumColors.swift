@@ -31,15 +31,17 @@ enum GumPalette: String, CaseIterable, Sendable {
 
     var isPro: Bool { !(self == .bubblegum || self == .coral) }
 
-    /// TestFlight and Xcode builds show every theme so they can be tried. Set `seasonsInStore` to true to show every
-    /// theme in the App Store copy too, ignoring the release calendar.
+    /// Xcode builds show every theme. TestFlight and App Review follow the release calendar like the App Store
+    /// (owner, 2026-11-14), unless a tester turns on "Show upcoming themes (testing)" from the Pop In Pro row, which
+    /// only TestFlight offers. Set `seasonsInStore` to true to ignore the calendar everywhere.
     static let seasonsInStore = false
+    static let previewUpcomingKey = "previewUpcomingThemes"
     static var seasonsReady: Bool {
         if seasonsInStore { return true }
         #if DEBUG
         return true
         #else
-        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        return UserDefaults(suiteName: "group.com.grahamdeno.promptly")?.bool(forKey: previewUpcomingKey) ?? false
         #endif
     }
     var isSeasonal: Bool { [.snowball, .ornament, .pumpkin, .easterEgg, .valentine, .fireworks, .beachBall].contains(self) }
@@ -96,7 +98,8 @@ enum GumPalette: String, CaseIterable, Sendable {
     }
 
     /// Themes with their own app icon (AppIcon-<Name>).
-    var hasIcon: Bool { !(self == .bubblegum) && !Self.novelty.contains(self) }
+    /// Every theme but Bubblegum (the main icon) has its own app icon, AppIcon-<Name> (scripts/make_theme_icons.py).
+    var hasIcon: Bool { self != .bubblegum }
     /// The theme's own pop sound (Sounds/<name>.wav), used by "Match the theme".
     var popFile: String {
         switch self {

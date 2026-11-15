@@ -32,7 +32,7 @@ targets:
         INFOPLIST_KEY_NSRemindersFullAccessUsageDescription: "Pop In reads reminders that have a time, like ones you ask Siri for, so they ring like a meeting. It never changes or completes a reminder, and nothing leaves this iPhone."
         INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "Pop In reads your calendars to ring before each meeting. It never changes your calendar, and nothing leaves this iPhone."
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Coral AppIcon-Unicorn AppIcon-Fortune AppIcon-Moon AppIcon-Grenade AppIcon-Snowball AppIcon-Ornament AppIcon-Pumpkin
+        ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AppIcon-Coral AppIcon-Unicorn AppIcon-Fortune AppIcon-Moon AppIcon-Grenade AppIcon-Snowball AppIcon-Ornament AppIcon-Pumpkin AppIcon-Disco AppIcon-Soap AppIcon-Planet AppIcon-Basketball AppIcon-Donut AppIcon-WaterBalloon AppIcon-Eyeball AppIcon-Fishbowl AppIcon-MoodRing AppIcon-LavaLamp AppIcon-Soccer AppIcon-Hockey AppIcon-Tennis AppIcon-Golf AppIcon-Baseball AppIcon-Bowling AppIcon-Pixel AppIcon-Gumball AppIcon-Cherry AppIcon-Orange AppIcon-Macaron AppIcon-CakePop AppIcon-Earth AppIcon-Sun AppIcon-Dandelion AppIcon-Atom AppIcon-Geode AppIcon-Yarn AppIcon-ArcadeButton AppIcon-Clock AppIcon-Marble AppIcon-Duck AppIcon-EasterEgg AppIcon-Valentine AppIcon-Fireworks AppIcon-BeachBall AppIcon-Zen
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
