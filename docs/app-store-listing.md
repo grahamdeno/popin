@@ -7,7 +7,7 @@ medical claims); EU stays out for 1.0. Character limits checked.
 **Subtitle (30):** Lose track of time, not calls  (29)
 **Category:** Productivity (secondary: Business)
 **Age rating:** 4+
-**In-app purchase display name:** Pop In Pro
+**In-app purchase display name:** Pop In Pro (one-time)
 **In-app purchase description (55):** Unicorn, Fortune and 10 more themes, sounds, desk mode  (54)
 **Price:** Free, with Pop In Pro at $6.99 one time (com.grahamdeno.promptly.pro). Tips $1.99 / $4.99 / $9.99, shown only to Pro owners.
 
