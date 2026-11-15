@@ -398,3 +398,11 @@ Code needed after approval (Sonnet): per-theme release dates replacing the singl
 - Icon, round 2 (owner, 2026-11-14: stopped working, maybe before 1049): the archive does list all 45 alternate icons (new TestFlight check enforces it), so the refusal happens at run time. Settings › Theme now has an App icon row: what the Home Screen shows, iOS's error text if it refused, and a "Use the <theme> icon" button that switches straight from a tap.
 - Owner, 2026-11-15: Moon and Grenade showed in 1054 without the testing switch knowingly on. The switch is now in memory only (relaunch returns to the calendar), the old saved flag is cleared, and the gallery shows a banner while it's on. Icon error on his phone: NSPOSIXErrorDomain 35 "Resource temporarily unavailable", a known iOS 26 problem in Apple's forums; restarting the phone reportedly clears it.
 - Owner, 2026-11-15: make one-time obvious. Settings row shows "$6.99 once", Pro button "Unlock for $6.99, one time", in-app purchase display name "Pop In Pro (one-time)" (Grok).
+
+## Handoff: 1.0 submitted (2026-11-15)
+- Submitted 5:45 AM ET 2026-11-15: iOS 1.0 build 1056 + Pop In Pro (one-time, $6.99) + tips $1.99/$4.99/$9.99. Status: Waiting for Review. EU off (no DSA trader declaration).
+- Listing: docs/app-store-listing.md is the source of truth (subtitle "Lose track of time, not calls", focus + privacy angle, review notes disclose dated seasonal themes). Screenshots: 8 iPhone 6.9" + 8 iPad 13" from the appstore-screenshots branch (publish-screenshots workflow).
+- Sites live: popin.tangomike.app (site/, Scales style) and tangomike.app (grahamdeno/tangomike) now lists Scales, Shoebox, Pop In. Change Pop In's tag from "In App Review" to "On the App Store" on approval.
+- Release calendar: Snowball and Ornament unlock Monday 2026-11-30, then Mondays per GumPalette.releaseDays. Sports dates marked "confirm" can be corrected in any update.
+- Known iOS 26 issue: icon change can fail with "Resource temporarily unavailable" until the phone restarts; Settings > Theme > App icon shows it and offers a tap-to-switch.
+- Next (post go-live): watch review; on approval update tangomike.app tag; first update candidates: per-theme polish before each drop, Pop for fun feel tuning, Mood ring its own pop, travel buffer, Watch and Mac apps.
