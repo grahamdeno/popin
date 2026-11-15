@@ -379,7 +379,7 @@ Code needed after approval (Sonnet): per-theme release dates replacing the singl
 
 ## Sprint 32: App Store launch prep (owner decisions 2026-11-14)
 - Pro $6.99 one time. Tip jar shown only to Pro owners; tips $1.99 / $4.99 / $9.99 (Grok sets prices). Lead with deep focus and privacy, no medical claims. EU stays out for 1.0 (no DSA trader declaration).
-- App: tips hidden unless Pro; Pro sheet line now "Always ring for a whole calendar, link or not"; Apple's rating prompt once, on return to the app after the third join with no alarm up (ReviewPrompt, unit tested).
+- App: tips hidden unless Pro; Pro sheet line now "Per calendar: always ring, link or not, or keep it quiet" (Always and Quiet per calendar are Pro; Smart is free); Apple's rating prompt once, on return to the app after the third join with no alarm up (ReviewPrompt, unit tested).
 - Privacy page (site/privacy.html) covers Apple Reminders, read only.
 - docs/app-store-listing.md rewritten: subtitle (was blank in App Store Connect), honest locked-vs-unlocked wording, 1.0 theme list, free features added, keywords without words already in the name, review notes.
 - Grok audit (2026-11-14): Paid Apps agreement active; build 1026 selected (needs the newest); four IAPs ready but not attached to 1.0; 7 + 7 screenshots current; privacy label Data Not Collected; age 4+.

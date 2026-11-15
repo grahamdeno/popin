@@ -28,7 +28,7 @@ Running late? The bubble notices. More bubbles bud off until the whole screen is
 
 FREE, AND IT STAYS FREE
 • Alarms for meetings with a video link, gentle notifications for the rest
-• Choose per calendar: Smart or Gentle
+• Pick which calendars ring; Smart alarms for video meetings
 • Ring 1, 2 or 5 minutes before, plus an optional early heads-up
 • Snooze, pause for an hour, two, or the rest of the day, and work hours
 • Only meetings you've accepted, if you like
@@ -43,7 +43,7 @@ POP IN PRO ($6.99, ONE TIME)
 • Every new theme through the year, included
 • Four more alarm sounds: Popcorn, Chimes, Oracle and Sonar
 • Ring 10 minutes before
-• Always ring for a whole calendar, link or not
+• Per calendar: always ring, link or not, or keep it quiet
 • Desk mode: keep the screen on while Pop In is open
 No subscription. Buy once, keep it.
 
