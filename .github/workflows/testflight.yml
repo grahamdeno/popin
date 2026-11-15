@@ -90,6 +90,12 @@ jobs:
           done
           [ -d "$RUNNER_TEMP/Promptly.xcarchive/Products/Applications/Promptly.app/PlugIns/PromptlyWidgets.appex" ] || { echo "::error::Lock Screen card extension is not embedded"; exit 1; }
           echo "::notice::Calendar, alarm, background refresh and Live Activity keys present; card extension embedded"
+          # Theme icons: the alternate icons must be listed in the app's Info.plist, or the icon never changes.
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIcons" "$PLIST" | head -40 || true
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIcons~ipad:CFBundleAlternateIcons" "$PLIST" >/dev/null 2>&1 && echo "::notice::iPad alternate icons listed"
+          N=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundleAlternateIcons" "$PLIST" 2>/dev/null | grep -c "CFBundleIconName" || true)
+          echo "::notice::Alternate app icons in Info.plist: $N"
+          [ "$N" -ge 45 ] || { echo "::error::expected 45 alternate app icons in Info.plist, found $N"; exit 1; }
 
       - name: Export and upload
         env:
