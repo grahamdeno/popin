@@ -292,6 +292,11 @@ final class ThemeTests: XCTestCase {
         let launchSet = GumPalette.allCases.filter { $0.releaseDate == nil }
         XCTAssertEqual(Set(launchSet), [.bubblegum, .coral, .unicorn, .fortune, .gumball, .planet, .soap, .lavaLamp, .moodRing, .zen, .fishbowl, .disco, .clock, .marble])
         XCTAssertTrue(AlarmSoundChoice.available.contains(.sonar))
+        // Held themes' pop sounds stay out of the Pop sound list until their theme lands.
+        if !GumPalette.seasonsReady && GumPalette.moon.isHeld && GumPalette.grenade.isHeld {
+            XCTAssertFalse(PopChoice.available.contains(.bloop))
+            XCTAssertFalse(PopChoice.available.contains(.pinPull))
+        }
     }
 
     func testEachThemeHasItsPopAndIsPro() {

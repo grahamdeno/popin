@@ -103,7 +103,7 @@ enum PopChoice: String, CaseIterable, Sendable {
     }
     static var available: [PopChoice] {
         allCases.filter { c in
-            let theme: GumPalette? = [.crunch: .snowball, .glassTing: .ornament, .leafThunk: .pumpkin][c]
+            let theme: GumPalette? = [.bloop: .moon, .pinPull: .grenade, .crunch: .snowball, .glassTing: .ornament, .leafThunk: .pumpkin][c]
             return GumPalette.seasonsReady || !(theme?.isHeld ?? false)
         }
     }
