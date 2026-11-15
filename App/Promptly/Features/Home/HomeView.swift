@@ -87,11 +87,14 @@ struct HomeView: View {
         .sheet(isPresented: $addingReminder) {
             AddReminderSheet().environment(model)
         }
-        .sheet(isPresented: $showCalendars) {
+        .sheet(isPresented: $showCalendars, onDismiss: { model.applyPendingTheme() }) {
             SettingsView()
                 .environment(model)
                 .onAppear { model.settingsOpen = true }
                 .onDisappear { model.settingsOpen = false }
+        }
+        .onChange(of: model.closeSettings) { _, close in
+            if close { showCalendars = false; model.closeSettings = false }
         }
     }
 

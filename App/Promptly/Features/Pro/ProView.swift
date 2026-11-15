@@ -9,8 +9,8 @@ struct ProView: View {
     private let features: [(String, String)] = [
         ("sparkles", "Unicorn mode: a rainbow bubble that bursts into confetti"),
         ("moon.stars", "Fortune: black glass, a violet glow and a meeting fortune"),
-        ("moon.circle", "Moon and Grenade themes, each with its own pop"),
-        ("square.grid.3x3", "Every theme, plus each new one through the year"),
+        ("circle.hexagongrid", "Gumball, Planet, Lava lamp, Disco and six more, each with its own pop"),
+        ("calendar.badge.plus", "Every new theme through the year, included"),
         ("bell.and.waves.left.and.right", "Six more alarm sounds, including Tick-tock and Groove"),
         ("calendar.badge.clock", "Per calendar: always ring, link or not, or keep it quiet"),
         ("clock", "Ring up to 10 minutes early"),
@@ -40,8 +40,8 @@ struct ProView: View {
                         .foregroundStyle(Brand.ink)
                     Text(store.betaAccess && !store.purchased
                          ? "Unlocked for TestFlight testing. In the App Store version this is a one-time \(store.price) purchase."
-                         : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked."
-                                       : "One purchase, yours for good. The free app keeps every alarm, the bubble and the widgets.")
+                         : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked, and new themes arrive on their own. There's a tip jar at the bottom of Settings if you ever want to give more."
+                                       : "One purchase, yours for good. No subscription. The free app keeps every alarm, the bubble and the widgets.")
                         .font(.callout)
                         .foregroundStyle(Brand.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -58,7 +58,7 @@ struct ProView: View {
                     if let message = store.message {
                         Text(message).font(.subheadline).foregroundStyle(Brand.ink)
                     }
-                    if !store.purchased {
+                    if !store.isPro {   // also shown in the TestFlight free preview
                         Button(store.purchasing ? "One moment…"
                                : store.betaAccess ? "Test the purchase (free in TestFlight)" : "Unlock for \(store.price)") {
                             Task { await store.buy() }

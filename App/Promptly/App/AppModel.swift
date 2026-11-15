@@ -75,13 +75,24 @@ final class AppModel {
     }
 
     /// Use a Pro theme for the rest of today. Once per theme.
-    func tryTheme(_ palette: GumPalette) {
+    func tryTheme(_ palette: GumPalette, apply: Bool = true) {
         guard canTry(palette) else { showPro = true; return }
         prefs.triedThemes.insert(palette.rawValue)
         prefs.trialTheme = palette.rawValue
         prefs.trialDay = ThemeTrial.today()
-        surprise = false
-        gumColor = palette
+        if apply { surprise = false; gumColor = palette } else { pendingTheme = palette }
+    }
+
+    /// A theme picked in Settings › Theme. Changing `gumColor` redraws the whole app (and would close Settings), so the
+    /// pick waits here while the person tries other themes' pops, and lands when Settings closes or on "See it on Home".
+    var pendingTheme: GumPalette?
+    /// Set by "See it on Home"; HomeView closes Settings and clears it.
+    var closeSettings = false
+
+    func applyPendingTheme() {
+        guard let p = pendingTheme else { return }
+        pendingTheme = nil
+        if p != gumColor || surprise { surprise = false; gumColor = p }
     }
 
     /// A trial ends with the day: back to Bubblegum unless the theme is owned.
