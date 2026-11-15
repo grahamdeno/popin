@@ -224,7 +224,7 @@ final class AppModel {
         }
     }
     /// The icon this theme wants (nil = the main Bubblegum icon). Surprise me keeps whatever icon is showing.
-    private var wantedIcon: String? {
+    var wantedIcon: String? {
         if surprise { return UIApplication.shared.alternateIconName }
         guard gumColor.hasIcon else { return nil }
         return "AppIcon-" + gumColor.rawValue.prefix(1).uppercased() + String(gumColor.rawValue.dropFirst())
@@ -242,10 +242,37 @@ final class AppModel {
                   UIApplication.shared.applicationState == .active else { return }
             do {
                 try await UIApplication.shared.setAlternateIconName(icon)
+                currentIcon = UIApplication.shared.alternateIconName
+                iconError = nil
             } catch {
+                currentIcon = UIApplication.shared.alternateIconName
+                iconError = error.localizedDescription
                 if retry { matchIcon(after: 1.5, retry: false) }
             }
         }
+    }
+
+    /// The icon on the Home Screen right now (nil = the main Bubblegum icon), and the last refusal from iOS, if any.
+    /// Settings › Theme shows both, with a button to switch by hand (owner, 2026-11-14: the icon stopped following).
+    var currentIcon: String? = UIApplication.shared.alternateIconName
+    var iconError: String?
+
+    /// Switches the icon straight from a tap, the way iOS most reliably allows it.
+    func setIconNow() {
+        let icon = wantedIcon
+        UIApplication.shared.setAlternateIconName(icon) { [weak self] error in
+            Task { @MainActor in
+                self?.currentIcon = UIApplication.shared.alternateIconName
+                self?.iconError = error?.localizedDescription
+            }
+        }
+    }
+
+    /// The theme an icon name belongs to (for showing it in Settings).
+    static func theme(forIcon name: String?) -> GumPalette {
+        guard let name, name.hasPrefix("AppIcon-") else { return .bubblegum }
+        let raw = String(name.dropFirst("AppIcon-".count))
+        return GumPalette(rawValue: raw.prefix(1).lowercased() + raw.dropFirst()) ?? .bubblegum
     }
 
     var surprise: Bool {
