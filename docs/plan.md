@@ -384,3 +384,4 @@ Code needed after approval (Sonnet): per-theme release dates replacing the singl
 - docs/app-store-listing.md rewritten: subtitle (was blank in App Store Connect), honest locked-vs-unlocked wording, 1.0 theme list, free features added, keywords without words already in the name, review notes.
 - Grok audit (2026-11-14): Paid Apps agreement active; build 1026 selected (needs the newest); four IAPs ready but not attached to 1.0; 7 + 7 screenshots current; privacy label Data Not Collected; age 4+.
 - Next: owner says ship, then the Grok prompt (text, prices, attach IAPs, select newest build), then screenshot rerun, then owner submits.
+- Owner, 2026-11-14: TestFlight no longer unlocks Pro for free. TestFlight, App Review and the App Store all start locked; testers and Apple's reviewer buy Pro through the sandbox (free). Debug builds and screenshot mode still unlock. Testers who used Pro themes without buying fall back to free choices.

@@ -17,7 +17,8 @@ final class ProStore {
     var isPro: Bool { purchased || betaAccess }
     /// Bought through the App Store.
     private(set) var purchased: Bool
-    /// TestFlight and Xcode builds unlock every Pro feature so testers can try them. Never true in the App Store.
+    /// Xcode (debug) builds and screenshot mode only. TestFlight and App Review now see the real locked app and buy
+    /// Pro through Apple's sandbox, which is free, so the purchase itself is what gets tested (owner, 2026-11-14).
     private(set) var betaAccess: Bool
     private(set) var product: Product?
     /// Theme packs the buyer owns (product IDs).
@@ -66,12 +67,12 @@ final class ProStore {
     /// The displayed price, from the App Store, in the buyer's currency.
     var price: String { product?.displayPrice ?? "$6.99" }
 
-    /// Fast first guess before StoreKit answers: TestFlight installs carry a sandbox receipt.
+    /// Debug builds start unlocked; TestFlight, App Review and the App Store start locked.
     private static var receiptLooksLikeBeta: Bool {
         #if DEBUG
         return true
         #else
-        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        return false
         #endif
     }
 
@@ -81,9 +82,7 @@ final class ProStore {
         #if DEBUG
         betaAccess = true
         #else
-        if case .verified(let app) = try? await AppTransaction.shared {
-            betaAccess = app.environment == .sandbox || app.environment == .xcode
-        }
+        betaAccess = false
         #endif
     }
 
@@ -119,6 +118,8 @@ final class ProStore {
         defaults.set(Array(packs), forKey: "ownedPacks")
         setPro(owned)
         if lostPack { onLost?() }
+        // Testers whose old builds unlocked Pro for free: drop Pro-only choices they never bought (no-op otherwise).
+        else if !isPro && demoAccess == nil { onLost?() }
     }
 
     func tipPrice(_ i: Int) -> String {
