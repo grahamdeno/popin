@@ -1,4 +1,4 @@
-@font-face { font-family:"Geist"; src:url("/fonts/geist-latin.woff2") format("woff2"); font-weight:100 900; font-display:swap; }
+@font-face { font-family:"Geist"; src:url("fonts/geist-latin.woff2") format("woff2"); font-weight:100 900; font-display:swap; }
 /* Pop In: calm white like the app, with the bubblegum pink as the one accent; the sheet that rises is deep ink. */
 :root { --paper:#FFFFFF; --ink:#141414; --muted:#4A4A4A; --pink:#FF7FB0; --pink-ink:#C8146A; --soft:#FFF0F6;
         --sheet:#1E1620; --bone:#FFF7FA; --sheet-muted:#C9B8C4; --sheet-faint:#9C8A97; --line:rgba(255,247,250,.12); }
