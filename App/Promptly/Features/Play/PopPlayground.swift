@@ -275,8 +275,9 @@ struct PopPlayground: View {
         }
         // Make sure the new target is on screen at least twice.
         if let target {
-            let onScreen = bubbles.filter { $0.palette == target }.count
-            for _ in onScreen..<2 { bubbles.append(PlayBubble.random(in: area, entering: true, palette: target)) }
+            // (A Range like 3..<2 traps, so only top up when there are fewer than two: this crashed build 1050.)
+            let missing = max(0, 2 - bubbles.filter { $0.palette == target }.count)
+            for _ in 0..<missing { bubbles.append(PlayBubble.random(in: area, entering: true, palette: target)) }
             // Keep the screen from filling up: drop the oldest non-target bubbles beyond a couple extra.
             while bubbles.count > count + 2, let i = bubbles.firstIndex(where: { $0.palette != target }) { bubbles.remove(at: i) }
         }
