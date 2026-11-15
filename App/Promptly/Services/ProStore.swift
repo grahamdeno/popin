@@ -207,6 +207,7 @@ final class ProStore {
     }
 
     func restore() async {
+        previewFree = false
         try? await AppStore.sync()
         await refreshEntitlement()
         message = purchased ? "Pro restored." : (ownedPacks.isEmpty ? "No purchases found for this Apple Account." : "Your theme packs are restored.")
