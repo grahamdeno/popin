@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// Settings › Theme: every bubble theme, grouped (Classic, Pro favorites, Sports and games, Treats, Nature and space,
-/// Fun objects, Seasons and holidays). Tapping a tile picks it and plays its pop; Pro themes open Pop In Pro for free
-/// users. "Surprise me" picks a different theme each day.
+/// Fun objects, Seasons and holidays). Tapping a tile picks it and plays that theme's pop, and Settings stays open so
+/// other pops can be tried (owner, 2026-11-14); the pick lands when Settings closes or on "See it on Home". Pro themes
+/// open Pop In Pro for free users. "Surprise me" picks a different theme each day.
 struct ThemeGalleryPage: View {
     @Environment(AppModel.self) private var model
     @State private var bounced: GumPalette?
@@ -48,7 +49,7 @@ struct ThemeGalleryPage: View {
         }
         .confirmationDialog(offer.map { "Try \($0.label)" } ?? "", isPresented: Binding(get: { offer != nil }, set: { if !$0 { offer = nil } }),
                             titleVisibility: .visible, presenting: offer) { palette in
-            Button("Try it for today") { model.tryTheme(palette); PopSound.play() }
+            Button("Try it for today") { model.tryTheme(palette, apply: false); PopSound.play(file: palette.popFile) }
             Button("Get Pop In Pro") { model.showPro = true }
         } message: { _ in
             Text("Use it for the rest of today, free. Each theme can be tried once. Pro keeps every theme, now and later.")
@@ -58,22 +59,40 @@ struct ThemeGalleryPage: View {
             if let message = model.store.message {
                 Text(message).font(.footnote).foregroundStyle(Brand.ink).padding(12)
                     .glassEffect(.regular, in: .capsule).padding(.bottom, 8)
+            } else if let picked = model.pendingTheme {
+                // The pick waits until Settings closes; this says so and offers the quick way home.
+                HStack(spacing: 12) {
+                    Text("\(picked.label) picked. Tap others to hear them.")
+                        .font(.footnote).foregroundStyle(Brand.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 4)
+                    Button("See it on Home") {
+                        model.applyPendingTheme()
+                        model.closeSettings = true
+                    }
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 14).frame(minHeight: 44)
+                    .background(Capsule().fill(Brand.ink))
+                }
+                .padding(.leading, 16).padding(.trailing, 6).padding(.vertical, 4)
+                .glassEffect(.regular, in: .capsule)
+                .padding(.horizontal, 12).padding(.bottom, 8)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
     }
 
     private func tile(_ palette: GumPalette) -> some View {
-        let selected = model.gumColor == palette && !model.surprise
+        let selected = model.pendingTheme.map { $0 == palette } ?? (model.gumColor == palette && !model.surprise)
         let locked = !model.canUse(palette)
         return Button {
             if locked {
                 if model.canTry(palette) { offer = palette } else { model.showPro = true }
                 return
             }
-            model.surprise = false
-            model.gumColor = palette
-            PopSound.play()
+            model.pendingTheme = (palette == model.gumColor && !model.surprise) ? nil : palette
+            PopSound.play(file: palette.popFile)
             withAnimation(.spring(response: 0.25, dampingFraction: 0.45)) { bounced = palette }
             Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(250))

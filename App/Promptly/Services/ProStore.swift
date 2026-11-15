@@ -14,7 +14,12 @@ final class ProStore {
     static let tipFallbackPrices = ["$1.99", "$4.99", "$9.99"]
 
     /// True when Pro is unlocked: bought, or a TestFlight / development build (beta access).
-    var isPro: Bool { purchased || betaAccess }
+    var isPro: Bool { (purchased && !previewFree) || betaAccess }
+    /// TestFlight only: show the free version even though Pro was bought with the free test purchase, so the locked
+    /// app, the Pro sheet and the hidden tip jar can be checked again. Never on in the App Store; not saved.
+    var previewFree = false
+    /// True for TestFlight and App Review installs (Apple's sandbox), where the preview switch is offered.
+    private(set) var isSandbox = false
     /// Bought through the App Store.
     private(set) var purchased: Bool
     /// Xcode (debug) builds and screenshot mode only. TestFlight and App Review now see the real locked app and buy
@@ -83,6 +88,7 @@ final class ProStore {
         betaAccess = true
         #else
         betaAccess = false
+        if case .verified(let app) = try? await AppTransaction.shared { isSandbox = app.environment == .sandbox }
         #endif
     }
 
@@ -182,6 +188,7 @@ final class ProStore {
             case .success(let result):
                 if case .verified(let t) = result {
                     await t.finish()
+                    previewFree = false
                     setPro(true)
                     message = nil
                 } else {

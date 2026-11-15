@@ -203,6 +203,7 @@ struct SettingsView: View {
             .background(RoundedRectangle(cornerRadius: 20).fill(.white))
         }
         .buttonStyle(.plain)
+        .modifier(TestingProMenu(store: model.store))
     }
 
     /// For the owner and for support: alarm count, test alarms, and the bubble rollback switch.
@@ -460,6 +461,23 @@ struct SwatchBall: View {
                                       lineWidth: 2)
             }
             Ellipse().fill(.white.opacity(0.55)).frame(width: 14, height: 8).rotationEffect(.degrees(-24)).offset(x: -8, y: -11)
+        }
+    }
+}
+
+/// TestFlight only: press and hold the Pop In Pro row to see the free version again after the free test purchase.
+/// Absent everywhere else (the App Store build never has a sandbox purchase).
+private struct TestingProMenu: ViewModifier {
+    let store: ProStore
+    func body(content: Content) -> some View {
+        if store.isSandbox && store.purchased {
+            content.contextMenu {
+                Button(store.previewFree ? "Back to Pro (testing)" : "Preview the free version (testing)") {
+                    store.previewFree.toggle()
+                }
+            }
+        } else {
+            content
         }
     }
 }
