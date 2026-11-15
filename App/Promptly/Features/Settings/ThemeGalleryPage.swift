@@ -11,6 +11,7 @@ struct ThemeGalleryPage: View {
 
     var body: some View {
         SettingsPage {
+            iconGroup
             SettingsGroup(nil, note: "A different theme each day, picked from the ones you have.") {
                 SettingsToggle(model.store.isPro || !model.store.ownedPacks.isEmpty ? "Surprise me" : "Surprise me ✦", detail: "Changes once a day when you open Pop In",
                                isOn: Binding(get: { model.surprise }, set: { on in
@@ -81,6 +82,32 @@ struct ThemeGalleryPage: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// App icon: what the Home Screen shows now, and a button to match the theme if it doesn't (or iOS said no).
+    private var iconGroup: some View {
+        let showing = AppModel.theme(forIcon: model.currentIcon)
+        let wanted = AppModel.theme(forIcon: model.wantedIcon)
+        let matches = model.currentIcon == model.wantedIcon
+        let note: String = model.iconError.map { "iOS didn't change the icon: \($0)" }
+            ?? (model.surprise ? "Surprise me keeps the icon as it is, so iOS doesn't ask every morning." : "The icon follows your theme. iOS shows a short notice each time it changes.")
+        return SettingsGroup("App icon", note: note) {
+            HStack(spacing: 12) {
+                Text("Home Screen").font(.body).foregroundStyle(Brand.ink)
+                Spacer()
+                Text(showing.label).font(.body).foregroundStyle(Brand.secondary)
+            }
+            .frame(minHeight: 44)
+            .padding(.horizontal, 18)
+            if !matches && !model.surprise {
+                Button("Use the \(wanted.label) icon") { model.setIconNow() }
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Brand.accentText)
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .padding(.horizontal, 18)
+            }
+        }
+        .onAppear { model.currentIcon = UIApplication.shared.alternateIconName }
     }
 
     private func tile(_ palette: GumPalette) -> some View {
