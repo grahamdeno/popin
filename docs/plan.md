@@ -406,3 +406,4 @@ Code needed after approval (Sonnet): per-theme release dates replacing the singl
 - Release calendar: Snowball and Ornament unlock Monday 2026-11-30, then Mondays per GumPalette.releaseDays. Sports dates marked "confirm" can be corrected in any update.
 - Known iOS 26 issue: icon change can fail with "Resource temporarily unavailable" until the phone restarts; Settings > Theme > App icon shows it and offers a tap-to-switch.
 - Next (post go-live): watch review; on approval update tangomike.app tag; first update candidates: per-theme polish before each drop, Pop for fun feel tuning, Mood ring its own pop, travel buffer, Watch and Mac apps.
+- Approved 2026-11-16: Ready for Distribution. tangomike.app tag changed to "On the App Store" (grahamdeno/tangomike PR #6, merged). Remaining: confirm Snowball and Ornament unlock on the App Store copy Monday 2026-11-30; then 1.1 planning from the list above.
