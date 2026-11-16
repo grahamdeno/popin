@@ -46,8 +46,18 @@ gate is met.
 - [ ] Note any website impact: popin.tangomike.app, tangomike.app.
 - **Gate:** Graham approves the shape. Record the decision here with the date.
 
-### Stage 3. Build (Sonnet)
-- [ ] Branch from main. One branch per item, or one per release batch if Graham prefers.
+### Stage 3. Plan the release (Graham decides, Opus proposes)
+- [ ] Opus proposes the scope: which shaped items go into this version, in order, and what waits. Weigh user pain,
+      size, risk to alarms, and dated drops on the release calendar.
+- [ ] Graham picks the scope. Record it under "Release scope" below, with the version number and the date.
+- [ ] **Freeze the scope.** New ideas found during the build go to Stage 1 for the next version. They join this one
+      only if Graham explicitly swaps something out, or if it's a fix for a bug this release introduced.
+- [ ] Set a rough target, not a deadline: the next themed drop that needs code, or "when it's ready."
+- [ ] Everything in scope ships together as one release.
+- **Gate:** scope recorded and frozen.
+
+### Stage 4. Build (Sonnet)
+- [ ] Branch from main. One branch per item in the frozen scope. Merging to main is fine; nothing ships until Stage 7.
 - [ ] Put business rules in Model/, unit tested, separate from views.
 - [ ] Add or update tests: unit tests for the rule, SimulatedDayTests for alarm timing, UI journeys for new screens.
 - [ ] Keep the Bubble / Steady switch and a visible "Not going" working.
@@ -55,7 +65,7 @@ gate is met.
 - [ ] CI must be green: build.yml (read-only guard, build, all tests).
 - **Gate:** green CI, with the test results recorded in the PR. Never claim a pass that wasn't run.
 
-### Stage 4. Test
+### Stage 5. Test
 - [ ] **Automated** (CI): unit tests, SimulatedDayTests, read-only guard.
 - [ ] **UX audit** (Sonnet runs it, Opus reviews): push a commit with `[audit]` in the message. ux-audit.yml walks
       the journeys in four setups (Pro light, big text, small phone, iPad). Opus rates the pictures and logs findings
@@ -70,7 +80,7 @@ gate is met.
       least a day of real meetings.
 - **Gate:** Graham says ship.
 
-### Stage 5. Prepare the release (Sonnet, with Opus for words)
+### Stage 6. Prepare the release (Sonnet, with Opus for words)
 - [ ] Bump `MARKETING_VERSION` in project.yml (1.1, 1.2 and so on). The build number is set automatically
       (1000 + the testflight workflow run number).
 - [ ] Write "What's New" for the App Store: short, plain, what changed for the user.
@@ -83,7 +93,7 @@ gate is met.
 - [ ] Docs: move the item to "Shipped" below, update CLAUDE.md if a rule changed, and add any new known issues.
 - **Gate:** Graham reviews the What's New text and any listing changes.
 
-### Stage 6. Upload and submit
+### Stage 7. Upload and submit
 - [ ] Claude merges to main, then pushes main to `testflight`. **This uploads the build.** Only after "ship".
 - [ ] Tell Graham what to expect: the build shows up in App Store Connect in about 15 to 30 minutes, after processing.
       Don't sit and wait for it.
@@ -93,8 +103,8 @@ gate is met.
 - [ ] **Graham presses Submit for Review.**
 - **Gate:** status shows Waiting for Review.
 
-### Stage 7. Review and release
-- [ ] If Apple rejects it: Graham pastes the message, Opus decides the response, Sonnet fixes it, and we go back to Stage 6.
+### Stage 8. Review and release
+- [ ] If Apple rejects it: Graham pastes the message, Opus decides the response, Sonnet fixes it, and we go back to Stage 7.
 - [ ] On approval: release (automatic, or **Graham presses Release** if manual was chosen).
 - [ ] Grok checks the live store: page, version, What's New, screenshots, prices, and search.
 - [ ] Websites (Sonnet): update popin.tangomike.app (site/ in this repo, deployed by pages.yml on merge) and
@@ -103,7 +113,7 @@ gate is met.
 - [ ] Tag the release in git: `v1.1` on the commit that was shipped.
 - **Gate:** live in the store, with the sites matching.
 
-### Stage 8. After release
+### Stage 9. After release
 - [ ] Watch the first week: App Store Connect crash reports, ratings and reviews (Grok can pull these).
       Opus drafts replies to reviews and Graham approves them.
 - [ ] Turn real problems into ideas (Stage 1) with the date.
@@ -141,6 +151,9 @@ gate is met.
   (12th for "Pop In Meeting Alarms").
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
 
+## Release scope
+- **1.1:** not yet planned (Stage 3). Candidates are listed below.
+
 ## Dated checks
 - **Monday 2026-11-30:** Snowball and Ornament unlock in the App Store copy, the first themes on the release
   calendar (GumPalette.releaseDays). Owner checks Settings > Theme on his phone. A scheduled reminder is set.
@@ -148,33 +161,67 @@ gate is met.
 
 ## 1.1 candidates (unordered until the owner ranks them)
 
-### 1. Stacked alarms: one alarm at a time (story, approved 2026-11-16)
-**User story:** As someone with back-to-back or overlapping meetings, I want only one Pop In alarm ringing at a
-time, so that when I come back to my phone I see what needs me now instead of a pile of alarms to clear.
+### 1. Epic: Ring only when it matters (approved 2026-11-16)
+**Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
+don't pile up as ringing alarms.
 
 **Context:** found in real use on 1.0. With two meetings at the same start time and a later meeting, all left
-unpopped while the user joined from another device, three alarms were ringing at once. The in-app screen already
-follows "newest meeting wins" (Sprint 29) and shows a missed line. The likely cause is at the system level: each
-meeting has its own AlarmKit alarm, and iOS rings each one on its own schedule. Not yet confirmed on a device.
+unpopped while the user joined from another device, three alarms were ringing at once when he picked up his phone.
+The in-app screen already follows "newest meeting wins" (Sprint 29). The likely cause is at the system level: each
+meeting has its own AlarmKit alarm, and iOS rings each one separately. Not yet confirmed on a device.
 
-**Acceptance criteria:**
-- Given an older meeting's alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops
-  and only the newer one rings.
-- Given one or more earlier meetings were not popped, when the current alarm shows, then they appear as one quiet
-  line (for example, "Also missed: 1:00 Standup, 1:00 Design review"), each with Join while it's still running.
-- Given the stack above, when the user pops or stops the current alarm, then every alarm in the stack is cleared.
-- Given two meetings start at the same minute, when their time comes, then one alarm rings and shows both, with a
-  Join for each.
-- The Bubble / Steady switch and "Not going" keep working.
+**Requirement that still holds:** while an alarm rings, it is a real, loud alarm unless story 1.4 applies. Quieter
+ringing must never cost a missed meeting.
 
-**Out of scope:** a "joined elsewhere" control to silence the rest of a meeting. Revisit if one alarm at a time
-isn't enough.
+#### 1.1 Catch double-booking before it rings
+As someone with overlapping meetings, I want Pop In to flag the clash ahead of time and let me pick one, so only
+the meeting I choose rings.
+- Given two or more ringing meetings start at the same minute, when Home shows them, then it says they clash and
+  offers a pick (for example, "2 meetings at 1:00 · Pick one").
+- Given the user picks one, then only that meeting rings. The other shows as a quiet line with Join, and no alarm.
+- Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
+- Picking never changes the calendar. Calendar access stays read only.
+- Open: should partial overlaps (1:00 to 2:00 and 1:30 to 2:00) count as a clash, or only same-minute starts?
+
+#### 1.2 Alarms stop on their own after 7 minutes
+As someone who sometimes joins from another device, I want an unanswered alarm to stop on its own, so my phone
+isn't ringing for a meeting I already handled.
+- Given an alarm has rung for 7 minutes without a pop, snooze or Not going, then it stops ringing.
+- Then the meeting stays on the Lock Screen and in the Live Activity as "Started · Join" until the meeting ends.
+- The meeting counts as missed under newest-meeting-wins, the same as today.
+- Open: is 7 minutes fixed, or a setting with 7 as the default?
+
+#### 1.3 One alarm at a time
+As someone with back-to-back meetings, I want only one Pop In alarm ringing at a time, so when I come back to my
+phone I see what needs me now.
+- Given an older alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops.
+- Given earlier meetings went unpopped, when the current alarm shows, then they appear as one quiet line
+  ("Also missed: 1:00 Standup, 1:00 Design review"), each with Join while it's still running.
+- Given that stack, when the user pops or stops the current alarm, then the whole stack clears.
+- Given two meetings start at the same minute and no pick was made, then one alarm rings showing both, with a Join
+  for each.
+
+#### 1.4 Gentler alarms while in a meeting
+As someone already in a meeting, I want the next meeting's alarm to be gentle, so it doesn't startle me or
+interrupt others while I'm speaking.
+- **In a meeting on another device:** given the user popped an earlier meeting that is still running, when the next
+  alarm comes due, then the full-screen alarm still shows, but with a quieter sound.
+- **In a meeting on the phone:** given the user is on a call on the phone (for example, they tapped Join and the
+  meeting app is on a call), when the next alarm comes due, then there is no full-screen takeover. It's a nudge
+  instead: a soft sound or haptic with Join.
+- Given the earlier meeting has ended, then alarms return to normal.
+- Open (check before shaping the build): can Pop In tell that the phone is on a call without network or new data
+  collection (for example, through CallKit's call observer)? Can AlarmKit play a quieter alarm, or does it need a
+  separate quiet sound file?
+
+**Out of scope:** a "joined elsewhere" button. Revisit if this epic isn't enough.
 
 **Steps:**
-1. Reproduce it on a device: two same-minute meetings plus a later one, all left unpopped. Confirm whether the
-   extra alarms are AlarmKit system alarms, backup alarms, or both. (Sonnet.)
-2. Settle the wording and look of the missed line and the two-meeting alarm. (Opus.)
-3. Build it in Model/, with SimulatedDayTests cases for each criterion above. (Sonnet.)
+1. Reproduce the pile-up on a device and confirm the cause (AlarmKit system alarms, backup alarms, or both). Answer
+   the open questions in 1.4 with a small device spike. (Sonnet.)
+2. Settle the clash pick, the missed line, the quiet alarm sound and the nudge, and answer the open questions in
+   1.1 and 1.2. (Opus, with Graham.)
+3. Build it in Model/, with SimulatedDayTests cases for every criterion above. (Sonnet.)
 
 ### 2. Polish each theme before its drop (from the 1.0 handoff)
 - Polish each theme ahead of its Monday on the release calendar. Next dates: Fireworks 2026-12-14, Duck 2027-01-04.
