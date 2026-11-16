@@ -1,6 +1,6 @@
 # Promptly working agreement
 
-Read docs/plan.md before making product changes.
+Read docs/roadmap.md before making product changes: it is the running plan for 1.1 and beyond. docs/plan.md is the history of how 1.0 was decided.
 
 ## What it is
 Full-screen meeting alarms from the iPhone's own calendars (AlarmKit + EventKit), in the calm white style of
@@ -23,4 +23,4 @@ Lovely Mail. App Store name "Promptly: Meeting Alarms", bundle `com.grahamdeno.p
 
 ## Handoff
 - Every PR states changes, tests actually run, limitations, and a phone-friendly review checklist.
-- Record unfinished work and next steps in docs/plan.md.
+- Record unfinished work and next steps in docs/roadmap.md.
