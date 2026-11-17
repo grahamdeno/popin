@@ -43,6 +43,10 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-16 | 1.1 scope approved and frozen: epic 1, stories 1.1 to 1.4. Items 2 to 6 wait for 1.2. No new purchases | One release that fixes alarm pile-ups; theme work isn't blocked (Fireworks unlocks 2026-12-14 as built) |
+| 2026-11-16 | Standing merge go for 1.1: each 1.1 PR merges once its review passes, if the merge uploads and deploys nothing | Graham doesn't approve each PR |
+| 2026-11-16 | A clash means meetings that start in the same minute. Partial overlaps are not a clash | Simple and predictable; story 1.3 keeps partial overlaps from ringing together |
+| 2026-11-16 | The auto-stop is fixed at 7 minutes in 1.1, not a setting | No new setting; revisit after real use |
 | 2026-11-16 | Pop In moves onto the playbook (1.0.0); 1.1 is the first release planned under it | One process across all apps |
 | 2026-11-16 | Epic "Ring only when it matters" approved as a 1.1 candidate | Found in real use on 1.0: several alarms rang at once |
 
@@ -53,16 +57,22 @@ Newest first. Refined decisions only.
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
 
 ## Release scope
-- **1.1:** not yet planned (Stage 3). Candidates are listed below.
+- **1.1 (approved and frozen 2026-11-16):** epic 1 "Ring only when it matters", stories 1.1, 1.2, 1.3 and 1.4, in
+  one release. New ideas go to 1.2.
+- **Waits for 1.2:** items 2 to 6 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
 - **Purchases approved:** none new.
-- **Go-aheads:** none yet.
+- **Go-aheads:** merge, standing for all 1.1 items as each passes review, when the merge uploads and deploys nothing
+  (2026-11-16). Test build: none yet. Ship: none yet.
+- **Target:** rough, not a deadline: after Fireworks drops on 2026-12-14.
 
 ## Dated checks
 - **Monday 2026-11-30:** Snowball and Ornament unlock in the App Store copy, the first themes on the release
   calendar (GumPalette.releaseDays). Graham checks Settings > Theme on his phone. A scheduled reminder is set.
   If they don't appear, look at releaseDays and seasonsReady.
 
-## Backlog: 1.1 candidates (unordered until Graham ranks them)
+## Backlog
+
+Item 1 is in 1.1. Items 2 to 6 wait for 1.2.
 
 ### 1. Epic: Ring only when it matters (approved 2026-11-16)
 **Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
@@ -72,6 +82,9 @@ don't pile up as ringing alarms.
 unpopped while the user joined from another device, three alarms were ringing at once when he picked up his phone.
 The in-app screen already follows "newest meeting wins" (Sprint 29). The likely cause is at the system level: each
 meeting has its own AlarmKit alarm, and iOS rings each one separately. Not yet confirmed on a device.
+Code check (2026-11-16): `AlarmPlanner` already gives meetings ringing in the same minute one shared alarm. Other
+sources of extra alarms: the backup alarm one minute after a ring (set while Pop In is open), the early heads-up
+alarm, and snoozes. The device check tells these apart.
 
 **Requirement that still holds:** while an alarm rings, it is a real, loud alarm unless story 1.4 applies. Quieter
 ringing must never cost a missed meeting.
@@ -84,7 +97,7 @@ the meeting I choose rings.
 - Given the user picks one, then only that meeting rings. The other shows as a quiet line with Join, and no alarm.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
-- Open: should partial overlaps (1:00 to 2:00 and 1:30 to 2:00) count as a clash, or only same-minute starts?
+- Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
 
 #### 1.2 Alarms stop on their own after 7 minutes
 As someone who sometimes joins from another device, I want an unanswered alarm to stop on its own, so my phone
@@ -92,7 +105,7 @@ isn't ringing for a meeting I already handled.
 - Given an alarm has rung for 7 minutes without a pop, snooze or Not going, then it stops ringing.
 - Then the meeting stays on the Lock Screen and in the Live Activity as "Started · Join" until the meeting ends.
 - The meeting counts as missed under newest-meeting-wins, the same as today.
-- Open: is 7 minutes fixed, or a setting with 7 as the default?
+- Settled 2026-11-16: 7 minutes is fixed in 1.1, not a setting.
 
 #### 1.3 One alarm at a time
 As someone with back-to-back meetings, I want only one Pop In alarm ringing at a time, so when I come back to my
