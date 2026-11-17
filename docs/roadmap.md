@@ -1,149 +1,50 @@
-# Pop In product plan: 1.1 and beyond
+# Pop In roadmap
 
-The running plan from 1.0 forward. It has two parts: **how we ship** (the checklist every change runs through, from
-idea to release) and **what's next** (the roadmap). Build from this file. docs/plan.md stays as the history of how
-1.0 was decided; read it for context, but this file says what comes next and how.
+The running plan for Pop In. It follows Graham's playbook (grahamdeno/playbook, version 1.0.0): the process, stages,
+roles, rules, item format and standards live there and aren't repeated here. This file holds what's specific to Pop
+In: where things stand, decisions, release scope, the backlog and what shipped. docs/plan.md is the history of how 1.0
+was decided.
 
-## The team
-| Who | Does |
-|---|---|
-| **Graham (owner)** | Decides what gets built, ranks the list, tests on his phone, says "ship", presses Submit for Review and Release. |
-| **Claude, Opus** | Feel, wording, design, data safety, judgment calls, reviewing the audit pictures, writing this plan. |
-| **Claude, Sonnet** | Building, tests, CI, PRs and merges, docs updates, the websites (repo side). |
-| **Grok** | Anything in a browser or account Claude can't reach: App Store Connect, the live App Store, device-side checks Graham hands off. Always reports back in chat. |
+**To pick up the work:** read "Where things stand", then "Decision log", then "Release scope", in that order.
 
-## How we ship: idea to release
+## Product specifics
 
-Every change, from a one-line fix to a big feature, goes through these stages in order. Small changes can move
-through a stage quickly, but they don't skip it. Each stage ends at a gate. Don't start the next stage until the
-gate is met.
+- **Standing rules:** see CLAUDE.md, "Rules that must never be missed".
+- **Uploads and deploys:** see CLAUDE.md, "Uploads and deploys in this repo".
+- **Core flow (regression list):** grant calendar access; a meeting rings while the phone is locked; pop to join opens
+  the right app; Not going; snooze; quiet hours; buying Pro and restoring purchases (sandbox).
+- **Edge cases always checked in Shape:** same-minute meetings, all-day events, quiet hours, paused, Pro versus free,
+  big text, iPad, small phone. Light only (no dark mode in 1.0).
+- **Guard:** `scripts/read_only_guard.py` enforces read-only Calendar and Reminders and no network or SDKs.
+- **Device checks** (the simulator can't prove alarms): alarms ring while locked, Join opens the right app, Live
+  Activity and Dynamic Island look right, widgets update, the theme icon switches. Full list in
+  docs/audit/ux-audit.md.
+- **UX audit:** a commit with `[audit]` runs `ux-audit.yml` in four setups (Pro light, big text, small phone, iPad).
+  Findings go in docs/audit/findings.md.
+- **Version and build:** `MARKETING_VERSION` in `project.yml`, bumped before the test build. The build number is
+  1000 plus the testflight workflow run number.
+- **Listing source:** docs/app-store-listing.md. Screenshots: `screenshots.yml`, then `publish-screenshots.yml`
+  with the run id (a ship step: it publishes public URLs).
+- **Privacy answer:** "Data Not Collected". The page is `site/privacy.html`.
+- **Websites:** popin.tangomike.app (`site/` here, deployed by `pages.yml` on merge), tangomike.app
+  (grahamdeno/tangomike).
+- **Compiled-in dates:** the theme release calendar, `GumPalette.releaseDays` in `App/Shared/GumColors.swift`.
+- **EU:** excluded until there's a DSA trader declaration.
 
-> **Steps that can't be undone, and who does them**
-> - **Pushing to the `testflight` branch** uploads a build to TestFlight. Claude does this only after Graham says ship.
-> - **Submit for Review** in App Store Connect. **Graham only.** Agents stop right before it.
-> - **Release** (when manual release is chosen). **Graham only.**
-> - **New or changed in-app purchases or prices.** These go live with the version. Graham approves each one.
-> - **Release calendar dates** (GumPalette.releaseDays). These are compiled into the app, so a wrong date can only be
->   fixed by shipping another update.
-> - **Deleting** anything: branches with unmerged work, App Store Connect items, website pages. Ask first.
+## Steps that can't be undone (Pop In extras)
 
-### Stage 1. Idea
-- [ ] Claude turns what Graham raised into a backlog item (see "How items are written" below) and briefs it back
-      to him in chat. Graham's own words never go into this file.
-- [ ] State the problem as the user feels it, not the fix.
-- [ ] Check it against the 1.0 rules: read-only calendar and Reminders, no network, no analytics, nothing leaves the phone.
-      An idea that breaks one of these goes back to Graham as a decision, not a task.
-- **Gate:** Graham approves the brief-back. Then it's added here with the date approved.
+The playbook's list applies. Also:
+- **Release calendar dates** in `GumPalette.releaseDays` are compiled into the app. A wrong date can only be fixed by
+  shipping another update. Opus checks each one against the real occasion; Graham approves.
 
-### Stage 2. Shape (Opus)
-- [ ] Reproduce the problem first if it's a bug (on a device or in SimulatedDayTests). Write down what's actually happening.
-- [ ] Decide the behavior, the wording and the look. Use plain words, one decision per screen, the calm white style.
-- [ ] Mock it up on the design canvas if it's visual.
-- [ ] List the edge cases: same-minute meetings, all-day events, quiet hours, paused, Pro vs free, big text, iPad,
-      small phone, light and dark.
-- [ ] Decide what's free and what's Pro.
-- [ ] Note any App Store impact: new screenshots, listing text, review notes, in-app purchases.
-- [ ] Note any website impact: popin.tangomike.app, tangomike.app.
-- **Gate:** Graham approves the shape. Record the decision here with the date.
+## Decision log
 
-### Stage 3. Plan the release (Graham decides, Opus proposes)
-- [ ] Opus proposes the scope: which shaped items go into this version, in order, and what waits. Weigh user pain,
-      size, risk to alarms, and dated drops on the release calendar.
-- [ ] Graham picks the scope. Record it under "Release scope" below, with the version number and the date.
-- [ ] **Freeze the scope.** New ideas found during the build go to Stage 1 for the next version. They join this one
-      only if Graham explicitly swaps something out, or if it's a fix for a bug this release introduced.
-- [ ] Set a rough target, not a deadline: the next themed drop that needs code, or "when it's ready."
-- [ ] Everything in scope ships together as one release.
-- **Gate:** scope recorded and frozen.
+Newest first. Refined decisions only.
 
-### Stage 4. Build (Sonnet)
-- [ ] Branch from main. One branch per item in the frozen scope. Merging to main is fine; nothing ships until Stage 7.
-- [ ] Put business rules in Model/, unit tested, separate from views.
-- [ ] Add or update tests: unit tests for the rule, SimulatedDayTests for alarm timing, UI journeys for new screens.
-- [ ] Keep the Bubble / Steady switch and a visible "Not going" working.
-- [ ] Run `xcodegen generate`. Never edit Promptly.xcodeproj by hand.
-- [ ] CI must be green: build.yml (read-only guard, build, all tests).
-- **Gate:** green CI, with the test results recorded in the PR. Never claim a pass that wasn't run.
-
-### Stage 5. Test
-- [ ] **Automated** (CI): unit tests, SimulatedDayTests, read-only guard.
-- [ ] **UX audit** (Sonnet runs it, Opus reviews): push a commit with `[audit]` in the message. ux-audit.yml walks
-      the journeys in four setups (Pro light, big text, small phone, iPad). Opus rates the pictures and logs findings
-      in docs/audit/findings.md. Fix anything rated 3 or 4 before shipping.
-- [ ] **Accessibility:** Apple's accessibility audit (part of the UX audit), VoiceOver labels on new controls, Dynamic Type.
-- [ ] **On a real device** (Graham, or a checklist Graham hands to Grok): alarms actually ring while the phone is
-      locked, Join opens the right app, Live Activity and Dynamic Island look right, widgets update, and the theme
-      icon switches. The simulator can't prove alarms.
-- [ ] **Regression:** the core flow still works: grant calendar access, a meeting rings, pop to join, Not going,
-      snooze, quiet hours, buying Pro and restoring purchases (sandbox).
-- [ ] **TestFlight** for anything that touches alarms, purchases or permissions. Graham lives on the build for at
-      least a day of real meetings.
-- **Gate:** Graham says ship.
-
-### Stage 6. Prepare the release (Sonnet, with Opus for words)
-- [ ] Bump `MARKETING_VERSION` in project.yml (1.1, 1.2 and so on). The build number is set automatically
-      (1000 + the testflight workflow run number).
-- [ ] Write "What's New" for the App Store: short, plain, what changed for the user.
-- [ ] Update docs/app-store-listing.md if the description, promotional text, keywords or review notes change.
-- [ ] New screenshots if the UI in them changed: run screenshots.yml, then publish-screenshots.yml with the run id,
-      so Grok can upload them.
-- [ ] Review notes: tell Apple anything that's hard to find: new purchases, date-locked themes, demo steps.
-- [ ] Privacy: confirm the App Privacy answers ("Data Not Collected") are still true. Update site/privacy.html if anything changed.
-- [ ] Release calendar: check every new or changed date in GumPalette.releaseDays against the real occasion.
-- [ ] Docs: move the item to "Shipped" below, update CLAUDE.md if a rule changed, and add any new known issues.
-- **Gate:** Graham reviews the What's New text and any listing changes.
-
-### Stage 7. Upload and submit
-- [ ] Claude merges to main, then pushes main to `testflight`. **This uploads the build.** Only after "ship".
-- [ ] Tell Graham what to expect: the build shows up in App Store Connect in about 15 to 30 minutes, after processing.
-      Don't sit and wait for it.
-- [ ] Grok (prompt from Claude) fills in App Store Connect: new version, select the build, What's New, listing changes,
-      screenshots, review notes, export compliance ("None"), and leaves the EU setting as it is unless Graham changed it.
-      **Grok stops before Submit for Review.**
-- [ ] **Graham presses Submit for Review.**
-- **Gate:** status shows Waiting for Review.
-
-### Stage 8. Review and release
-- [ ] If Apple rejects it: Graham pastes the message, Opus decides the response, Sonnet fixes it, and we go back to Stage 7.
-- [ ] On approval: release (automatic, or **Graham presses Release** if manual was chosen).
-- [ ] Grok checks the live store: page, version, What's New, screenshots, prices, and search.
-- [ ] Websites (Sonnet): update popin.tangomike.app (site/ in this repo, deployed by pages.yml on merge) and
-      tangomike.app (grahamdeno/tangomike) if features, screenshots or status changed. Check that support.html
-      still answers the real questions.
-- [ ] Tag the release in git: `v1.1` on the commit that was shipped.
-- **Gate:** live in the store, with the sites matching.
-
-### Stage 9. After release
-- [ ] Watch the first week: App Store Connect crash reports, ratings and reviews (Grok can pull these).
-      Opus drafts replies to reviews and Graham approves them.
-- [ ] Turn real problems into ideas (Stage 1) with the date.
-- [ ] Dated checks: confirm each release-calendar drop actually unlocks on its Monday.
-- [ ] Update "Where things stand" in this file.
-
-### What else to keep in mind
-- **Apple account:** the developer membership renews every year, and agreements, tax and banking must stay current
-  or sales stop.
-- **New iOS versions:** each September, test on the new iOS beta before it ships (AlarmKit and Liquid Glass change).
-- **EU:** excluded until there's a DSA trader declaration. Revisit if Graham wants EU sales.
-- **Support email** and the support page must work.
-- **Secrets** (signing, App Store Connect key) live in GitHub Actions secrets. Never print or commit them.
-
-## Rules for this file
-- Add items only after the owner approves a brief-back. Never paste the owner's own words here; write the refined item.
-- Record the date each item was approved.
-
-## How items are written
-- **Epic** for a large area of work that holds several stories (for example, Watch app).
-- **User story** for one change a user notices: "As a [user], I want [behavior] so that [outcome]."
-- **Acceptance criteria:** testable statements, written as Given / When / Then where it helps. These become the tests.
-- **Requirement** for a rule the app must always follow (for example, read-only calendar access).
-- **Each item also has:** context (what we know and the likely cause), out of scope, open questions, and steps
-  with the model each step needs (Opus for feel, data safety and judgment; Sonnet for building and shipping).
-- Items carried over from the 1.0 handoff stay short until they're shaped (Stage 2). Then they get the full format.
-- When an item ships, move it to "Shipped" with the version and build. Don't delete it.
-- Nothing ships until the owner says ship. He prefers one big release over several small ones.
-- The 1.0 rules in CLAUDE.md still apply: calendar and Reminders stay read only, no network, keep the
-  Bubble / Steady switch, keep a visible "Not going", and never press Submit for Review.
+| Date | Decision | Why |
+|---|---|---|
+| 2026-11-16 | Pop In moves onto the playbook (1.0.0); 1.1 is the first release planned under it | One process across all apps |
+| 2026-11-16 | Epic "Ring only when it matters" approved as a 1.1 candidate | Found in real use on 1.0: several alarms rang at once |
 
 ## Where things stand (2026-11-16)
 - 1.0 (build 1056) approved and live in the US App Store, EU excluded. Grok checked on 2026-11-16: the page,
@@ -153,13 +54,15 @@ gate is met.
 
 ## Release scope
 - **1.1:** not yet planned (Stage 3). Candidates are listed below.
+- **Purchases approved:** none new.
+- **Go-aheads:** none yet.
 
 ## Dated checks
 - **Monday 2026-11-30:** Snowball and Ornament unlock in the App Store copy, the first themes on the release
-  calendar (GumPalette.releaseDays). Owner checks Settings > Theme on his phone. A scheduled reminder is set.
+  calendar (GumPalette.releaseDays). Graham checks Settings > Theme on his phone. A scheduled reminder is set.
   If they don't appear, look at releaseDays and seasonsReady.
 
-## 1.1 candidates (unordered until the owner ranks them)
+## Backlog: 1.1 candidates (unordered until Graham ranks them)
 
 ### 1. Epic: Ring only when it matters (approved 2026-11-16)
 **Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
