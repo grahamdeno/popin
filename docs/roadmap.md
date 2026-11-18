@@ -43,6 +43,11 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-18 | 1.1 scope reopened and frozen again: epic 7 added (Home and the alarm work for everyone). Standing merge go extends to epic 7 | Grok's design review found a severity 4 (big-text Home) and a severity 3 (Not going can't be undone after 5 s) on 1.0; the playbook fixes both before the next release. The M1 Home layout goes in now so Home is rebuilt once |
+| 2026-11-18 | 1.2 will honor the widgets' tinted and clear Home Screen modes | It's how iOS draws widgets, not an app dark mode; the app stays light only |
+| 2026-11-18 | Pro sheet follows mockup M4 (trio hero, two-column features, price bar, Restore link), in 1.2 | Graham preferred it to the current sheet |
+| 2026-11-18 | Settings as a native Form: try one page first (1.2), then decide | Free Dynamic Type and VoiceOver structure against a rebuild and a shift in look |
+| 2026-11-18 | Design review inputs: Grok passes 1 and 2 and mockups M1 to M6, in docs/design-review/2026-11-18/ once that PR merges | Reference for epics 7 to 9 |
 | 2026-11-16 | 1.1 scope approved and frozen: epic 1, stories 1.1 to 1.4. Items 2 to 6 wait for 1.2. No new purchases | One release that fixes alarm pile-ups; theme work isn't blocked (Fireworks unlocks 2026-12-14 as built) |
 | 2026-11-16 | Standing merge go for 1.1: each 1.1 PR merges once its review passes, if the merge uploads and deploys nothing | Graham doesn't approve each PR |
 | 2026-11-16 | A clash means meetings that start in the same minute. Partial overlaps are not a clash | Simple and predictable; story 1.3 keeps partial overlaps from ringing together |
@@ -50,18 +55,20 @@ Newest first. Refined decisions only.
 | 2026-11-16 | Pop In moves onto the playbook (1.0.0); 1.1 is the first release planned under it | One process across all apps |
 | 2026-11-16 | Epic "Ring only when it matters" approved as a 1.1 candidate | Found in real use on 1.0: several alarms rang at once |
 
-## Where things stand (2026-11-16)
+## Where things stand (2026-11-18)
 - 1.0 (build 1056) approved and live in the US App Store, EU excluded. Grok checked on 2026-11-16: the page,
   subtitle, icon, 8 screenshots, Pop In Pro $6.99 and all three tips are live, and it shows up in search
   (12th for "Pop In Meeting Alarms").
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
+- 2026-11-18: Grok's design review is in; epic 7 added to 1.1. Next: Sonnet fixes the audit walk (7.4).
 
 ## Release scope
-- **1.1 (approved and frozen 2026-11-16):** epic 1 "Ring only when it matters", stories 1.1, 1.2, 1.3 and 1.4, in
-  one release. New ideas go to 1.2.
-- **Waits for 1.2:** items 2 to 6 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
+- **1.1 (approved and frozen 2026-11-16, reopened and frozen again 2026-11-18):** epic 1 "Ring only when it
+  matters", stories 1.1 to 1.4, and epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5, in one release.
+  New ideas go to 1.2.
+- **Waits for 1.2:** items 2 to 6 and 8 to 10 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
 - **Purchases approved:** none new.
-- **Go-aheads:** merge, standing for all 1.1 items as each passes review, when the merge uploads and deploys nothing
+- **Go-aheads:** merge, standing for all 1.1 items (epic 7 included, 2026-11-18) as each passes review, when the merge uploads and deploys nothing
   (2026-11-16). Test build: none yet. Ship: none yet.
 - **Target:** rough, not a deadline: after Fireworks drops on 2026-12-14.
 
@@ -72,7 +79,7 @@ Newest first. Refined decisions only.
 
 ## Backlog
 
-Item 1 is in 1.1. Items 2 to 6 wait for 1.2.
+Items 1 and 7 are in 1.1. Items 2 to 6 and 8 to 10 wait for 1.2.
 
 ### 1. Epic: Ring only when it matters (approved 2026-11-16)
 **Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
@@ -138,6 +145,95 @@ interrupt others while I'm speaking.
 2. Settle the clash pick, the missed line, the quiet alarm sound and the nudge, and answer the open questions in
    1.1 and 1.2. (Opus, with Graham.)
 3. Build it in Model/, with SimulatedDayTests cases for every criterion above. (Sonnet.)
+
+### 7. Epic: Home and the alarm work for everyone (approved 2026-11-18, in 1.1)
+**Goal:** every person can reach every control on Home and the alarm screen at any text size, and can change their
+mind about a skipped meeting.
+
+**Context:** Grok's design review on 2026-11-18 (pass 1 UX, pass 2 design, mockups M1 and M2; files in
+docs/design-review/2026-11-18/) found GR-1 (severity 4: at Accessibility XXXL, Home's header and the only route to
+Settings go off screen and nothing scrolls) and GR-2 (severity 3: Not going can be undone for 5 seconds only). The
+playbook fixes both before the next release. Home is rebuilt once, in the M1 layout, rather than patched now and
+redone in 1.2.
+
+**Rules that hold:** the bubble is the main button; a visible Not going; the Bubble / Steady switch keeps working;
+light only; calendar read only.
+
+#### 7.1 Home: new card layout that works at every text size (GR-1, D-1, D-2, D-3, GR-5)
+As someone who uses large text, I want Home to fit and scroll, so I can always reach the bubble, Not going and
+Settings.
+- Given any text size up to Accessibility XXXL, when Home shows the next meeting, then the header (wordmark, ⋯ and a
+  gear) stays on screen and the card scrolls if needed.
+- Given the meeting gets close and the hint line appears, then the countdown keeps its size; the title wraps instead
+  (remove the countdown's `minimumScaleFactor`).
+- The card follows M1: one meta row (Next · service on the leading side, Rings… on the trailing side), title, large
+  countdown, time span, then a footer with the hint and a Not going button at least 44 pt.
+- "Then" is a plain line under the card, not a floating pill.
+- The gear opens Settings in one tap. ⋯ keeps Add a reminder, Pop for fun and Pause.
+- Steady gets the same countdown and layout.
+- A debug-only switch, next to Bubble / Steady, shows the card as glass or near-opaque white (D-5). Graham picks on
+  the phone; the other is removed before release.
+- Icons are SF Symbols, not emoji. Text on the bubble meets AA contrast.
+- Checked by: big-text, small-phone and iPad walk pictures; a walk check that ⋯ and the gear are hittable at XXXL;
+  benchmark "Ring before" from Home in 3 taps.
+
+#### 7.2 Bring back a skipped meeting (GR-2, GR-6)
+As someone who tapped Not going by mistake, I want to bring the meeting back until it starts, so a slow tap doesn't
+cost me the alarm.
+- Given I tap Not going, then the toast says "Not going to [title] · Undo". After a pop, it says "Popped [title] ·
+  Undo".
+- Given the toast has gone, then the meeting shows as a quiet line ("Not going: 3:00 Design review · Undo") until
+  it starts.
+- Given I tap Undo before the start, then its alarm comes back exactly as it was.
+- Nothing is written to the calendar. App state only.
+- Checked by: unit tests in Model/ and a walk step that undoes after 10 seconds.
+
+#### 7.3 Alarm screen: clear countdown and controls (D-4, GR-4, GR-7, GR-8; built with story 1.3)
+As someone whose alarm is ringing, I want to see how long I have and what each button does, so I act without
+thinking.
+- The card follows M2: a "Starts in" label, a large countdown, the title, the span and service, then Not going and
+  "Snooze 2 min" side by side inside the card.
+- At any text size, nothing overlaps the meeting time.
+- "Snooze 2 min" is the visible word and the VoiceOver name.
+- Story 1.3's "Also missed" line wraps, is at least 44 pt tall, and has its own Join for each meeting.
+- Checked by: big-text and small-phone takeover pictures; the Apple accessibility audit on the screen.
+
+#### 7.4 Requirement: the audit walk shows what it claims
+- J12 shows each theme, not Fortune (`Journeys.swift` launches the fortune scene, which overrides `-theme`).
+- Benchmarks are counted from Home, not from inside Settings.
+- J3 pictures the Not going state as well as the Undo.
+- A journey that stops early counts as a failed check in SUMMARY.md.
+- Checked by: an `[audit]` run with the fixed journeys before 1.1's own audit.
+
+#### 7.5 Requirement: iPad App Store screenshots are upright (GR-3)
+- The screenshot pipeline stores landscape iPad frames the right way round before they are published.
+- Checked by: the pictures from `screenshots.yml`; Grok on the live store after 1.1 is approved. Publishing and
+  uploading happen under 1.1's ship go.
+
+**Out of scope:** the rest of the design review (items 8 to 10, 1.2). A "Join" word on the card: only if 7.1's
+scrolling isn't enough at XXXL, and only with Graham's approval.
+
+**Steps:**
+1. Settle contrast on the bubble, the SF Symbols and the XXXL Home layout. (Opus.)
+2. Fix the audit walk first (7.4), then build 7.1 to 7.3 on their own branches, with tests. (Sonnet.)
+3. Review each PR. (Opus.)
+4. Phone checks: card style, big text, Undo after the toast. (Graham.)
+
+### 8. Epic: Design polish (approved 2026-11-18, for 1.2, to shape)
+- From the review: Settings rows and Pro row (M3), the Pro sheet (M4), the theme gallery (M6, keeping Surprise me and
+  the groups), one shared ball highlight (D-11), haptics (D-14), empty state (D-16), pressed buttons (D-19), one PRO
+  tag (GR-13), tap areas (GR-14), Pro sheet icons hidden from VoiceOver (GR-12), Add reminder chips (GR-10), iPad
+  sizing (GR-15, GR-17), fixed sizes (GR-18), Calendars (D-17), copy on the site and support pages (GR-19).
+- Opus shapes; Sonnet builds.
+
+### 9. Epic: Widgets look like the app (approved 2026-11-18, for 1.2, to shape)
+- M5: "8 min" as in the app, the big-bubble light, tinted and clear Home Screen modes, text styles (GR-11, D-12), and
+  the Live Activity (D-13).
+- Opus shapes; Sonnet builds.
+
+### 10. Settings as a native Form: try one page (approved 2026-11-18, for 1.2)
+- Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
+- Sonnet builds the trial; Opus and Graham decide.
 
 ### 2. Polish each theme before its drop (from the 1.0 handoff)
 - Polish each theme ahead of its Monday on the release calendar. Next dates: Fireworks 2026-12-14, Duck 2027-01-04.
