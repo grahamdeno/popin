@@ -1,4 +1,5 @@
 {
+  "counted_from": "Home",
   "jobs": {
     "Join the next meeting": {"taps": 1},
     "Undo a pop": {"taps": 1},

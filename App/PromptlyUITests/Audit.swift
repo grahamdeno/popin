@@ -25,6 +25,8 @@ final class Audit {
         dir = Audit.root.appending(path: journey)
         try? FileManager.default.removeItem(at: dir)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        // Written at once, marked unfinished, so a journey that stops before its first picture still shows in the report.
+        save()
     }
 
     /// Starts Pop In in its demo mode on one scene (ScreenshotMode.swift): made-up meetings, no calendar, no alarms.
@@ -85,14 +87,19 @@ final class Audit {
     private(set) var taps = 0
     private var jobs: [String: (taps: Int, at: Date)] = [:]
 
-    /// A job starts: from here its taps are counted.
-    func begin(_ job: String) { jobs[job] = (taps, Date()) }
+    private var stopped: [String: Int] = [:]
+
+    /// A job starts: from here its taps are counted. Benchmarks begin on Home (docs/audit-benchmarks.json).
+    func begin(_ job: String) { jobs[job] = (taps, Date()); stopped[job] = nil }
+
+    /// The job's last deliberate move is made: taps after this (going back to check the result) are not counted.
+    func stop(_ job: String) { stopped[job] = taps }
 
     /// The job is done (or not): written down with the taps it took. Seconds are the simulator's, waits included, so
     /// only taps and the move responses below are compared with targets; a person's own time comes from the testers.
     func done(_ job: String, _ ok: Bool) {
         guard let start = jobs[job] else { return }
-        steps.append(["n": n, "kind": "benchmark", "name": job, "ok": ok, "taps": taps - start.taps,
+        steps.append(["n": n, "kind": "benchmark", "name": job, "ok": ok, "taps": (stopped[job] ?? taps) - start.taps,
                       "seconds": round(Date().timeIntervalSince(start.at) * 10) / 10])
         check("job done: \(job)", ok, severity: 4)
     }
@@ -164,12 +171,17 @@ final class Audit {
 
     /// Writes the record so far after every picture and check: a UI query that times out raises an exception that
     /// skips `defer`, and the journey's record was lost with it (CI, November 8).
-    private func save() { finish() }
+    /// Until `finish` runs, the record says `finished: false`; the report lists such a journey as stopped early.
+    private func save() { write(finished: false) }
 
-    /// Writes the record. Call at the end of every journey.
-    func finish() {
+    /// Writes the record as finished. Call at the end of every journey (`defer { a.finish() }`). An exception that
+    /// ends the journey skips the `defer`, so the record keeps `finished: false`.
+    func finish() { write(finished: true) }
+
+    private func write(finished: Bool) {
         let doc: [String: Any] = ["journey": journey, "config": Audit.config, "steps": steps, "accessibility": issues,
-                                  "seconds": round(Date().timeIntervalSince(started))]
+                                  "seconds": round(Date().timeIntervalSince(started)), "finished": finished,
+                                  "pictures": n]
         if let data = try? JSONSerialization.data(withJSONObject: doc, options: [.prettyPrinted, .sortedKeys]) {
             try? data.write(to: dir.appending(path: "record.json"))
         }
@@ -232,12 +244,24 @@ final class Audit {
         return check("can go back", true, severity: severity)
     }
 
-    /// Taps a word if it is there; written down as a finding if not.
+    /// Taps a word if it is there; written down as a finding if not. A control drawn off the screen (the big-text
+    /// Home header, November 14) is a finding too: tapping it raised an exception that ended the journey.
     @discardableResult
     func tap(_ name: String, _ e: XCUIElement, severity: Int = 3, timeout: Double = 4) -> Bool {
         guard expect("can tap \(name)", e, timeout: timeout, severity: severity) else { return false }
+        if e.isHittable {
+            taps += 1
+            e.tap()
+            return true
+        }
+        let f = e.frame
+        let screen = app.windows.firstMatch.frame
+        guard !f.isEmpty, screen.contains(CGPoint(x: f.midX, y: f.midY)) else {
+            check("\(name) is on the screen", false, severity: severity, detail: "drawn at \(f), screen \(screen)")
+            return false
+        }
         taps += 1
-        if e.isHittable { e.tap() } else { e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
+        e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         return true
     }
 }

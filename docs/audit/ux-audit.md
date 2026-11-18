@@ -18,14 +18,25 @@ contact sheets) lands on the `ci-audit` branch as `SUMMARY.md` and `sheets/`.
 |---|---|---|
 | J1 | First run | Hello, calendars why, alarms why, which calendars, covered, Home |
 | J2 | Home, minutes away | Read the card, pop to join, Undo |
-| J3 | Not going | Not going, the next meeting moves up, Undo |
+| J3 | Not going | Not going (a picture of the meeting put away, with Undo up), Undo, the meeting is back |
 | J4 | Home, a day away | The calm state |
 | J5 | Takeover and late | Ringing screen; 50 s and 75 s after the ring (buds); pop |
-| J6 | Settings (free) | Every row opens and comes back; Ring before 2 min; Sound; Pop sound; a locked color opens Pro; Restore |
-| J7 | Many calendars | 22 calendars in 5 accounts: fold, search "soccer", switch one off, turn a whole account off |
+| J6 | Settings (free) | From Home: More, Settings, Ring before, 2 minutes (the benchmark). Then every row opens and comes back; Sound; Pop sound; a locked theme opens Pro; Restore |
+| J7 | Many calendars | 22 calendars in 5 accounts. From Home: More, Settings, Calendars, search "soccer", switch one off. From Home again: turn a whole account off |
 | J8 | Nothing coming up | Empty Home, Try a pop |
 | J9 | Unicorn | Bubble, pop with confetti, sprinkles and unicorns |
 | J10 | Fortune | Black ball, the fortune on the card, the mist pop |
+| J11 | Moon and Grenade | Each ball and its pop; Moon says "Next transmission" |
+| J12 | Every held theme | For each of the 40 holiday and novelty themes: Home with that theme, the pop, then Settings' Theme row must name the theme asked for |
+| J13 | Edge cases | Missed under a new alarm, paused, outside work hours, own reminder, merged duplicate, the More menu, Add a reminder, Pop for fun |
+
+**Benchmarks** (`docs/audit-benchmarks.json`) are counted from Home, the way a person starts, and include the taps to
+reach Settings. The targets stay as set, so a job that costs more from Home shows as over target until the app
+changes (7.1 adds a Settings button on Home).
+
+**A journey that stops early** (an exception ends it before its last step) is listed under Failed checks in
+SUMMARY.md, with the last picture it took and the first error in the test log. A journey missing from one config is
+listed too. A control drawn off the screen is a failed check, and the walk goes on.
 
 Demo mode: `-screenshots -scene <name>` (`App/Promptly/App/ScreenshotMode.swift`), `-free` for the free version.
 No calendar, no alarms, no system prompts, nothing saved.
@@ -80,3 +91,4 @@ Pro choices marked and open the Pro sheet, never a dead end.
 |---|---|---|
 | Nov 11 | 7421ca1 | First walk, 4 configs, 36 journeys. Found UX-1 to UX-11 (findings.md), led by first run blocked at large text. |
 | Nov 11 | 87fdd95 | Final code, 4 configs, 36 journeys. UX-1 to UX-11 hold (first run completes at the largest text). New, small: at the largest text the Pro row squeezes and the Rings line cuts off (PR #19). The rest is test-side: big-text Settings walk loses its rows off screen; Skip counts the Undo tap. |
+| Nov 14 | 08de82d | 4 configs, 52 journeys. SUMMARY.md said no failed checks, but the walk had three faults found later (Grok, Nov 18): every J12 picture showed Fortune, the Settings benchmarks were counted from inside Settings, and big-text J13 stopped after picture 05 without being listed. Fixed in 7.4. |
