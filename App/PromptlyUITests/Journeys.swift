@@ -168,11 +168,12 @@ final class Journeys: XCTestCase {
         if openSettingsFromHome(a) {
             a.tap("Ring before", a.reveal(a.any(containing: "Ring before")))
             a.pause(0.8)
-            a.tap("2 minutes", a.any(containing: "2 minutes"))
+            // Demo mode already rings 2 minutes before, so the row alone can't show the choice was made: the tap must land too.
+            let chose = a.tap("2 minutes", a.any(containing: "2 minutes"))
             a.stop("Ring 2 minutes before")
             a.back()
             a.pause(0.6)
-            a.done("Ring 2 minutes before", ringsTwoMinutesBefore(a))
+            a.done("Ring 2 minutes before", chose && ringsTwoMinutesBefore(a))
         } else {
             a.done("Ring 2 minutes before", false)
         }

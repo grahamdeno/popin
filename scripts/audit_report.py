@@ -94,6 +94,8 @@ for r in records:
         err = first_error(r["config"], r["journey"])
         fails.append((4, r["config"], r["journey"], f"the journey stopped early, {after}",
                       err or f"see {r['config']}/test.log"))
+    for i in r["accessibility"]:
+        a11y[(i["type"], i["summary"], i.get("element", ""), i["screen"])].append(r["config"])
 
 # A journey recorded in one config but not another never started there (the run stopped before it).
 journeys_seen = {r["journey"] for r in records}
@@ -103,8 +105,6 @@ for r in records:
 for cfg in sorted(by_config):
     for j in sorted(journeys_seen - by_config[cfg]):
         fails.append((4, cfg, j, "the journey has no record (it never started)", f"see {cfg}/test.log"))
-    for i in r["accessibility"]:
-        a11y[(i["type"], i["summary"], i.get("element", ""), i["screen"])].append(r["config"])
 
 fails.sort(key=lambda f: (-f[0], f[2], f[3], f[1]))
 lines += ["## Failed checks (severity 4 blocks the task, 1 is cosmetic)", ""]
