@@ -247,31 +247,40 @@ final class Audit {
     /// Taps a word if it is there; written down as a finding if not. A control drawn off the screen (the big-text
     /// Home header, November 14) is a finding too: tapping it raised an exception that ended the journey.
     /// A menu item can also report an infinite frame for a moment while the menu settles, and asking `isHittable`
-    /// then raises an exception that ends the journey (iPad J13 and pro-light J6, November 18). So the frame is
-    /// checked first, for up to 2 seconds, and `isHittable` is asked only of a control whose middle is on the screen.
+    /// then raises an exception that ends the journey (iPad J13 and pro-light J6, November 18). So `isHittable` is
+    /// asked only once the frame is real (waiting up to 1 second, briefly, so a passing Undo note isn't missed).
+    /// A hittable control is tapped even if its middle is off the screen: the big-text bubble is larger than the
+    /// screen, and requiring its middle on screen stopped every pop at the largest text (November 18, b521ccd).
     @discardableResult
     func tap(_ name: String, _ e: XCUIElement, severity: Int = 3, timeout: Double = 4) -> Bool {
         guard expect("can tap \(name)", e, timeout: timeout, severity: severity) else { return false }
-        let screen = app.windows.firstMatch.frame
-        var f = e.frame
-        let until = Date().addingTimeInterval(2)
-        while !Audit.onScreen(f, screen) && Date() < until {
-            pause(0.2)
+        var f = e.exists ? e.frame : .null
+        let until = Date().addingTimeInterval(1)
+        while !Audit.real(f) && Date() < until {
+            pause(0.1)
             f = e.exists ? e.frame : .null
         }
-        guard Audit.onScreen(f, screen) else {
+        guard Audit.real(f) else {
+            check("\(name) has a place on the screen", false, severity: severity, detail: "frame \(f)")
+            return false
+        }
+        if e.isHittable {
+            taps += 1
+            e.tap()
+            return true
+        }
+        let screen = app.windows.firstMatch.frame
+        guard screen.contains(CGPoint(x: f.midX, y: f.midY)) else {
             check("\(name) is on the screen", false, severity: severity, detail: "drawn at \(f), screen \(screen)")
             return false
         }
         taps += 1
-        if e.isHittable { e.tap() } else { e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
+        e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         return true
     }
 
-    /// A real frame (finite, not empty) whose middle is on the screen.
-    private static func onScreen(_ f: CGRect, _ screen: CGRect) -> Bool {
-        guard !f.isNull, f.origin.x.isFinite, f.origin.y.isFinite, f.width.isFinite, f.height.isFinite,
-              !f.isEmpty else { return false }
-        return screen.contains(CGPoint(x: f.midX, y: f.midY))
+    /// A frame XCTest can tap: finite and not empty.
+    private static func real(_ f: CGRect) -> Bool {
+        !f.isNull && f.origin.x.isFinite && f.origin.y.isFinite && f.width.isFinite && f.height.isFinite && !f.isEmpty
     }
 }
