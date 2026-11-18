@@ -24,8 +24,9 @@ final class Journeys: XCTestCase {
         guard a.tap("More", a.app.buttons[Journeys.more], severity: severity) else { return false }
         a.pause(0.6)
         guard a.tap("Settings (in More)", a.app.buttons["Settings"], severity: severity) else { return false }
-        a.pause(1.0)
-        return true
+        // The sheet rises after the menu closes. Wait for it, so the next query doesn't run against Home: J12 lost
+        // the Theme row in 10 of 40 themes without this wait (pro-light, November 18).
+        return a.expect("Settings opens", a.app.navigationBars["Settings"], timeout: 5, severity: severity)
     }
 
     /// The Settings row "Ring before", whose label carries the choice ("Ring before, 2 min"). Demo mode already rings
@@ -203,7 +204,8 @@ final class Journeys: XCTestCase {
         a.back()
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
-        a.reveal(popSound)
+        // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
+        a.reveal(popSound, tries: 12)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")

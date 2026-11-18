@@ -246,22 +246,32 @@ final class Audit {
 
     /// Taps a word if it is there; written down as a finding if not. A control drawn off the screen (the big-text
     /// Home header, November 14) is a finding too: tapping it raised an exception that ended the journey.
+    /// A menu item can also report an infinite frame for a moment while the menu settles, and asking `isHittable`
+    /// then raises an exception that ends the journey (iPad J13 and pro-light J6, November 18). So the frame is
+    /// checked first, for up to 2 seconds, and `isHittable` is asked only of a control whose middle is on the screen.
     @discardableResult
     func tap(_ name: String, _ e: XCUIElement, severity: Int = 3, timeout: Double = 4) -> Bool {
         guard expect("can tap \(name)", e, timeout: timeout, severity: severity) else { return false }
-        if e.isHittable {
-            taps += 1
-            e.tap()
-            return true
-        }
-        let f = e.frame
         let screen = app.windows.firstMatch.frame
-        guard !f.isEmpty, screen.contains(CGPoint(x: f.midX, y: f.midY)) else {
+        var f = e.frame
+        let until = Date().addingTimeInterval(2)
+        while !Audit.onScreen(f, screen) && Date() < until {
+            pause(0.2)
+            f = e.exists ? e.frame : .null
+        }
+        guard Audit.onScreen(f, screen) else {
             check("\(name) is on the screen", false, severity: severity, detail: "drawn at \(f), screen \(screen)")
             return false
         }
         taps += 1
-        e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        if e.isHittable { e.tap() } else { e.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
         return true
+    }
+
+    /// A real frame (finite, not empty) whose middle is on the screen.
+    private static func onScreen(_ f: CGRect, _ screen: CGRect) -> Bool {
+        guard !f.isNull, f.origin.x.isFinite, f.origin.y.isFinite, f.width.isFinite, f.height.isFinite,
+              !f.isEmpty else { return false }
+        return screen.contains(CGPoint(x: f.midX, y: f.midY))
     }
 }
