@@ -12,6 +12,8 @@ struct HomeView: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
+    /// "Nothing coming up": 22 pt at the default size, growing with text size (story 8.7).
+    @ScaledMetric(relativeTo: .title2) private var emptyTitleSize: CGFloat = 22
     /// The countdown: 88 pt at the default size, growing with text size up to `countdownCap`.
     @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 88
     @ScaledMetric(relativeTo: .title2) private var unitSize: CGFloat = 22
@@ -504,19 +506,30 @@ struct HomeView: View {
     /// The "Try a pop" practice meeting: no countdown to wait for, just pop it.
     private func isDemo(_ meeting: Meeting) -> Bool { meeting.eventID == "demo" }
 
+    /// Story 8.7: a calm, centred empty state on the plate. The resting bubble below stays as it is (not tappable).
     private var emptyBlock: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(spacing: 8) {
             Text("Nothing coming up")
-                .font(.system(size: titleSize, weight: .semibold))
-                .tracking(-0.8)
+                .font(.system(size: emptyTitleSize, weight: .semibold))
                 .foregroundStyle(Brand.ink)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
             Text("Your next two days are clear on the calendars Pop In watches.")
                 .font(.callout)
                 .foregroundStyle(Brand.secondary)
+                .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-            Button("Try a pop") { model.startDemo() }
-                .buttonStyle(SecondaryButtonStyle(height: 44))
+            Button { model.startDemo() } label: {
+                Text("Try a pop")
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(Brand.accentText)
+                    .padding(.horizontal, 12)
+                    .frame(minHeight: 44)
+                    .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
         }
+        .frame(maxWidth: .infinity)
     }
 
     /// Five seconds to take back a pop or a "Not going", on the plate, low on the screen. At accessibility sizes the
