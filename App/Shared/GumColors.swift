@@ -460,7 +460,7 @@ enum GumPalette: String, CaseIterable, Sendable {
     static let key = "gumColor"
 
     static var current: GumPalette {
-        GumPalette(rawValue: UserDefaults(suiteName: "group.com.grahamdeno.promptly")?.string(forKey: key) ?? "") ?? .bubblegum
+        GumPalette(rawValue: SettingsSuite.defaults?.string(forKey: key) ?? "") ?? .bubblegum
     }
 }
 

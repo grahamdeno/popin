@@ -7,7 +7,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var versionTaps = 0
     /// Debug card switch (Diagnostics): "plate" or "glass". Home reads the same key through `CardStyle.current`.
-    @AppStorage(CardStyle.key, store: UserDefaults(suiteName: Prefs.suite)) private var cardStyleRaw = CardStyle.plate.rawValue
+    @AppStorage(CardStyle.key, store: Prefs.current.defaults) private var cardStyleRaw = CardStyle.plate.rawValue
 
     var body: some View {
         NavigationStack {

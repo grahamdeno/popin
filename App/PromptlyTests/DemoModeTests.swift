@@ -2,8 +2,9 @@ import XCTest
 @testable import Promptly
 
 /// Item 11 (docs/roadmap.md): starting Pop In in demo mode leaves the saved settings unchanged, the theme and
-/// Surprise me included. AppModel uses `Prefs.demo()` whenever `ScreenshotMode.isOn`; the demo scene is fixed per
-/// launch by the process arguments, so these tests exercise the store every demo scene goes through.
+/// Surprise me included. Every settings read and write goes through `Prefs.current` or `SettingsSuite`, which pick
+/// the throwaway store in demo mode; `scripts/read_only_guard.py` fails CI on any other settings store. These tests
+/// check the throwaway store itself.
 final class DemoModeTests: XCTestCase {
     private func freshSuite() -> (name: String, defaults: UserDefaults) {
         let name = "promptly.tests.\(UUID().uuidString)"
@@ -40,6 +41,7 @@ final class DemoModeTests: XCTestCase {
         XCTAssertEqual(owner.ballStyle, .steady)
         XCTAssertEqual(owner.clearedMeetingIDs, ["keep@1"])
         UserDefaults().removePersistentDomain(forName: demoName)
+        UserDefaults().removePersistentDomain(forName: real.name)
     }
 
     /// Each demo launch starts empty: nothing one demo saved is read by the next, so a saved Surprise me never
@@ -58,5 +60,10 @@ final class DemoModeTests: XCTestCase {
     /// The demo store is never the real App Group suite.
     func testDemoSuiteIsNotTheRealSuite() {
         XCTAssertNotEqual(Prefs.demoSuite, Prefs.suite)
+        XCTAssertEqual(Prefs.suite, SettingsSuite.real)
+        XCTAssertEqual(Prefs.demoSuite, SettingsSuite.demo)
+        // Unit tests don't run in demo mode, so the shared store is the real suite here.
+        XCTAssertFalse(SettingsSuite.isDemo)
+        XCTAssertEqual(SettingsSuite.name, SettingsSuite.real)
     }
 }

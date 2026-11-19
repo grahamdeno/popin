@@ -30,6 +30,8 @@ final class AlarmService {
 
     /// Cancels every meeting alarm this service set, so the next sync reschedules them (e.g. after a sound change).
     func cancelOwned() {
+        // Demo mode never touches real alarms or their saved IDs (item 11).
+        if SettingsSuite.isDemo { return }
         for id in ownedIDs { try? manager.cancel(id: id) }
         ownedIDs = []
     }

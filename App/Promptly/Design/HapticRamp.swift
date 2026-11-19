@@ -75,7 +75,7 @@ enum AlarmLoop {
     nonisolated static func volume(now: Date, start: Date) -> Float { 1 }
 
     static func start(meetingStart: Date? = nil) {
-        guard player?.isPlaying != true, let url = soundURL(Prefs().alarmSound),
+        guard player?.isPlaying != true, let url = soundURL(Prefs.current.alarmSound),
               let p = try? AVAudioPlayer(contentsOf: url) else { return }
         try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.duckOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
@@ -191,7 +191,7 @@ enum PopSound {
     }
 
     static func play() {
-        let choice = Prefs().popChoice
+        let choice = Prefs.current.popChoice
         guard choice != .off else { return }
         let session = AVAudioSession.sharedInstance()
         if session.category != .ambient, !AlarmLoop.isPlaying {
