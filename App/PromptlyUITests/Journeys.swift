@@ -540,6 +540,12 @@ final class Journeys: XCTestCase {
                 a.pause(1)
                 a.shot("add-reminder-sheet")
                 a.accessibility("add-reminder")
+                // 8.10: quick times, and Add waits for a title.
+                a.expect("the quick time In 15 min", a.app.buttons["In 15 min"], timeout: 2, severity: 2)
+                a.expect("Pick a time", a.app.buttons["Pick a time"], timeout: 2, severity: 2)
+                let add = a.app.buttons["Add"].firstMatch
+                a.check("Add is disabled until there's a title", add.exists && !add.isEnabled, severity: 2)
+                a.check("the footer says this device", a.any(containing: "this device").exists, severity: 1)
             }
         }
         a.launch("playground", settle: 3)
