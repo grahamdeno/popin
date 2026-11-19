@@ -16,6 +16,33 @@ final class Journeys: XCTestCase {
         return true
     }
 
+    private static let more = "More: add a reminder, pop for fun, pause alerts, settings"
+
+    /// From Home to Settings the way a person gets there: the More menu, then Settings. Two taps, counted.
+    @discardableResult
+    private func openSettingsFromHome(_ a: Audit, severity: Int = 3) -> Bool {
+        guard a.tap("More", a.app.buttons[Journeys.more], severity: severity) else { return false }
+        a.pause(0.6)
+        guard a.tap("Settings (in More)", a.app.buttons["Settings"], severity: severity) else { return false }
+        // The sheet rises after the menu closes. Wait for it, so the next query doesn't run against Home: J12 lost
+        // the Theme row in 10 of 40 themes without this wait (pro-light, November 18).
+        return a.expect("Settings opens", a.app.navigationBars["Settings"], timeout: 5, severity: severity)
+    }
+
+    /// The Settings row "Ring before", whose label carries the choice ("Ring before, 2 min"). Demo mode already rings
+    /// 2 minutes before, so the row is read rather than any "2 min" on screen (the Home card has one too).
+    private func ringsTwoMinutesBefore(_ a: Audit) -> Bool {
+        let row = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Ring before")).firstMatch
+        return row.waitForExistence(timeout: 2) && row.label.contains("2 min")
+    }
+
+    /// Closes the Settings sheet, back to Home. Not counted as part of any job.
+    private func closeSettings(_ a: Audit) {
+        let done = a.app.buttons["Done"].firstMatch
+        if done.waitForExistence(timeout: 2), done.isHittable { done.tap() }
+        a.pause(1.0)
+    }
+
     // J1. First run: hello, calendars, alarms, choose calendars, covered, Home.
     func test01_FirstRun() {
         let a = Audit("J1-first-run")
@@ -90,7 +117,10 @@ final class Journeys: XCTestCase {
         let undo = a.app.buttons["Undo"]
         let offered = undo.waitForExistence(timeout: 2)
         a.done("Skip a meeting", offered)
+        // The Not going state itself, while Undo is still up (a picture is quick; the slow checks wait until after).
+        a.shot("not-going", note: "Design review is put away; Undo is offered")
         a.check("Undo is offered", offered, severity: 3)
+        a.check("Undo is still up after the picture", undo.exists, severity: 2)
         a.tap("Undo", undo)
         a.pause(0.8)
         a.shot("after-undo")
@@ -133,6 +163,22 @@ final class Journeys: XCTestCase {
     func test06_Settings() {
         let a = Audit("J6-settings")
         defer { a.finish() }
+        // The benchmark is counted from Home, the way a person starts: More, Settings, Ring before, 2 minutes.
+        a.launch("home", free: true)
+        a.begin("Ring 2 minutes before")
+        if openSettingsFromHome(a) {
+            a.tap("Ring before", a.reveal(a.any(containing: "Ring before")))
+            a.pause(0.8)
+            // Demo mode already rings 2 minutes before, so the row alone can't show the choice was made: the tap must land too.
+            let chose = a.tap("2 minutes", a.any(containing: "2 minutes"))
+            a.stop("Ring 2 minutes before")
+            a.back()
+            a.pause(0.6)
+            a.done("Ring 2 minutes before", chose && ringsTwoMinutesBefore(a))
+        } else {
+            a.done("Ring 2 minutes before", false)
+        }
+        // The rest of Settings, every row, from the Settings scene.
         a.launch("settings", free: true, settle: 3)
         a.shot("settings-top")
         a.accessibility("settings")
@@ -145,11 +191,10 @@ final class Journeys: XCTestCase {
         a.pause(0.8)
         a.shot("ring-before")
         a.accessibility("ring-before")
-        a.begin("Ring 2 minutes before")
         a.tap("2 minutes", a.any(containing: "2 minutes"))
         a.back()
         a.pause(0.6)
-        a.done("Ring 2 minutes before", a.any(containing: "2 min").exists)
+        a.check("Ring before shows 2 min", ringsTwoMinutesBefore(a), severity: 3)
         let sound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Sound")).firstMatch
         a.tap("Sound", a.reveal(sound))
         a.pause(0.8)
@@ -159,7 +204,8 @@ final class Journeys: XCTestCase {
         a.back()
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
-        a.reveal(popSound)
+        // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
+        a.reveal(popSound, tries: 12)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
@@ -191,8 +237,11 @@ final class Journeys: XCTestCase {
         let a = Audit("J7-many-calendars")
         defer { a.finish() }
         a.launch("manycals", settle: 3)
+        // This scene opens on Settings; close it so both jobs are counted from Home.
+        closeSettings(a)
         a.begin("Find and turn off one calendar")
-        a.tap("Calendars", a.any(containing: "Calendars"))
+        openSettingsFromHome(a)
+        a.tap("Calendars", a.reveal(a.any(containing: "Calendars")))
         a.pause(0.8)
         a.shot("calendars")
         a.accessibility("calendars")
@@ -212,9 +261,14 @@ final class Journeys: XCTestCase {
         }
         a.tap("clear search", a.app.buttons["Clear search"], severity: 2)
         a.pause(0.6)
+        closeSettings(a)
         a.begin("Turn off a whole account")
-        let allOff = a.app.buttons["Turn all off"].firstMatch
-        a.done("Turn off a whole account", a.tap("Turn all off", allOff))
+        var allOffDone = false
+        if openSettingsFromHome(a), a.tap("Calendars", a.reveal(a.any(containing: "Calendars"))) {
+            a.pause(0.8)
+            allOffDone = a.tap("Turn all off", a.app.buttons["Turn all off"].firstMatch)
+        }
+        a.done("Turn off a whole account", allOffDone)
         a.pause(0.6)
         a.shot("account-off")
     }
@@ -278,17 +332,55 @@ final class Journeys: XCTestCase {
         a.check("Moon says Next transmission", a.any(containing: "Next transmission").exists, severity: 2)
     }
 
-    // J12. Every held theme (holiday and novelty): the ball and the pop, one picture each.
+    /// The held themes (holiday and novelty) with the name Settings shows for each (`GumPalette.label`).
+    private static let heldThemes: [(String, String)] = [
+        ("snowball", "Snowball"), ("ornament", "Ornament"), ("pumpkin", "Pumpkin spice"), ("disco", "Disco"),
+        ("soap", "Soap bubble"), ("planet", "Planet"), ("basketball", "Basketball"), ("donut", "Donut"),
+        ("waterBalloon", "Water balloon"), ("eyeball", "Eyeball"), ("fishbowl", "Fishbowl"), ("moodRing", "Mood ring"),
+        ("lavaLamp", "Lava lamp"), ("soccer", "Soccer"), ("hockey", "Hockey puck"), ("tennis", "Tennis ball"),
+        ("golf", "Golf ball"), ("baseball", "Baseball"), ("bowling", "Bowling ball"), ("pixel", "8-bit"),
+        ("gumball", "Gumball machine"), ("cherry", "Cherry"), ("orange", "Orange"), ("macaron", "Macaron"),
+        ("cakePop", "Cake pop"), ("earth", "Earth"), ("sun", "Sun"), ("dandelion", "Dandelion"), ("atom", "Atom"),
+        ("geode", "Geode"), ("yarn", "Ball of yarn"), ("arcadeButton", "Big red button"), ("clock", "Clock"),
+        ("marble", "Marble"), ("duck", "Rubber duck"), ("easterEgg", "Easter egg"), ("valentine", "Valentine"),
+        ("fireworks", "Fireworks"), ("beachBall", "Beach ball"), ("zen", "Zen stone"),
+    ]
+
+    /// Reads the theme Settings names (its Theme row) and checks it is the one asked for.
+    private func checkTheme(_ a: Audit, _ raw: String, _ label: String, where place: String) {
+        let row = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Theme")).firstMatch
+        a.reveal(row)
+        let shown = row.waitForExistence(timeout: 3) ? row.label : "(no Theme row)"
+        a.check("the theme shown is the one asked for", shown.contains(label), severity: 3,
+                detail: "asked for \(raw) (\(label)); Settings says \"\(shown)\" (\(place))")
+    }
+
+    // J12. Every held theme (holiday and novelty): the ball and the pop, one picture each, on Home with `-theme`
+    // (the fortune scene sets Fortune over `-theme`, so every picture showed Fortune before November 18). After the
+    // pictures, Settings is opened from Home in the same launch and its Theme row must name the theme asked for.
     func test12_AllThemes() {
         let a = Audit("J12-all-themes")
         defer { a.finish() }
-        for theme in ["snowball", "ornament", "pumpkin", "disco", "soap", "planet", "basketball", "donut",
-                      "waterBalloon", "eyeball", "fishbowl", "moodRing", "lavaLamp", "soccer", "hockey", "tennis", "golf", "baseball", "bowling", "pixel", "gumball", "cherry", "orange", "macaron", "cakePop", "earth", "sun", "dandelion", "atom", "geode", "yarn", "arcadeButton", "clock", "marble", "duck", "easterEgg", "valentine", "fireworks", "beachBall", "zen"] {
-            a.launch("fortune", theme: theme, settle: 2)
+        for (theme, label) in Journeys.heldThemes {
+            a.launch("home", theme: theme, settle: 2)
             a.shot("\(theme)")
+            a.check("the card shows no fortune (only Fortune does)", !a.any(containing: "Fortune:").exists, severity: 3,
+                    detail: theme)
             _ = popBubble(a)
             a.pause(0.3)
             a.shot("\(theme)-pop")
+            a.pause(1.0)
+            let more = a.app.buttons[Journeys.more]
+            if more.exists && more.isHittable && openSettingsFromHome(a, severity: 2) {
+                checkTheme(a, theme, label, where: "same launch as the pictures")
+            } else {
+                // At the largest text More is drawn off the screen (Home header, 7.1). Read the theme in the Settings
+                // scene instead, which takes `-theme` through the same demo setup as Home.
+                a.check("Settings opens from Home to read the theme", false, severity: 2,
+                        detail: "\(theme): read from the Settings scene instead")
+                a.launch("settings", theme: theme, settle: 2)
+                checkTheme(a, theme, label, where: "Settings scene")
+            }
         }
     }
 
@@ -308,14 +400,11 @@ final class Journeys: XCTestCase {
         a.launch("dupes")
         a.shot("duplicate-merged", note: "Design review and its FW copy show as one meeting")
         a.launch("home")
-        let more = a.app.buttons["More: add a reminder, pop for fun, pause alerts, settings"]
-        if more.waitForExistence(timeout: 4) {
-            more.tap()
+        // Every tap goes through the recorder, so a control that can't be tapped is a failed check, not a stop.
+        if a.tap("More", a.app.buttons[Journeys.more]) {
             a.pause(0.8)
             a.shot("more-menu", note: "Add a reminder, Pop for fun, Pause alerts, Settings")
-            let add = a.app.buttons["Add a reminder"]
-            if add.waitForExistence(timeout: 2) {
-                add.tap()
+            if a.tap("Add a reminder", a.app.buttons["Add a reminder"], timeout: 2) {
                 a.pause(1)
                 a.shot("add-reminder-sheet")
                 a.accessibility("add-reminder")
@@ -324,8 +413,7 @@ final class Journeys: XCTestCase {
         a.launch("playground", settle: 3)
         a.shot("pop-for-fun")
         let ball = a.app.descendants(matching: .any).matching(NSPredicate(format: "label ENDSWITH 'bubble'")).firstMatch
-        if ball.waitForExistence(timeout: 3) {
-            ball.tap()
+        if a.tap("a playground bubble", ball, timeout: 3) {
             a.pause(0.25)
             a.shot("pop-for-fun-popped")
         }

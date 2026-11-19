@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The UX audit's report (docs/audit/ux-audit.md). Reads report/<config>/<journey>/record.json and its pictures,
 writes a contact sheet per journey (sheets/<config>--<journey>.jpg) and SUMMARY.md: the failed checks by severity,
-the benchmarks against docs/audit/benchmarks.json, the pictures that changed since the baseline, the accessibility
+the benchmarks against docs/audit-benchmarks.json (counted from Home), the pictures that changed since the baseline, the accessibility
 issues by type, the timings, and which journeys did not finish.
 Usage: audit_report.py <dir> <sha> [<baseline dir>] [<benchmarks.json>]"""
 import json, os, re, sys
@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 root, sha = sys.argv[1], sys.argv[2]
 baseline = sys.argv[3] if len(sys.argv) > 3 else ""
-bench_file = sys.argv[4] if len(sys.argv) > 4 else "docs/audit/benchmarks.json"
+bench_file = sys.argv[4] if len(sys.argv) > 4 else "docs/audit-benchmarks.json"
 os.makedirs(os.path.join(root, "sheets"), exist_ok=True)
 
 def font(size):
@@ -69,14 +69,42 @@ configs = sorted({r["config"] for r in records})
 lines.append(f"Configs: {', '.join(configs) or 'none'}. Journeys recorded: {len(records)}.")
 lines.append("")
 
+def first_error(config, journey):
+    """The first error line the test log has for this journey's test (J13 is test13_...), or ""."""
+    m = re.match(r"J(\d+)-", journey)
+    log = os.path.join(root, config, "test.log")
+    if not m or not os.path.isfile(log):
+        return ""
+    test = f"test{int(m.group(1)):02d}_"
+    for line in open(log, errors="replace"):
+        if test in line and "error:" in line:
+            return line.split("error:", 1)[1].strip()
+    return ""
+
 fails = []
 a11y = defaultdict(list)
 for r in records:
     for s in r["steps"]:
         if s["kind"] == "check" and not s["ok"]:
             fails.append((s["severity"], r["config"], r["journey"], s["name"], s.get("detail", "")))
+    # A journey that ended before its last step never wrote `finished: true` (the recorder writes it only at the end).
+    if not r.get("finished", False):
+        shots = [s for s in r["steps"] if s["kind"] == "shot"]
+        after = f"after picture {shots[-1]['n']:02d} ({shots[-1]['name']})" if shots else "before its first picture"
+        err = first_error(r["config"], r["journey"])
+        fails.append((4, r["config"], r["journey"], f"the journey stopped early, {after}",
+                      err or f"see {r['config']}/test.log"))
     for i in r["accessibility"]:
         a11y[(i["type"], i["summary"], i.get("element", ""), i["screen"])].append(r["config"])
+
+# A journey recorded in one config but not another never started there (the run stopped before it).
+journeys_seen = {r["journey"] for r in records}
+by_config = defaultdict(set)
+for r in records:
+    by_config[r["config"]].add(r["journey"])
+for cfg in sorted(by_config):
+    for j in sorted(journeys_seen - by_config[cfg]):
+        fails.append((4, cfg, j, "the journey has no record (it never started)", f"see {cfg}/test.log"))
 
 fails.sort(key=lambda f: (-f[0], f[2], f[3], f[1]))
 lines += ["## Failed checks (severity 4 blocks the task, 1 is cosmetic)", ""]
@@ -93,7 +121,7 @@ lines.append("")
 
 # Benchmarks: taps per job and app responses, against their targets.
 targets = json.load(open(bench_file)) if os.path.exists(bench_file) else {"jobs": {}, "responses": {"default": 1.5}}
-lines += ["## Benchmarks (targets in docs/audit/benchmarks.json)", ""]
+lines += ["## Benchmarks (taps counted from Home; targets in docs/audit-benchmarks.json)", ""]
 rows, over = [], 0
 for r in records:
     for s_ in r["steps"]:
@@ -183,7 +211,8 @@ for r in records:
     name = sheet(r["config"], r["journey"], r["_dir"], shots)
     ok = sum(1 for s in r["steps"] if s["kind"] == "check" and s["ok"])
     bad = sum(1 for s in r["steps"] if s["kind"] == "check" and not s["ok"])
-    lines.append(f"### {r['config']} / {r['journey']} ({r['seconds']} s, {ok} checks held, {bad} did not)")
+    stopped = "" if r.get("finished", False) else ", **stopped early**"
+    lines.append(f"### {r['config']} / {r['journey']} ({r['seconds']} s, {ok} checks held, {bad} did not{stopped})")
     if name:
         lines.append(f"![]({'sheets/' + name})")
     for s in r["steps"]:
