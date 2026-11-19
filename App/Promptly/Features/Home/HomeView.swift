@@ -16,6 +16,8 @@ struct HomeView: View {
     @ScaledMetric(relativeTo: .title2) private var emptyTitleSize: CGFloat = 22
     /// The countdown: 88 pt at the default size, growing with text size up to `countdownCap`.
     @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 88
+    /// 8.9: on a regular-width iPad the countdown starts at 110 pt, under the same one-line cap.
+    @ScaledMetric(relativeTo: .largeTitle) private var padCountSize: CGFloat = 110
     @ScaledMetric(relativeTo: .title2) private var unitSize: CGFloat = 22
 
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -152,13 +154,17 @@ struct HomeView: View {
     /// The column scrolls under the fixed header. On iPhone it is only as tall as its content (up to the space the
     /// header leaves), so the bubble below it can still be tapped.
     private func scrollColumn(now: Date, upcoming: [Meeting], next: Meeting?, onPhone: Bool) -> some View {
-        ScrollView {
-            textColumn(now: now, upcoming: upcoming, next: next, showThen: onPhone, later: onPhone ? [] : Array(upcoming.dropFirst().prefix(5)))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnContentHeight = $0 }
+        GeometryReader { geo in
+            ScrollView {
+                textColumn(now: now, upcoming: upcoming, next: next, showThen: onPhone, later: onPhone ? [] : Array(upcoming.dropFirst().prefix(5)))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnContentHeight = $0 }
+                    // 8.9: on iPad the card sits centred beside the bubble; a taller column scrolls from the top.
+                    .frame(minHeight: onPhone ? 0 : geo.size.height, alignment: .center)
+            }
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollBounceBehavior(.basedOnSize)
         .frame(maxHeight: onPhone ? columnContentHeight : .infinity)
     }
 
@@ -382,7 +388,7 @@ struct HomeView: View {
     private func countdown(_ parts: (big: String, unit: String)) -> some View {
         HStack(alignment: .lastTextBaseline, spacing: 8) {
             Text(parts.big)
-                .font(.system(size: min(countSize, Self.countdownCap), weight: .medium))
+                .font(.system(size: min(sizeClass == .regular ? padCountSize : countSize, Self.countdownCap), weight: .medium))
                 .tracking(-2.5)
                 .monospacedDigit()
                 .contentTransition(reduceMotion ? .identity : .numericText())

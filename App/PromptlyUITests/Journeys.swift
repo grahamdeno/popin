@@ -238,6 +238,14 @@ final class Journeys: XCTestCase {
         a.check("the hint is showing in the near scene", hint.exists, severity: 3)
         a.check("the countdown keeps its size when the hint appears", abs(farHeight - near.frame.height) < 1, severity: 3,
                 detail: "a day away \(farHeight) pt; 7 minutes with the hint \(near.frame.height) pt")
+        // 8.9: on a regular-width iPad the countdown starts at 110 pt and the card sits centred beside the bubble.
+        if UIDevice.current.userInterfaceIdiom == .pad, near.exists {
+            a.check("iPad countdown is at least 110 pt type", near.frame.height >= 105, severity: 2,
+                    detail: "countdown height \(near.frame.height) pt")
+            let screen = a.app.frame
+            a.check("iPad card is centred vertically", abs(near.frame.midY - screen.midY) < screen.height * 0.25, severity: 2,
+                    detail: "countdown middle \(near.frame.midY) of \(screen.height)")
+        }
     }
 
     // J5. The takeover when it rings, then late with buds.
