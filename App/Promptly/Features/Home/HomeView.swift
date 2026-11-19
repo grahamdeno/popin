@@ -12,6 +12,8 @@ struct HomeView: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
+    /// "Pop In can't see your calendar" grows with text size (story 8.8).
+    @ScaledMetric(relativeTo: .title) private var noticeTitleSize: CGFloat = 30
     /// The countdown: 88 pt at the default size, growing with text size up to `countdownCap`.
     @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 88
     @ScaledMetric(relativeTo: .title2) private var unitSize: CGFloat = 22
@@ -560,7 +562,7 @@ struct HomeView: View {
     private var permissionNotice: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(model.calendarAuthorized ? "Alarms are off" : "Pop In can't see your calendar")
-                .font(Brand.display(30))
+                .font(Brand.display(noticeTitleSize))
                 .tracking(-0.6)
                 .foregroundStyle(Brand.ink)
             Text(model.calendarAuthorized

@@ -367,6 +367,12 @@ final class Journeys: XCTestCase {
             search.typeText("soccer")
             a.pause(0.8)
             a.shot("search-soccer")
+            // 8.8: the calendar's mode menu is at least 44 pt tall.
+            let soccerMode = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Soccer alerts")).firstMatch
+            if soccerMode.exists {
+                a.check("the mode menu is at least 44 pt", soccerMode.frame.height >= 44, severity: 2,
+                        detail: "height \(soccerMode.frame.height)")
+            }
             let toggle = a.app.switches["Soccer"]
             a.done("Find and turn off one calendar", a.tap("Soccer switch", toggle))
             a.pause(0.5)
