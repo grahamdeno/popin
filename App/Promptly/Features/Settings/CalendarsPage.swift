@@ -131,8 +131,16 @@ struct CalendarsList: View {
                             if new == .smart || model.store.isPro { model.setRule(new, forCalendar: calendar.id) } else { model.showPro = true }
                         })) {
                             Text("Smart: rings for video meetings").tag(AppModel.AlertRule.smart)
-                            Text(model.store.isPro ? "Always rings" : "Always rings (Pro)").tag(AppModel.AlertRule.alarm)
-                            Text(model.store.isPro ? "Quiet: notifications only" : "Quiet: notifications only (Pro)").tag(AppModel.AlertRule.gentle)
+                            // Menus show text only, so the paid choices sit under a "Pro" heading (story 8.4).
+                            if model.store.isPro {
+                                Text("Always rings").tag(AppModel.AlertRule.alarm)
+                                Text("Quiet: notifications only").tag(AppModel.AlertRule.gentle)
+                            } else {
+                                Section("Pro") {
+                                    Text("Always rings").tag(AppModel.AlertRule.alarm)
+                                    Text("Quiet: notifications only").tag(AppModel.AlertRule.gentle)
+                                }
+                            }
                         }
                     } label: {
                         HStack(spacing: 3) {

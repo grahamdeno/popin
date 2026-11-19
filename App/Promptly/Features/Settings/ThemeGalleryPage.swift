@@ -19,7 +19,8 @@ struct ThemeGalleryPage: View {
             }
             iconGroup
             SettingsGroup(nil, note: "A different theme each day, picked from the ones you have.") {
-                SettingsToggle(model.store.isPro || !model.store.ownedPacks.isEmpty ? "Surprise me" : "Surprise me ✦", detail: "Changes once a day when you open Pop In",
+                SettingsToggle("Surprise me", detail: "Changes once a day when you open Pop In",
+                               pro: !model.store.isPro && model.store.ownedPacks.isEmpty,
                                isOn: Binding(get: { model.surprise }, set: { on in
                                    if on && !model.store.isPro && model.store.ownedPacks.isEmpty { model.showPro = true } else { model.surprise = on }
                                }))
@@ -137,12 +138,13 @@ struct ThemeGalleryPage: View {
                     .frame(width: 52, height: 52)
                     .scaleEffect(bounced == palette ? 1.18 : 1)
                     .padding(.top, 10)
-                Text(locked ? "\(palette.label) ✦" : palette.label)
+                Text(palette.label)
                     .font(.footnote.weight(selected ? .semibold : .regular))
                     .foregroundStyle(Brand.ink)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
+                if locked { ProPill() }
             }
             .frame(maxWidth: .infinity, minHeight: 104, alignment: .top)
             .background(RoundedRectangle(cornerRadius: 14).stroke(selected ? Brand.ink : Brand.hairline, lineWidth: selected ? 2 : 1))

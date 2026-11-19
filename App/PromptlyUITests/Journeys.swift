@@ -319,6 +319,9 @@ final class Journeys: XCTestCase {
         a.shot("settings-top")
         a.accessibility("settings")
         a.labels("settings")
+        // 8.4: one way to mark Pro, the word in a pill. No "✦" and no "(Pro)".
+        a.check("no ✦ on Settings", !a.any(containing: "✦").exists, severity: 2)
+        a.check("no (Pro) on Settings", !a.any(containing: "(Pro)").exists, severity: 2)
         a.expect("Test the alarm is visible", a.any(containing: "Test the alarm"), severity: 3)
         for row in ["Calendars", "Ring before", "Sound"] {
             a.expect("row \(row) shows", a.any(containing: row), severity: 3)
@@ -354,6 +357,7 @@ final class Journeys: XCTestCase {
         a.tap("Theme", a.reveal(theme))
         a.pause(0.8)
         a.shot("theme-gallery")
+        a.check("no ✦ in the theme gallery", !a.any(containing: "✦").exists, severity: 2)
         a.accessibility("theme-gallery")
         let unicorn = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unicorn")).firstMatch
         a.tap("Unicorn (locked)", a.reveal(unicorn))
@@ -382,6 +386,21 @@ final class Journeys: XCTestCase {
         a.shot("calendars")
         a.accessibility("calendars")
         a.labels("calendars")
+        // 8.4: the alert menu marks paid choices under a "Pro" heading, never "(Pro)". Open it, look, then pick Smart
+        // again so nothing changes.
+        let modeMenu = a.app.buttons.matching(NSPredicate(format: "label ENDSWITH %@", "alerts: Smart")).firstMatch
+        if modeMenu.exists && modeMenu.isHittable {
+            modeMenu.tap()
+            a.pause(0.6)
+            a.check("no (Pro) in the alert menu", !a.any(containing: "(Pro)").exists, severity: 2)
+            a.check("no ✦ in the alert menu", !a.any(containing: "✦").exists, severity: 2)
+            let smart = a.app.buttons["Smart: rings for video meetings"].firstMatch
+            if smart.waitForExistence(timeout: 2) { smart.tap() } else { a.tapAt(0.5, 0.05) }
+            a.pause(0.6)
+            a.check("the alert menu closed", !a.app.buttons["Smart: rings for video meetings"].exists, severity: 2)
+        } else {
+            a.check("the alert menu could be opened", false, severity: 2)
+        }
         let search = a.app.textFields["Find a calendar"]
         if a.expect("search shows with many calendars", search, severity: 2) {
             a.tap("search", search)
