@@ -594,7 +594,13 @@ final class Journeys: XCTestCase {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
             let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
-            themeDone = a.tap("Coral", coral, severity: 2)
+            if a.tap("Coral", coral, severity: 2) {
+                // Close the gallery; the pick applies on close (the benchmark counts taps; the picture shows the theme).
+                a.app.swipeDown(velocity: .fast)
+                a.pause(1.0)
+                themeDone = a.check("the gallery closes", !a.app.navigationBars.firstMatch.exists, severity: 2)
+                a.shot("theme-applied", note: "Home after picking Coral from the ⋯ menu: the bubble should be Coral")
+            }
         }
         a.done("Change the theme", themeDone)
         a.launch("playground", settle: 3)
