@@ -863,7 +863,8 @@ final class AppModel {
     private func writeWidgetSnapshot() {
         // Demo meetings never reach the real widget (item 11).
         if ScreenshotMode.isOn { return }
-        let items = meetings.filter { !cleared.contains($0.id) }.prefix(12).map {
+        // Dropped by a clash pick: not the widget's next either (story 1.1).
+        let items = meetings.filter { !cleared.contains($0.id) && !clashDropped.contains($0.id) }.prefix(12).map {
             WidgetSnapshot.Item(id: $0.id, title: $0.title, start: $0.start, end: $0.end,
                                 service: $0.service?.rawValue ?? "", hasLink: $0.joinURL != nil)
         }

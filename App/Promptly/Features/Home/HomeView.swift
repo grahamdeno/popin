@@ -507,15 +507,15 @@ struct HomeView: View {
         .accessibilityHint("Pick the one meeting that should ring")
     }
 
-    /// Story 1.1: "Not ringing: 1:00 PM Design review · Join" for a meeting dropped by a pick.
+    /// Story 1.1: "Not ringing: 1:00 PM Design review · Join · Undo" for a meeting dropped by a pick. Stacks at
+    /// accessibility sizes, like the skipped row.
     private func droppedRow(_ meeting: Meeting, now: Date) -> some View {
-        HStack(alignment: .center, spacing: 10) {
-            Text(ClashRule.droppedLine(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
-                .font(.subheadline)
-                .foregroundStyle(Brand.secondary)
-                .lineLimit(3)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 4)
+        let words = Text(ClashRule.droppedLine(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
+            .font(.subheadline)
+            .foregroundStyle(Brand.secondary)
+            .lineLimit(3)
+            .fixedSize(horizontal: false, vertical: true)
+        let actions = HStack(spacing: 4) {
             if let url = meeting.joinURL {
                 Button { openURL(url) } label: {
                     Text("Join")
@@ -540,7 +540,14 @@ struct HomeView: View {
                 .accessibilityLabel("Undo the pick, ring for \(meeting.title)")
             }
         }
-        .frame(minHeight: 44)
+        return Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 0) { words.padding(.top, 8); actions }
+            } else {
+                HStack(alignment: .center, spacing: 10) { words; Spacer(minLength: 4); actions }
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
     }
 
     /// "Not going: 3:00 PM Design review · Undo" until the meeting starts. Undo brings it back with its alarm.

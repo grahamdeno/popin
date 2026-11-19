@@ -45,7 +45,6 @@ Newest first. Refined decisions only.
 |---|---|---|
 | 2026-11-19 | The seven findings first proposed for later (GR-16, GR-20, GR-21, GR-22, D-15, D-18, D-20) are in 1.1 as stories 8.13 to 8.17 | Graham: handle them in 1.1 |
 | 2026-11-19 | A missed alarm goes quiet for up to 15 minutes before the next meeting's alarm rather than risk silencing it | Graham chose the quiet gap (option A): the meeting he can still make always rings |
-| 2026-11-19 | Answering a shared alarm doesn't clear its same-minute neighbour; it drops to a quiet line with Join | Never lose a meeting silently; reuses 1.1's pick (Opus, after Fable's review of #85) |
 | 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
@@ -124,8 +123,9 @@ the meeting I choose rings.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
-- Settled 2026-11-19 (Opus, from Fable's review): the "Not ringing" line also has Undo until the meeting starts, so a
-  mis-tapped pick can be reversed, as Not going can (7.2). A dropped meeting appears only on that line.
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: the "Not ringing" line also has Undo
+  until the meeting starts, so a mis-tapped pick can be reversed, as Not going can (7.2); undone after its ring time,
+  its alarm comes up at once. A dropped meeting appears only on that line.
 
 #### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
 As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my
@@ -181,7 +181,7 @@ phone I see what needs me now.
 - Given that stack, when the user pops the current alarm or chooses Not going, then the whole stack clears.
 - Given two meetings start at the same minute and no pick was made, then one alarm rings showing both, with a Join
   for each.
-- Settled 2026-11-19 (Opus, from Fable's review): popping or Not going on a shared alarm stops the same-minute
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: popping or Not going on a shared alarm stops the same-minute
   meetings ringing but doesn't clear them; they stay on Home as story 1.1's "Not ringing" line with Join, so a
   meeting is never lost by answering its neighbour. Snooze snoozes them together. A meeting seconds later in the same
   minute never takes over. Undo right after the pop brings everything back; Undo later on the quiet line brings back
