@@ -246,6 +246,12 @@ final class Journeys: XCTestCase {
         a.check("the hint is showing in the near scene", hint.exists, severity: 3)
         a.check("the countdown keeps its size when the hint appears", abs(farHeight - near.frame.height) < 1, severity: 3,
                 detail: "a day away \(farHeight) pt; 7 minutes with the hint \(near.frame.height) pt")
+        // 8.9: on a regular-width iPad the countdown starts at 110 pt (a line about 131 pt tall; iPhone's 88 pt is about
+        // 105). Centring beside the bubble is checked from the iPad pictures.
+        if UIDevice.current.userInterfaceIdiom == .pad, near.exists {
+            a.check("iPad countdown is at least 110 pt type", near.frame.height >= 125, severity: 2,
+                    detail: "countdown height \(near.frame.height) pt")
+        }
     }
 
     // J5. The takeover when it rings, then late with buds.
