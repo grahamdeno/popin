@@ -13,7 +13,8 @@ final class BallLightTests: XCTestCase {
     /// The window and glint sit where the big bubble puts them (upper left window, glint near the top).
     func testLightSitsWhereTheBubblePutsIt() {
         let m = BallLight.metrics(size: 100)
-        XCTAssertEqual(m.windowCenter, CGPoint(x: 31, y: 25))
+        XCTAssertEqual(m.windowCenter.x, 31, accuracy: 0.001)
+        XCTAssertEqual(m.windowCenter.y, 25, accuracy: 0.001)
         XCTAssertEqual(m.streakInset, 7.5, accuracy: 0.001)
         XCTAssertLessThan(m.glintCenter.y, m.windowCenter.y)
     }

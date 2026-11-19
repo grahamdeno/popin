@@ -499,8 +499,9 @@ struct GumBall: View {
     }
 }
 
-/// Story 8.5: the big bubble's light (gloss streak, window, glint) scaled to a small ball, so every ball in Pop In
-/// is lit the same way. The numbers match BubbleView's, as fractions of the ball's width.
+/// Story 8.5: the big bubble's light (gloss streak, window, glint) on a small ball, so every ball in Pop In is lit
+/// the same way. Same positions, angles, arc and opacity as BubbleView; the parts are drawn larger so they read at
+/// 16 to 64 pt.
 struct BallLight: View {
     let size: CGFloat
     /// Fortune's black glass takes a softer streak, as on the big bubble.
@@ -516,8 +517,9 @@ struct BallLight: View {
         var glintCenter: CGPoint
     }
 
-    /// Fractions shared with BubbleView: streak 3% of the width (at least 1.2 pt here), inset 7.5%, window 10% by
-    /// 5.5% at (31%, 25%), glint 5.5% by 2% at (60%, 10%). The glint is left out below 24 pt, where it would be a speck.
+    /// As fractions of the width. BubbleView's positions: window at (31%, 25%), glint at 10% high (12% here so it
+    /// clears the edge), streak inset 7.5%. Sizes are 1.6 times BubbleView's (streak 3%, window 10% by 5.5%) and 1.4
+    /// times for the glint (5.5% by 2%). The glint is left out below 24 pt, where it would be a speck.
     static func metrics(size s: CGFloat) -> Metrics {
         Metrics(streakWidth: max(1.2, s * 0.03 * 1.6), streakInset: s * 0.075,
                 window: CGSize(width: s * 0.1 * 1.6, height: s * 0.055 * 1.6), windowCenter: CGPoint(x: s * 0.31, y: s * 0.25),
