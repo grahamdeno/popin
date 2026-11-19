@@ -39,6 +39,8 @@ final class AppModel {
     var cleared: Set<String>
     /// The cleared meetings that were skipped with Not going, so they can come back until they start (item 7.2).
     var skipped: Set<String> = []
+    /// Story 1.1: meetings dropped by a clash pick. No alarm; a quiet line with Join on Home.
+    var clashDropped: Set<String> = []
     /// The meeting shown full screen on the Now screen.
     var arrived: Meeting?
     /// A meeting link waiting for the view to open it.
@@ -329,6 +331,7 @@ final class AppModel {
         nudges = prefs.nudges
         cleared = prefs.clearedMeetingIDs
         skipped = prefs.skippedMeetingIDs.intersection(prefs.clearedMeetingIDs)
+        clashDropped = ScreenshotMode.isOn ? [] : prefs.clashDroppedIDs
         taughtPop = prefs.taughtPop
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
@@ -428,6 +431,27 @@ final class AppModel {
                                paused: { self.isPaused($0, now: now) })
     }
 
+    /// Story 1.1: the clash `meeting` is in (two or more ringing meetings in the same minute, no pick yet).
+    func clash(for meeting: Meeting, now: Date = .now) -> [Meeting]? {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        let groups = ClashRule.groups(open, rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
+        return ClashRule.group(for: meeting, in: groups)
+    }
+
+    /// Story 1.1: only the picked meeting rings; the others drop to a quiet line with Join. The calendar is untouched.
+    func pick(_ meeting: Meeting, from group: [Meeting]) {
+        clashDropped.formUnion(ClashRule.dropped(picking: meeting, from: group))
+        clashDropped.remove(meeting.id)
+        if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        writeWidgetSnapshot()
+        Task { await syncAlarms() }
+    }
+
+    /// Story 1.1: meetings dropped by a pick, for Home's quiet line.
+    func droppedLines(at now: Date) -> [Meeting] {
+        ClashRule.droppedLines(meetings + testMeetings, dropped: clashDropped, cleared: cleared, now: now)
+    }
+
     /// Superseded by a later meeting whose alarm has come due (see NewestWins).
     func isMissed(_ m: Meeting, among open: [Meeting], now: Date) -> Bool {
         NewestWins.isMissed(m, among: open, now: now, lead: TimeInterval(leadMinutes * 60),
@@ -496,6 +520,7 @@ final class AppModel {
 
     /// Whether this meeting gets the full alarm (and Pop In's takeover) rather than a gentle notification.
     func ringsFully(_ meeting: Meeting) -> Bool {
+        if clashDropped.contains(meeting.id) { return false }
         if meeting.calendarID == "test" || meeting.calendarID == OwnReminder.calendarID
             || meeting.calendarID == CalendarService.remindersCalendarID { return true }
         guard workHours.contains(meeting.start) else { return false }
@@ -680,6 +705,8 @@ final class AppModel {
         let liveIDs = Set((meetings + testMeetings).map(\.id))
         let pruned = cleared.intersection(liveIDs)
         if pruned != cleared { cleared = pruned; prefs.clearedMeetingIDs = pruned }
+        let keptDrops = clashDropped.intersection(liveIDs)
+        if keptDrops != clashDropped { clashDropped = keptDrops; if !ScreenshotMode.isOn { prefs.clashDroppedIDs = keptDrops } }
         let keptSkips = skipped.intersection(pruned)
         if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
         writeWidgetSnapshot()
@@ -694,7 +721,8 @@ final class AppModel {
         let open = meetings.filter { !cleared.contains($0.id) && $0.end > now }
         let live = meetings.filter { !isPaused($0, now: now) && !isMissed($0, among: open, now: now) }
         let alarmMeetings = live.filter { ringsFully($0) }
-        let gentleMeetings = live.filter { !ringsFully($0) }
+        // A meeting dropped by a clash pick gets no alarm and no notification (story 1.1).
+        let gentleMeetings = live.filter { !ringsFully($0) && !clashDropped.contains($0.id) }
         let planned = AlarmPlanner.plan(meetings: alarmMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared,
                                         countdown: countdownCard)
         let gentlePlanned = AlarmPlanner.plan(meetings: gentleMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared)

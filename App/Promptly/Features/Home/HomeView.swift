@@ -178,9 +178,11 @@ struct HomeView: View {
                     emptyBlock.glassCard()
                 }
             }
+            // Story 1.1: two or more ringing meetings at the same minute: say so and offer a pick.
+            if let next, let group = model.clash(for: next, now: now) { clashRow(group, now: now) }
             if model.calendarAuthorized && model.alarmsAuthorized {
                 quietStrip(then: next != nil && showThen ? upcoming.dropFirst().first : nil,
-                           skipped: model.skippedLines(at: now), now: now)
+                           skipped: model.skippedLines(at: now), dropped: model.droppedLines(at: now), now: now)
             }
             whatsNewCard
             if next != nil, !later.isEmpty { todayList(later) }
@@ -445,11 +447,12 @@ struct HomeView: View {
     /// The quiet strip under the card, on the plate: "Then 10:30 AM · Title", and a line for each skipped meeting that
     /// can still come back ("Not going: 3:00 PM Design review · Undo", item 7.2). Hidden when it has nothing to say.
     @ViewBuilder
-    private func quietStrip(then: Meeting?, skipped: [Meeting], now: Date) -> some View {
-        if then != nil || !skipped.isEmpty {
+    private func quietStrip(then: Meeting?, skipped: [Meeting], dropped: [Meeting] = [], now: Date) -> some View {
+        if then != nil || !skipped.isEmpty || !dropped.isEmpty {
             VStack(alignment: .leading, spacing: 0) {
                 if let then { thenRow(then, now: now).padding(.vertical, 12) }
                 ForEach(skipped) { skippedRow($0, now: now) }
+                ForEach(dropped) { droppedRow($0, now: now) }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
@@ -478,6 +481,54 @@ struct HomeView: View {
         .foregroundStyle(Brand.ink)
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
+    }
+
+    /// Story 1.1: "2 meetings at 1:00 PM · Pick one", a menu of at least 44 pt listing each meeting.
+    private func clashRow(_ group: [Meeting], now: Date) -> some View {
+        Menu {
+            Section("Ring only for") {
+                ForEach(group) { m in
+                    Button(m.title) { Feedback.pick(); model.pick(m, from: group) }
+                }
+            }
+        } label: {
+            Label(ClashRule.line(count: group.count, time: Countdown.time(group[0].start, now: now)),
+                  systemImage: "exclamationmark.2")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(Brand.ink)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .padding(.horizontal, 16)
+                .contentShape(.rect)
+        }
+        .plate(cornerRadius: 18)
+        .accessibilityIdentifier("clash-pick")
+        .accessibilityHint("Pick the one meeting that should ring")
+    }
+
+    /// Story 1.1: "Not ringing: 1:00 PM Design review · Join" for a meeting dropped by a pick.
+    private func droppedRow(_ meeting: Meeting, now: Date) -> some View {
+        HStack(alignment: .center, spacing: 10) {
+            Text(ClashRule.droppedLine(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
+                .font(.subheadline)
+                .foregroundStyle(Brand.secondary)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 4)
+            if let url = meeting.joinURL {
+                Button { openURL(url) } label: {
+                    Text("Join")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Brand.ink)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Join \(meeting.title)")
+            }
+        }
+        .frame(minHeight: 44)
     }
 
     /// "Not going: 3:00 PM Design review · Undo" until the meeting starts. Undo brings it back with its alarm.

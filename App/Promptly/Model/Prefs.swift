@@ -397,6 +397,13 @@ final class Prefs: @unchecked Sendable {
         get { Set(defaults.stringArray(forKey: "skippedMeetingIDs") ?? []) }
         set { defaults.set(Array(newValue).sorted(), forKey: "skippedMeetingIDs") }
     }
+
+    /// Meetings dropped by picking another at the same minute (story 1.1): no alarm, a quiet line with Join. Added in
+    /// 1.1; older versions ignore it.
+    var clashDroppedIDs: Set<String> {
+        get { Set(defaults.stringArray(forKey: "clashDroppedIDs") ?? []) }
+        set { defaults.set(Array(newValue).sorted(), forKey: "clashDroppedIDs") }
+    }
 }
 
 /// Written by the alarm's Join button (OpenMeetingIntent) and read when the app opens.
