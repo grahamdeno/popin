@@ -178,14 +178,29 @@ final class Journeys: XCTestCase {
         a.tap("Undo", undo)
         a.pause(0.8)
         a.shot("after-undo")
-        a.check("the meeting is back", a.any(containing: "Design review").waitForExistence(timeout: 3), severity: 3)
-        // The Not going state itself, from a second skip at the end.
+        let back = a.any(containing: "Pop the bubble to join Design review")
+        a.check("the meeting is back", back.waitForExistence(timeout: 3), severity: 3)
+        // 7.2: skip again and let the toast go. The quiet line takes over, and its Undo brings the meeting back after
+        // 10 seconds.
         let again = a.reveal(a.app.buttons["Not going"], tries: 8)
-        if again.exists && again.isHittable {
-            again.tap()
-            a.pause(0.3)
-            a.shot("not-going", note: "Design review is put away; Undo is offered")
+        guard again.exists && again.isHittable else {
+            a.check("Not going can be tapped a second time", false, severity: 3)
+            return
         }
+        again.tap()
+        a.check("the toast names the skip", a.any(containing: "Not going to Design review").waitForExistence(timeout: 2), severity: 2)
+        a.shot("not-going", note: "Toast: Not going to Design review · Undo")
+        a.pause(10)
+        a.check("the toast has gone after 5 seconds", !a.app.buttons["Undo"].exists, severity: 2)
+        let line = a.reveal(a.app.buttons["undo-skip"], tries: 8)
+        a.shot("not-going-line", note: "Not going: [time] Design review · Undo, in the strip under the card")
+        a.check("the quiet line shows the skipped meeting", a.any(containing: "Not going:").exists, severity: 3)
+        a.check("the quiet line's Undo is at least 44 pt", line.exists && line.frame.height >= 44, severity: 3,
+                detail: "height \(line.frame.height)")
+        a.tap("Undo on the quiet line, 10 seconds later", line, severity: 3)
+        a.pause(0.8)
+        a.check("the meeting is back after 10 seconds", back.waitForExistence(timeout: 3), severity: 3)
+        a.shot("after-line-undo")
     }
 
     // J4. Home a day ahead: the calm state.

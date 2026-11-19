@@ -168,10 +168,14 @@ struct HomeView: View {
                 if !model.calendarAuthorized || !model.alarmsAuthorized {
                     permissionNotice.glassCard()
                 } else if let next {
-                    meetingBlock(next, now: now, then: showThen ? upcoming.dropFirst().first : nil)
+                    meetingBlock(next, now: now)
                 } else {
                     emptyBlock.glassCard()
                 }
+            }
+            if model.calendarAuthorized && model.alarmsAuthorized {
+                quietStrip(then: next != nil && showThen ? upcoming.dropFirst().first : nil,
+                           skipped: model.skippedLines(at: now), now: now)
             }
             whatsNewCard
             if next != nil, !later.isEmpty { todayList(later) }
@@ -302,7 +306,7 @@ struct HomeView: View {
 
     /// One card holds the meeting and its countdown (mockup M1): the meta row, the title, the countdown, the time
     /// span, then the hint and Not going. What comes after is a quiet line below it.
-    private func meetingBlock(_ meeting: Meeting, now: Date, then: Meeting?) -> some View {
+    private func meetingBlock(_ meeting: Meeting, now: Date) -> some View {
         let parts = Countdown.parts(now: now, start: meeting.start)
         let started = meeting.start <= now
         let demo = isDemo(meeting)
@@ -341,8 +345,6 @@ struct HomeView: View {
                     .padding(.top, 18)
             }
             .glassCard()
-
-            if let then { thenStrip(then, now: now) }
         }
     }
 
@@ -434,9 +436,24 @@ struct HomeView: View {
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// "Then 10:30 AM · Title": a plain line under the card, on the plate. At accessibility sizes the title goes
-    /// under the time, two lines at most. The time is never split.
-    private func thenStrip(_ then: Meeting, now: Date) -> some View {
+    /// The quiet strip under the card, on the plate: "Then 10:30 AM · Title", and a line for each skipped meeting that
+    /// can still come back ("Not going: 3:00 PM Design review · Undo", item 7.2). Hidden when it has nothing to say.
+    @ViewBuilder
+    private func quietStrip(then: Meeting?, skipped: [Meeting], now: Date) -> some View {
+        if then != nil || !skipped.isEmpty {
+            VStack(alignment: .leading, spacing: 0) {
+                if let then { thenRow(then, now: now).padding(.vertical, 12) }
+                ForEach(skipped) { skippedRow($0, now: now) }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .plate(cornerRadius: 18)
+        }
+    }
+
+    /// "Then 10:30 AM · Title". At accessibility sizes the title goes under the time, two lines at most. The time is
+    /// never split.
+    private func thenRow(_ then: Meeting, now: Date) -> some View {
         let time = Countdown.time(then.start, now: now)
         return Group {
             if typeSize.isAccessibilitySize {
@@ -454,10 +471,34 @@ struct HomeView: View {
         .font(.subheadline.weight(.medium))
         .foregroundStyle(Brand.ink)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .plate(cornerRadius: 18)
         .accessibilityElement(children: .combine)
+    }
+
+    /// "Not going: 3:00 PM Design review · Undo" until the meeting starts. Undo brings it back with its alarm.
+    private func skippedRow(_ meeting: Meeting, now: Date) -> some View {
+        let words = Text(SkipRule.line(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
+            .font(.subheadline)
+            .foregroundStyle(Brand.secondary)
+            .lineLimit(3)
+            .fixedSize(horizontal: false, vertical: true)
+        let undo = Button { model.restore(meeting) } label: {
+            Text("Undo")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Brand.ink)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Undo Not going, \(meeting.title)")
+        .accessibilityIdentifier("undo-skip")
+        return Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 0) { words.padding(.top, 8); undo }
+            } else {
+                HStack(alignment: .center, spacing: 12) { words; Spacer(minLength: 4); undo }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// The "Try a pop" practice meeting: no countdown to wait for, just pop it.
@@ -478,28 +519,36 @@ struct HomeView: View {
         }
     }
 
-    /// Five seconds to take back a pop or a "Not going".
+    /// Five seconds to take back a pop or a "Not going", on the plate, low on the screen. At accessibility sizes the
+    /// words wrap (three lines at most) and Undo takes its own row. After a skip, the quiet line takes over.
     @ViewBuilder
     private var undoToast: some View {
         if let last = model.lastCleared {
-            HStack(spacing: 12) {
-                Text("Cleared \(last.title)")
-                    .font(.subheadline)
+            let words = Text(SkipRule.toast(title: last.title, skipped: model.lastClearedSkipped))
+                .font(.subheadline)
+                .foregroundStyle(Brand.ink)
+                .lineLimit(3)
+                .fixedSize(horizontal: false, vertical: true)
+            // The tappable area is the full 44 pt height, not just the word (the iPad audit's taps missed it).
+            let undo = Button { model.undoClear() } label: {
+                Text("Undo")
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Brand.ink)
-                    .lineLimit(1)
-                // The tappable area is the full 44 pt height, not just the word (the iPad audit's taps missed it).
-                Button { model.undoClear() } label: {
-                    Text("Undo")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Brand.ink)
-                        .frame(minWidth: 44, minHeight: 44)
-                        .contentShape(.rect)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+            Group {
+                if typeSize.isAccessibilitySize {
+                    VStack(alignment: .leading, spacing: 0) { words.padding(.top, 10); undo }
+                } else {
+                    HStack(spacing: 12) { words; undo }
                 }
-                .buttonStyle(.plain)
             }
             .padding(.horizontal, 18)
-            .glassEffect(.regular, in: .capsule)
-            .padding(.bottom, 28)
+            .plate(cornerRadius: 22)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 12)
             .transition(.move(edge: .bottom).combined(with: .opacity))
             .task(id: last.id) {
                 try? await Task.sleep(for: .seconds(5))

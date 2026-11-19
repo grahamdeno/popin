@@ -37,6 +37,8 @@ final class AppModel {
     var alarmsAuthorized = false
     var onboarded: Bool
     var cleared: Set<String>
+    /// The cleared meetings that were skipped with Not going, so they can come back until they start (item 7.2).
+    var skipped: Set<String> = []
     /// The meeting shown full screen on the Now screen.
     var arrived: Meeting?
     /// A meeting link waiting for the view to open it.
@@ -325,6 +327,7 @@ final class AppModel {
         alarmService.sound = prefs.alarmSound
         nudges = prefs.nudges
         cleared = prefs.clearedMeetingIDs
+        skipped = prefs.skippedMeetingIDs.intersection(cleared)
         taughtPop = prefs.taughtPop
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
@@ -360,6 +363,7 @@ final class AppModel {
             ballStyle = .bubble
             leadMinutes = 2
             cleared = []
+            skipped = []
             calendars = scene == .manycals ? ScreenshotMode.manyCalendars : ScreenshotMode.calendars
             meetings = scene == .empty ? [] : MeetingMerge.merge(ScreenshotMode.meetings())
             pausedUntil = scene == .paused ? Date.now.addingTimeInterval(3600) : nil
@@ -520,12 +524,37 @@ final class AppModel {
 
     /// The last meeting popped or marked Not going, for the 5-second Undo.
     var lastCleared: Meeting?
+    /// True when `lastCleared` was skipped with Not going, false when it was popped. The toast says which.
+    var lastClearedSkipped = false
 
     func undoClear() {
         guard let meeting = lastCleared else { return }
         lastCleared = nil
+        bringBack(meeting)
+    }
+
+    /// Skipped meetings that can still be brought back, soonest first, for Home's quiet line. The one whose toast is
+    /// still up is left out until the toast goes.
+    func skippedLines(at now: Date) -> [Meeting] {
+        SkipRule.restorable(meetings + testMeetings, skipped: skipped, now: now,
+                            hiding: lastClearedSkipped ? lastCleared?.id : nil)
+    }
+
+    /// Undo on the quiet line: brings a skipped meeting back until it starts. Its alarm is planned again from the
+    /// same meeting and settings, so it gets the same ID and ring time as before.
+    func restore(_ meeting: Meeting, now: Date = .now) {
+        guard SkipRule.canRestore(meeting, skipped: skipped, now: now) else { return }
+        if lastCleared?.id == meeting.id { lastCleared = nil }
+        bringBack(meeting)
+    }
+
+    private func bringBack(_ meeting: Meeting) {
         cleared.remove(meeting.id)
-        prefs.clearedMeetingIDs = cleared
+        skipped.remove(meeting.id)
+        if !ScreenshotMode.isOn {
+            prefs.clearedMeetingIDs = cleared
+            prefs.skippedMeetingIDs = skipped
+        }
         shownNowFor.remove(meeting.id)
         writeWidgetSnapshot()
         Task { await syncAlarms() }
@@ -629,6 +658,8 @@ final class AppModel {
         let liveIDs = Set((meetings + testMeetings).map(\.id))
         let pruned = cleared.intersection(liveIDs)
         if pruned != cleared { cleared = pruned; prefs.clearedMeetingIDs = pruned }
+        let keptSkips = skipped.intersection(pruned)
+        if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
         writeWidgetSnapshot()
         await syncAlarms()
     }
@@ -799,9 +830,14 @@ final class AppModel {
         alarmService.stopAlerting()
         AlarmLoop.stop()
         cleared.insert(meeting.id)
+        if skipped { self.skipped.insert(meeting.id) } else { self.skipped.remove(meeting.id) }
         if meeting.calendarID == "test" { testPlanned.removeAll { $0.meeting.id == meeting.id } }
-        if !ScreenshotMode.isOn { prefs.clearedMeetingIDs = cleared }
+        if !ScreenshotMode.isOn {
+            prefs.clearedMeetingIDs = cleared
+            prefs.skippedMeetingIDs = self.skipped
+        }
         lastCleared = meeting
+        lastClearedSkipped = skipped
         if skipped { skipCount += 1 } else { popCount += 1 }
         if !taughtPop { taughtPop = true; prefs.taughtPop = true }
         writeWidgetSnapshot()
