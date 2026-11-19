@@ -49,7 +49,7 @@ struct ProView: View {
                             .foregroundStyle(Brand.ink)
                         Text(store.betaAccess && !store.purchased
                              ? "Unlocked for TestFlight testing. In the App Store version this is a one-time \(store.price) purchase."
-                             : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked, and new themes arrive on their own."
+                             : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked, and new themes arrive on their own. There's a tip jar at the bottom of Settings if you ever want to give more."
                                            : "One purchase, yours for good. The free app keeps every alarm, the bubble and the widgets.")
                             .font(.callout)
                             .foregroundStyle(Brand.secondary)
@@ -61,7 +61,8 @@ struct ProView: View {
                               alignment: .leading, spacing: 16) {
                         ForEach(features, id: \.1) { item in feature(icon: item.0, words: item.1) }
                     }
-                    if let message = store.message {
+                    // Owners still see a result message (a restore that found nothing new, say) here.
+                    if store.isPro, let message = store.message {
                         Text(message).font(.subheadline).foregroundStyle(Brand.ink)
                     }
                 }
@@ -95,8 +96,15 @@ struct ProView: View {
     /// "$6.99 One time · no subscription", Unlock Pro and Restore purchase, fixed at the bottom on the plate.
     private func buyBar(_ store: ProStore) -> some View {
         VStack(spacing: 10) {
-            (Text(store.price).fontWeight(.semibold).foregroundColor(Brand.ink)
-             + Text("  One time · no subscription").foregroundColor(Brand.secondary))
+            // A failed buy or restore says so here, beside the buttons, not below the fold.
+            if let message = store.message {
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(Brand.ink)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Text("\(Text(store.price).fontWeight(.semibold).foregroundStyle(Brand.ink))  \(Text("One time · no subscription").foregroundStyle(Brand.secondary))")
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
