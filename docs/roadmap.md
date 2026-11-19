@@ -45,7 +45,7 @@ Newest first. Refined decisions only.
 |---|---|---|
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
 | 2026-11-19 | Story 1.2 changes: a missed alarm keeps ringing at one steady volume until it's dismissed or a later ringing meeting reaches its ring time. The 7-minute auto-stop is dropped | Graham's decision. A missed meeting should never go quiet on its own |
-| 2026-11-19 | Graham's written exception for epic 7 and 1.1 (his handoff note, sent in the Pop In Product chat on 2026-11-19): Opus reviews and merges 1.1 work, makes test builds, and after its own go-live verdict runs the release triggers, naming each trigger, version and commit in its PR. Nobody reviews their own work. Graham still presses Submit for Review and Release. Deleting, force-pushing, renaming, archiving, transferring, purchases, product IDs, secrets and release-calendar dates stay his | Speed: no active users, one release |
+| 2026-11-19 | Graham's written exception for epic 7 and 1.1 (his handoff note, sent in the Pop In Product chat on 2026-11-19): Opus reviews and merges 1.1 work, makes test builds, and after the go-live verdict from a different model (Fable) runs the release triggers, naming each trigger, version and commit in its PR. Graham confirms this allowance in his own message before the first release trigger runs. Nobody reviews their own work. Graham still presses Submit for Review and Release. Deleting, force-pushing, renaming, archiving, transferring, purchases, prices, product IDs, secrets and release-calendar dates stay his | Speed: no active users, one release |
 | 2026-11-19 | Benchmark "Find and turn off one calendar" is 4 taps from Home (the gear, Calendars, search, the switch) | Search is the quick way through 22 calendars. The walk on c4a63f1 (run 44508485401) counted 4 in every config; it was 5 before 7.1 |
 | 2026-11-19 | Epic 7 step 1 settled: words never sit on the gum (Fortune's fortune excepted); words over the bubble sit on a white plate of at least 90%; ten accent text colors darken; Home's header stays fixed at every text size and the card scrolls over a bubble that keeps its size; "Pop the bubble to join" moves into the alarm card; the card is the white plate unless glass passes Apple's audit on every theme | A script over all 46 themes: white words on the gum fail on 41, one text color per theme fails on 17, a bare "Then" line fails on all 46. On a 90% plate, ink, secondary and every accent text pass 4.5:1 over any color, the darkest theme art included |
 | 2026-11-18 | 1.1 scope reopened and frozen again: epic 7 added (Home and the alarm work for everyone). Standing merge go extends to epic 7 | Grok's design review found a severity 4 (big-text Home) and a severity 3 (Not going can't be undone after 5 s) on 1.0; the playbook fixes both before the next release. The M1 Home layout goes in now so Home is rebuilt once |
@@ -81,8 +81,9 @@ Newest first. Refined decisions only.
 - **Purchases approved:** none new.
 - **Go-aheads:** merge, standing for all 1.1 items as each passes review, when the merge uploads and deploys nothing
   (2026-11-16, 2026-11-18). From 2026-11-19, Graham's written exception (decision log) lets Opus also make 1.1
-  test builds and, after its own go-live verdict, run the release triggers, each named with its commit in a PR.
-  Submit for Review and Release stay Graham's.
+  test builds and, after the go-live verdict from a different model (Fable), run the release triggers, each named
+  with its commit in a PR, once Graham has confirmed that allowance in his own message. Submit for Review and
+  Release stay Graham's.
 - **Target:** rough, not a deadline: after Fireworks drops on 2026-12-14.
 
 ## Dated checks
