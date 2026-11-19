@@ -57,6 +57,7 @@ struct NowView: View {
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .frame(maxWidth: 680, maxHeight: min(cardHeight, reach), alignment: .top)
+                    .accessibilityIdentifier("alarm-scroll")
                     .padding(.horizontal, 12)
                     .padding(.top, 24)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -123,6 +124,8 @@ struct NowView: View {
                 .padding(.top, 14)
         }
         .glassCard()
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("alarm-card")
     }
 
     /// "Also missed: 1:00 PM Standup", wrapping, at least 44 pt, with its own Join while it has a link.
