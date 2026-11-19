@@ -302,7 +302,8 @@ final class AppModel {
     @ObservationIgnored private var shownNowFor: Set<String> = []
 
     init() {
-        let prefs = Prefs()
+        // Demo mode (screenshots and the audit walk) works on its own throwaway settings, so it saves nothing (item 11).
+        let prefs = ScreenshotMode.isOn ? Prefs.demo() : Prefs()
         self.prefs = prefs
         onboarded = prefs.onboarded
         leadMinutes = prefs.leadMinutes

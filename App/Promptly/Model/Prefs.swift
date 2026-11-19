@@ -163,6 +163,17 @@ final class Prefs: @unchecked Sendable {
         self.defaults = defaults
     }
 
+    /// The suite demo mode uses instead of the real one (item 11).
+    static let demoSuite = "com.grahamdeno.promptly.demo"
+
+    /// Demo mode's settings (item 11: demo mode saves nothing). A separate store, emptied at every demo launch, so a
+    /// demo never reads the owner's settings and never changes them, the theme and Surprise me included.
+    static func demo(suiteName: String = demoSuite) -> Prefs {
+        let store = UserDefaults(suiteName: suiteName) ?? UserDefaults()
+        store.removePersistentDomain(forName: suiteName)
+        return Prefs(defaults: store)
+    }
+
     var onboarded: Bool {
         get { defaults.bool(forKey: "onboarded") }
         set { defaults.set(newValue, forKey: "onboarded") }
