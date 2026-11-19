@@ -92,7 +92,12 @@ struct HomeView: View {
         })
         .hapticRamp(until: model.upcoming(at: .now).first?.start, enabled: model.buzz && model.arrived == nil)
         .overlay { DiscoLights().ignoresSafeArea().environment(\.themeStill, quiet || PowerWatch.shared.strained) }
-        .overlay(alignment: .bottom) { undoToast }
+        // 8.16: the toast rises from the bottom edge with a quick, firm spring; with Reduce Motion it simply appears.
+        // The animation is scoped to the toast, so the card and bubble don't animate with it.
+        .overlay(alignment: .bottom) {
+            ZStack { undoToast }
+                .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: model.lastCleared?.id)
+        }
         // A theme picked here applies when the sheet closes, as from Settings (8.15).
         .sheet(isPresented: $showGallery, onDismiss: { model.applyPendingTheme() }) {
             NavigationStack { ThemeGalleryPage() }
@@ -361,7 +366,14 @@ struct HomeView: View {
             .font(.subheadline.weight(.medium))
             .foregroundStyle(Brand.secondary)
             .fixedSize(horizontal: false, vertical: true)
-        let right = Label(how, systemImage: rings ? "bell.fill" : "bell.slash")
+        // 8.16: when the alarm is set, the bell wiggles once (not with Reduce Motion).
+        let right = Label {
+            Text(how)
+        } icon: {
+            Image(systemName: rings ? "bell.fill" : "bell.slash")
+                .symbolEffect(.wiggle, options: .nonRepeating, isActive: rings && !reduceMotion)
+                .accessibilityHidden(true)
+        }
             .font(.footnote.weight(.medium))
             .foregroundStyle(rings ? Brand.accentText : Brand.secondary)
             .fixedSize(horizontal: false, vertical: true)
