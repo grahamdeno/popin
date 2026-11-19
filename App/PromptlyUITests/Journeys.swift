@@ -585,6 +585,18 @@ final class Journeys: XCTestCase {
                 a.accessibility("add-reminder")
             }
         }
+        // 8.15: Theme in the ⋯ menu opens the gallery; picking a theme takes 3 taps from Home.
+        a.launch("home")
+        a.begin("Change the theme")
+        var themeDone = false
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
+           a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
+            a.pause(0.8)
+            a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
+            let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
+            themeDone = a.tap("Coral", coral, severity: 2)
+        }
+        a.done("Change the theme", themeDone)
         a.launch("playground", settle: 3)
         a.shot("pop-for-fun")
         let ball = a.app.descendants(matching: .any).matching(NSPredicate(format: "label ENDSWITH 'bubble'")).firstMatch

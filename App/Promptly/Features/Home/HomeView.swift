@@ -267,6 +267,7 @@ struct HomeView: View {
             Menu {
                 Button("Add a reminder", systemImage: "plus") { addingReminder = true }
                 Button("Pop for fun", systemImage: "circle.hexagongrid") { playing = true }
+                Button("Theme", systemImage: "paintpalette") { showGallery = true }
                 if let until = model.pausedUntil, until > .now {
                     Button("Resume alerts", systemImage: "bell") { model.resume() }
                 } else {
