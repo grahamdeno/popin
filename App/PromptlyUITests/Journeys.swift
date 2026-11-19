@@ -531,7 +531,7 @@ final class Journeys: XCTestCase {
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
         // 8.10: with a reminder saved, the sheet's list has an Edit button of at least 44 pt.
         if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
-           a.tap("Add a reminder", a.app.buttons["Add a reminder"], timeout: 2, severity: 2) {
+           a.tap("Add a reminder", a.app.buttons["Add a reminder"], severity: 2, timeout: 2) {
             a.pause(1)
             let editButton = a.app.buttons["Edit"].firstMatch
             if a.expect("Edit on your reminders", editButton, timeout: 2, severity: 2) {
