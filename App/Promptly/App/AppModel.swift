@@ -327,7 +327,7 @@ final class AppModel {
         alarmService.sound = prefs.alarmSound
         nudges = prefs.nudges
         cleared = prefs.clearedMeetingIDs
-        skipped = prefs.skippedMeetingIDs.intersection(cleared)
+        skipped = prefs.skippedMeetingIDs.intersection(prefs.clearedMeetingIDs)
         taughtPop = prefs.taughtPop
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
