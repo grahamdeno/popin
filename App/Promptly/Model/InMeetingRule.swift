@@ -16,9 +16,10 @@ enum InMeetingRule {
         popped.contains { $0.start <= ring && ring < $0.end }
     }
 
-    /// The meetings that count as "in": cleared with a pop, not skipped with Not going.
-    static func popped(_ meetings: [Meeting], cleared: Set<String>, skipped: Set<String>) -> [Meeting] {
-        meetings.filter { cleared.contains($0.id) && !skipped.contains($0.id) }
+    /// The meetings that count as "in": ones the owner popped themselves, still cleared. Not going, and meetings
+    /// cleared along with another (story 1.3's stack), don't count.
+    static func popped(_ meetings: [Meeting], poppedIDs: Set<String>, cleared: Set<String>) -> [Meeting] {
+        meetings.filter { poppedIDs.contains($0.id) && cleared.contains($0.id) }
     }
 
     /// A quiet alarm gets its own ID, so switching between quiet and normal replaces the scheduled alarm (iOS can't

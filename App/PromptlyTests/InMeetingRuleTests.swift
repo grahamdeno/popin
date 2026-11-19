@@ -33,11 +33,11 @@ final class InMeetingRuleTests: XCTestCase {
         XCTAssertTrue(result.quiet.isEmpty)
     }
 
-    /// Not going doesn't count as being in a meeting; a pop does.
+    /// Only the owner's own pops count: not Not going, and not meetings cleared along with another (1.3's stack).
     func testOnlyPoppedMeetingsCount() {
-        let a = m("a", 0), b = m("b", 0)
-        let popped = InMeetingRule.popped([a, b], cleared: ["a", "b"], skipped: ["b"])
-        XCTAssertEqual(popped.map(\.id), ["a"])
+        let a = m("a", 0), b = m("b", 0), c = m("c", 0)
+        let popped = InMeetingRule.popped([a, b, c], poppedIDs: ["a", "c"], cleared: ["a", "b"])
+        XCTAssertEqual(popped.map(\.id), ["a"], "b was cleared without a pop; c was brought back")
     }
 
     /// Test and snooze alarms keep their IDs, and a meeting doesn't make its own alarm quiet.

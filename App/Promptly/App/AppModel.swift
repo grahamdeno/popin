@@ -39,6 +39,8 @@ final class AppModel {
     var cleared: Set<String>
     /// The cleared meetings that were skipped with Not going, so they can come back until they start (item 7.2).
     var skipped: Set<String> = []
+    /// Story 1.4: meetings the owner popped themselves.
+    var popped: Set<String> = []
     /// The meeting shown full screen on the Now screen.
     var arrived: Meeting?
     /// A meeting link waiting for the view to open it.
@@ -329,6 +331,7 @@ final class AppModel {
         nudges = prefs.nudges
         cleared = prefs.clearedMeetingIDs
         skipped = prefs.skippedMeetingIDs.intersection(prefs.clearedMeetingIDs)
+        popped = prefs.poppedMeetingIDs.intersection(prefs.clearedMeetingIDs)
         taughtPop = prefs.taughtPop
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
@@ -557,9 +560,11 @@ final class AppModel {
     private func bringBack(_ meeting: Meeting) {
         cleared.remove(meeting.id)
         skipped.remove(meeting.id)
+        popped.remove(meeting.id)
         if !ScreenshotMode.isOn {
             prefs.clearedMeetingIDs = cleared
             prefs.skippedMeetingIDs = skipped
+            prefs.poppedMeetingIDs = popped
         }
         shownNowFor.remove(meeting.id)
         writeWidgetSnapshot()
@@ -664,6 +669,8 @@ final class AppModel {
         let liveIDs = Set((meetings + testMeetings).map(\.id))
         let pruned = cleared.intersection(liveIDs)
         if pruned != cleared { cleared = pruned; prefs.clearedMeetingIDs = pruned }
+        let keptPops = popped.intersection(pruned)
+        if keptPops != popped { popped = keptPops; if !ScreenshotMode.isOn { prefs.poppedMeetingIDs = keptPops } }
         let keptSkips = skipped.intersection(pruned)
         if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
         // Dismissals only matter while their meeting is still on the calendar (story 1.2).
@@ -728,7 +735,7 @@ final class AppModel {
                                             openUntil: isForeground ? now.addingTimeInterval(Self.openQuietWindow) : nil,
                                             showing: shownNowFor)
         // Story 1.4: alarms that ring while a popped meeting is still running use the quieter sound.
-        let popped = InMeetingRule.popped(meetings, cleared: cleared, skipped: skipped)
+        let popped = InMeetingRule.popped(meetings, poppedIDs: popped, cleared: cleared)
         let protected = Set((testPlanned + snoozePlanned).map(\.id))
         let firsts = InMeetingRule.apply(plan.firstRings, popped: popped, except: protected)
         let repeatsQ = InMeetingRule.apply(plan.repeats, popped: popped)
@@ -842,7 +849,7 @@ final class AppModel {
         arrived = meeting
         if ring && isForeground {
             // Story 1.4: quieter while a popped meeting is still running.
-            let popped = InMeetingRule.popped(meetings, cleared: cleared, skipped: skipped).filter { $0.id != meeting.id }
+            let popped = InMeetingRule.popped(meetings, poppedIDs: popped, cleared: cleared).filter { $0.id != meeting.id }
             AlarmLoop.start(meetingStart: meeting.start, quiet: InMeetingRule.isInMeeting(at: .now, popped: popped))
         }
         Task { await syncAlarms() }   // drops the backup alarm for this meeting
@@ -874,10 +881,12 @@ final class AppModel {
         AlarmLoop.stop()
         cleared.insert(meeting.id)
         if skipped { self.skipped.insert(meeting.id) } else { self.skipped.remove(meeting.id) }
+        if skipped { popped.remove(meeting.id) } else { popped.insert(meeting.id) }
         if meeting.calendarID == "test" { testPlanned.removeAll { $0.meeting.id == meeting.id } }
         if !ScreenshotMode.isOn {
             prefs.clearedMeetingIDs = cleared
             prefs.skippedMeetingIDs = self.skipped
+            prefs.poppedMeetingIDs = popped
         }
         lastCleared = meeting
         lastClearedSkipped = skipped
