@@ -6,9 +6,11 @@ name: screenshots
 on:
   workflow_dispatch:
   pull_request:
+    # Only when the screenshot test or this workflow changes. Walk changes (Journeys.swift, Audit.swift) are covered
+    # by build and ux-audit; running screenshots on every PR held the Mac runners (November 19).
     paths:
       - .github/workflows/screenshots.yml
-      - App/PromptlyUITests/**
+      - App/PromptlyUITests/ScreenshotTests.swift
 
 permissions:
   contents: read
