@@ -10,7 +10,7 @@ One page for the app, the site (popin.tangomike.app) and the App Store pictures.
 | Ink | `#141414` | Titles, body, buttons on white |
 | Secondary | `#4A4A4A` | Second lines, captions (8.0:1 or better on white and soft pink) |
 | Soft pink | `#FFF0F6` | Quiet panels and ghost buttons on the site |
-| Pink words | `#C8146A` | Links, kickers and pink words on white (5.6:1 on white, 5.1:1 on soft pink) |
+| Pink words | `#B02E68` | Links, kickers and pink words on white, the app's Bubblegum accent text (above 4.5:1 on white and soft pink); each app theme has its own accent text |
 | Bubble pink | `#FF7FB0` | The bubble only; never words on white |
 | Deep band | `#1E1620` | The site's Pro and price band only |
 

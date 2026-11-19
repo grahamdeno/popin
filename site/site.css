@@ -1,7 +1,7 @@
 @font-face { font-family:"Geist"; src:url("fonts/geist-latin.woff2") format("woff2"); font-weight:100 900; font-display:swap; }
 /* Pop In: calm white like the app, with the bubblegum pink as the one color mass (docs/brand.md). The deep ink band
    is used only for Pro and its price (story 8.17). */
-:root { --paper:#FFFFFF; --ink:#141414; --muted:#4A4A4A; --pink:#FF7FB0; --pink-ink:#C8146A; --soft:#FFF0F6;
+:root { --paper:#FFFFFF; --ink:#141414; --muted:#4A4A4A; --pink:#FF7FB0; --pink-ink:#B02E68; --soft:#FFF0F6;
         --sheet:#1E1620; --bone:#FFF7FA; --sheet-muted:#C9B8C4; --sheet-faint:#9C8A97; --line:rgba(20,20,20,.08); --band-line:rgba(255,247,250,.12); }
 * { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; background:var(--paper); }

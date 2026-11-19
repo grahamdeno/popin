@@ -406,9 +406,11 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - Checked by: J7 picture; the read-only guard.
 
 #### 8.12 The site and support pages use the app's words (GR-19)
-- Given popin.tangomike.app and its support page, then they say Smart, Always rings and Quiet; "Open" for the Lock
-  Screen; and the alarm screen's alt text names the bubble, Not going and Snooze.
+- Given popin.tangomike.app and its support page, then they say Smart, Always rings and Quiet; the Lock Screen's
+  own buttons, Dismiss and "Join [service]" or "Open" (widened 2026-11-19 to match the app); and the alarm screen's alt text names the bubble, Not going and Snooze.
 - This deploys the site (`site/**`): it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
+  The site's pictures (`site/img/shot-*.webp`) are refreshed from 1.1's screenshot run in the same ship, so the words
+  and pictures agree; the price and theme count are checked then.
 - Checked by: review of `site/` against the app's strings.
 
 #### 8.13 Your own reminders say Skip (GR-16)
