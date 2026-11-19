@@ -35,7 +35,8 @@ final class Journeys: XCTestCase {
         // the Theme row in 10 of 40 themes without this wait (pro-light, November 18). One more tap if it didn't.
         let bar = a.app.navigationBars["Settings"].firstMatch
         if !bar.waitForExistence(timeout: 4) {
-            a.app.buttons["home-settings"].tap()
+            a.check("Settings opened on the first tap", false, severity: 1)
+            a.tap("Settings (gear), second try", a.app.buttons["home-settings"], severity: 1)
         }
         return a.expect("Settings opens", bar, timeout: 5, severity: severity)
     }
@@ -255,7 +256,9 @@ final class Journeys: XCTestCase {
         let card = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
         if a.expect("the alarm card is shown", card, severity: 4) {
             a.check("the card says Starts in", card.staticTexts["Starts in"].exists, severity: 3)
-            a.check("the card says how to join", card.staticTexts["Pop the bubble to join"].exists, severity: 3)
+            a.check("the card says how to join",
+                    card.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch.exists,
+                    severity: 3)
             let snooze = card.buttons["Snooze 2 min"].firstMatch
             let notGoing = card.buttons["Not going"].firstMatch
             let span = card.descendants(matching: .any).matching(identifier: "alarm-span").firstMatch
@@ -271,10 +274,13 @@ final class Journeys: XCTestCase {
             } else {
                 a.check("the meeting time is shown", false, severity: 3)
             }
-            // The card stops at three quarters of the screen, so the bubble can be tapped in the bottom quarter.
+            // The card's scroll area stops at three quarters of the screen, so the bubble can be tapped in the bottom
+            // quarter. (The card itself can be taller and scroll; its frame isn't clipped, so measure the scroll area.)
             let screen = a.app.windows.firstMatch.frame
-            a.check("the card leaves the bottom quarter for the bubble", card.frame.maxY <= screen.height * 0.75 + 1,
-                    severity: 4, detail: "card \(card.frame), screen \(screen)")
+            let scroll = a.app.descendants(matching: .any).matching(identifier: "alarm-scroll").firstMatch
+            a.check("the card leaves the bottom quarter for the bubble",
+                    scroll.exists && scroll.frame.maxY <= screen.height * 0.75 + 1,
+                    severity: 4, detail: "scroll area \(scroll.frame), screen \(screen)")
         }
         a.launch("late", settle: 3)
         a.shot("late-50s", note: "50 s after the ring: the first bud should be out")
@@ -282,6 +288,9 @@ final class Journeys: XCTestCase {
         a.shot("late-75s", note: "75 s after the ring: two or three buds")
         a.begin("Pop the late bubble")
         a.done("Pop the late bubble", popBubble(a))
+        // The tap really popped: the alarm card is gone.
+        let lateCard = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
+        a.check("the pop closed the alarm", !lateCard.waitForExistence(timeout: 2), severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
     }

@@ -57,6 +57,7 @@ struct NowView: View {
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .frame(maxWidth: 680, maxHeight: min(cardHeight, reach), alignment: .top)
+                    .accessibilityIdentifier("alarm-scroll")
                     .padding(.horizontal, 12)
                     .padding(.top, 24)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
