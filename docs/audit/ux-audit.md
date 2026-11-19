@@ -17,22 +17,22 @@ contact sheets) lands on the `ci-audit` branch as `SUMMARY.md` and `sheets/`.
 | # | Journey | What it walks |
 |---|---|---|
 | J1 | First run | Hello, calendars why, alarms why, which calendars, covered, Home |
-| J2 | Home, minutes away | Read the card, pop to join, Undo |
+| J2 | Home, minutes away | Read the card; the header (More, gear) is on screen and hittable; the column scrolls and Not going is 44 pt and reachable; the bubble is hittable with the column at the top and the bottom; pop to join, Undo |
 | J3 | Not going | Not going (a picture of the meeting put away, with Undo up), Undo, the meeting is back |
-| J4 | Home, a day away | The calm state |
+| J4 | Home, a day away | The calm state; the countdown keeps its height when the hint line appears (a day away against 7 minutes) |
 | J5 | Takeover and late | Ringing screen; 50 s and 75 s after the ring (buds); pop |
-| J6 | Settings (free) | From Home: More, Settings, Ring before, 2 minutes (the benchmark). Then every row opens and comes back; Sound; Pop sound; a locked theme opens Pro; Restore |
-| J7 | Many calendars | 22 calendars in 5 accounts. From Home: More, Settings, Calendars, search "soccer", switch one off. From Home again: turn a whole account off |
+| J6 | Settings (free) | From Home: the gear, Ring before, 2 minutes (the benchmark). Then every row opens and comes back; Sound; Pop sound; a locked theme opens Pro; Restore |
+| J7 | Many calendars | 22 calendars in 5 accounts. From Home: the gear, Calendars, search "soccer", switch one off. From Home again: turn a whole account off |
 | J8 | Nothing coming up | Empty Home, Try a pop |
 | J9 | Unicorn | Bubble, pop with confetti, sprinkles and unicorns |
 | J10 | Fortune | Black ball, the fortune on the card, the mist pop |
 | J11 | Moon and Grenade | Each ball and its pop; Moon says "Next transmission" |
-| J12 | Every held theme | For each of the 40 holiday and novelty themes: Home with that theme, the pop, then Settings' Theme row must name the theme asked for |
-| J13 | Edge cases | Missed under a new alarm, paused, outside work hours, own reminder, merged duplicate, the More menu, Add a reminder, Pop for fun |
+| J12 | Every held theme | For each of the 40 holiday and novelty themes: Home with that theme, Apple's accessibility audit on Home, the pop, then Settings' Theme row must name the theme asked for |
+| J13 | Edge cases | Missed under a new alarm, paused (the Paused line is the first row, 44 pt), outside work hours, own reminder, merged duplicate, the More menu, Add a reminder, Pop for fun |
 
 **Benchmarks** (`docs/audit-benchmarks.json`) are counted from Home, the way a person starts, and include the taps to
 reach Settings. The targets stay as set, so a job that costs more from Home shows as over target until the app
-changes (7.1 adds a Settings button on Home).
+changes (7.1 adds a Settings button on Home, so "Ring 2 minutes before" is 3 taps from Home).
 
 **A journey that stops early** (an exception ends it before its last step) is listed under Failed checks in
 SUMMARY.md, with the last picture it took and the first error in the test log. A journey missing from one config is

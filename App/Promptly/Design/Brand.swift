@@ -24,19 +24,45 @@ enum Brand {
     }
 }
 
-/// A glass card: keeps text readable when the bubble rises behind it.
+/// How opaque the white plate is. Never below 0.90: ink, secondary and every accent text measure 4.5:1 on it over any
+/// bubble color, the darkest theme art included (HomeLayoutTests).
+extension Brand {
+    static let plateOpacity: Double = 0.92
+}
+
+/// A white plate for any words the bubble can pass behind. Used by every card on Home and by `GlassCard`.
+struct Plate: ViewModifier {
+    var cornerRadius: CGFloat = 24
+    func body(content: Content) -> some View {
+        content.background(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(Color.white.opacity(Brand.plateOpacity))
+                .overlay(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .strokeBorder(Brand.hairline, lineWidth: 1))
+        )
+    }
+}
+
+/// A card: keeps text readable when the bubble rises behind it. The white plate by default; glass only when the
+/// debug switch in Settings, Diagnostics asks for it (Graham's phone check).
 struct GlassCard: ViewModifier {
     func body(content: Content) -> some View {
-        content
+        let padded = content
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
-            .glassEffect(.regular, in: .rect(cornerRadius: 24))
+        if CardStyle.current == .glass {
+            padded.glassEffect(.regular, in: .rect(cornerRadius: 24))
+        } else {
+            padded.plate(cornerRadius: 24)
+        }
     }
 }
 
 extension View {
     func glassCard() -> some View { modifier(GlassCard()) }
+    /// The white plate behind words the bubble can pass behind.
+    func plate(cornerRadius: CGFloat = 24) -> some View { modifier(Plate(cornerRadius: cornerRadius)) }
 }
 
 /// The lowercase wordmark with its coral dot.

@@ -16,17 +16,52 @@ final class Journeys: XCTestCase {
         return true
     }
 
-    private static let more = "More: add a reminder, pop for fun, pause alerts, settings"
+    /// Home's header (7.1): ⋯ reads "More"; the gear reads "Settings" and opens Settings in one tap.
+    private static let more = "More"
 
-    /// From Home to Settings the way a person gets there: the More menu, then Settings. Two taps, counted.
+    /// From Home to Settings the way a person gets there: the gear in the header. One tap, counted.
     @discardableResult
     private func openSettingsFromHome(_ a: Audit, severity: Int = 3) -> Bool {
-        guard a.tap("More", a.app.buttons[Journeys.more], severity: severity) else { return false }
-        a.pause(0.6)
-        guard a.tap("Settings (in More)", a.app.buttons["Settings"], severity: severity) else { return false }
-        // The sheet rises after the menu closes. Wait for it, so the next query doesn't run against Home: J12 lost
+        guard a.tap("Settings (gear)", a.app.buttons["Settings"], severity: severity) else { return false }
+        // The sheet rises after the tap. Wait for it, so the next query doesn't run against Home: J12 lost
         // the Theme row in 10 of 40 themes without this wait (pro-light, November 18).
         return a.expect("Settings opens", a.app.navigationBars["Settings"], timeout: 5, severity: severity)
+    }
+
+    // MARK: Home's layout (item 7.1)
+
+    private func countdown(_ a: Audit) -> XCUIElement {
+        a.app.descendants(matching: .any).matching(identifier: "countdown").firstMatch
+    }
+
+    /// The header stays on screen and both buttons can be tapped.
+    private func headerChecks(_ a: Audit, _ place: String) {
+        let more = a.app.buttons[Journeys.more]
+        let gear = a.app.buttons["Settings"]
+        a.check("More is on screen and hittable (\(place))", more.waitForExistence(timeout: 3) && more.isHittable, severity: 4)
+        a.check("the gear (Settings) is on screen and hittable (\(place))", gear.waitForExistence(timeout: 3) && gear.isHittable, severity: 4)
+    }
+
+    /// Not going can be reached by scrolling the column, and is at least 44 pt tall.
+    @discardableResult
+    private func notGoingChecks(_ a: Audit, _ place: String) -> Bool {
+        let notGoing = a.app.buttons["Not going"]
+        guard a.expect("Not going exists (\(place))", notGoing, severity: 4) else { return false }
+        a.reveal(notGoing, tries: 8)
+        let reached = a.check("Not going is reachable by scrolling (\(place))", notGoing.isHittable, severity: 4)
+        a.check("Not going is at least 44 pt tall (\(place))", notGoing.frame.height >= 44, severity: 3,
+                detail: "height \(notGoing.frame.height)")
+        return reached
+    }
+
+    /// The bubble can be tapped with the column at the top and again after it has scrolled to the bottom.
+    private func bubbleChecks(_ a: Audit) {
+        let bubble = a.any(containing: "Pop the bubble to join Design review")
+        a.check("the bubble is hittable with the column at the top", bubble.waitForExistence(timeout: 3) && bubble.isHittable, severity: 4)
+        let column = a.app.scrollViews.firstMatch
+        if column.exists { for _ in 0..<4 { column.swipeUp() } }
+        a.pause(0.4)
+        a.check("the bubble is hittable with the column at the bottom", bubble.exists && bubble.isHittable, severity: 4)
     }
 
     /// The Settings row "Ring before", whose label carries the choice ("Ring before, 2 min"). Demo mode already rings
@@ -90,7 +125,14 @@ final class Journeys: XCTestCase {
         a.expect("the card says how long", a.any(containing: "min"), severity: 3)
         a.expect("the card says it will ring", a.any(containing: "Rings"), severity: 3)
         a.expect("Not going is visible", a.app.buttons["Not going"], severity: 4)
-        a.expect("Settings is reachable", a.app.buttons["More: add a reminder, pop for fun, pause alerts, settings"], severity: 3)
+        a.expect("Settings is reachable", a.app.buttons["Settings"], severity: 3)
+        // 7.1: the header is fixed, Not going is reachable and 44 pt, the bubble is tappable at both ends of the column.
+        headerChecks(a, "column at the top")
+        bubbleChecks(a)
+        a.shot("home-column-bottom", note: "The column scrolled to its end; the header stays at the top")
+        headerChecks(a, "column at the bottom")
+        notGoingChecks(a, "Home")
+        a.launch("home")
         a.begin("Join the next meeting")
         let ok = popBubble(a)
         a.pause(0.3)
@@ -137,6 +179,18 @@ final class Journeys: XCTestCase {
         a.labels("home-far")
         a.expect("the day is named", a.any(containing: "Tomorrow"), severity: 2)
         a.expect("Not going is visible", a.app.buttons["Not going"], severity: 3)
+        // 7.1: the countdown keeps its size when the hint line appears. This scene has no hint (a day away); the
+        // Home scene (7 minutes, with a link) has one. No demo scene sits at 11 minutes, so the two scenes stand in.
+        let far = countdown(a)
+        a.expect("the countdown is named (a day away)", far, severity: 3)
+        let farHeight = far.frame.height
+        a.launch("home")
+        let near = countdown(a)
+        a.expect("the countdown is named (7 minutes)", near, severity: 3)
+        let hint = a.app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch
+        a.check("the hint is showing in the near scene", hint.exists, severity: 3)
+        a.check("the countdown keeps its size when the hint appears", abs(farHeight - near.frame.height) < 1, severity: 3,
+                detail: "a day away \(farHeight) pt; 7 minutes with the hint \(near.frame.height) pt")
     }
 
     // J5. The takeover when it rings, then late with buds.
@@ -364,17 +418,18 @@ final class Journeys: XCTestCase {
         for (theme, label) in Journeys.heldThemes {
             a.launch("home", theme: theme, settle: 2)
             a.shot("\(theme)")
+            a.accessibility("home-\(theme)")
             a.check("the card shows no fortune (only Fortune does)", !a.any(containing: "Fortune:").exists, severity: 3,
                     detail: theme)
             _ = popBubble(a)
             a.pause(0.3)
             a.shot("\(theme)-pop")
             a.pause(1.0)
-            let more = a.app.buttons[Journeys.more]
-            if more.exists && more.isHittable && openSettingsFromHome(a, severity: 2) {
+            let gear = a.app.buttons["Settings"]
+            if gear.exists && gear.isHittable && openSettingsFromHome(a, severity: 2) {
                 checkTheme(a, theme, label, where: "same launch as the pictures")
             } else {
-                // At the largest text More is drawn off the screen (Home header, 7.1). Read the theme in the Settings
+                // If the gear can't be tapped, read the theme in the Settings
                 // scene instead, which takes `-theme` through the same demo setup as Home.
                 a.check("Settings opens from Home to read the theme", false, severity: 2,
                         detail: "\(theme): read from the Settings scene instead")
@@ -392,7 +447,16 @@ final class Journeys: XCTestCase {
         a.shot("missed-under-new-alarm", note: "New alarm up; the unpopped earlier meeting shows as Missed with Join")
         a.accessibility("missed")
         a.launch("paused")
-        a.shot("paused-home", note: "Paused until pill under the header; card says Paused until")
+        a.shot("paused-home", note: "Paused until is the first row of the column; card says Paused until")
+        // 7.1: the Paused line is the first row of the column and at least 44 pt tall.
+        let pausedRow = a.button(startingWith: "Paused until")
+        if a.expect("the Paused line is a button", pausedRow, severity: 3) {
+            a.check("the Paused line is at least 44 pt tall", pausedRow.frame.height >= 44, severity: 3,
+                    detail: "height \(pausedRow.frame.height)")
+            let title = a.any(containing: "Design review")
+            a.check("the Paused line is above the card", title.exists && pausedRow.frame.minY < title.frame.minY, severity: 3,
+                    detail: "paused \(pausedRow.frame.minY), card \(title.frame.minY)")
+        }
         a.launch("outside")
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
@@ -403,7 +467,7 @@ final class Journeys: XCTestCase {
         // Every tap goes through the recorder, so a control that can't be tapped is a failed check, not a stop.
         if a.tap("More", a.app.buttons[Journeys.more]) {
             a.pause(0.8)
-            a.shot("more-menu", note: "Add a reminder, Pop for fun, Pause alerts, Settings")
+            a.shot("more-menu", note: "Add a reminder, Pop for fun, Pause alerts")
             if a.tap("Add a reminder", a.app.buttons["Add a reminder"], timeout: 2) {
                 a.pause(1)
                 a.shot("add-reminder-sheet")
