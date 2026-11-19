@@ -9,6 +9,8 @@ struct HomeView: View {
     @State private var playing = false
     @State private var showGallery = false
     @State private var showCalendars = ScreenshotMode.scene.map { [ScreenshotScene.settings, .pro, .manycals].contains($0) } ?? false
+    /// Item 10's Form trial, shown only in its demo scene.
+    @State private var showFormTrial = ScreenshotMode.scene == .formtrial
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
@@ -120,6 +122,7 @@ struct HomeView: View {
         .sheet(isPresented: $addingReminder) {
             AddReminderSheet().environment(model)
         }
+        .sheet(isPresented: $showFormTrial) { AlarmFormTrial().environment(model) }
         .sheet(isPresented: $showCalendars, onDismiss: { model.applyPendingTheme() }) {
             SettingsView()
                 .environment(model)

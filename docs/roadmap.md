@@ -466,6 +466,8 @@ his phone with the test build. The audit walk doesn't reach widgets, so the phon
 ### 10. Settings as a native Form: try one page (approved 2026-11-18, in 1.1)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
 - Sonnet builds the trial; Opus and Graham decide.
+- The trial view and its `formtrial` demo scene are removed, or adopted, before the 1.1 go-live verdict, as with 7.1's
+  card switch (added 2026-11-19).
 
 ### 11. Requirement: demo mode saves nothing (approved 2026-11-18, in 1.1)
 - Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise
