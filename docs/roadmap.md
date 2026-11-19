@@ -60,13 +60,15 @@ Newest first. Refined decisions only.
   subtitle, icon, 8 screenshots, Pop In Pro $6.99 and all three tips are live, and it shows up in search
   (12th for "Pop In Meeting Alarms").
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
-- 2026-11-18: Grok's design review is in; epic 7 added to 1.1. Next: Sonnet fixes the audit walk (7.4).
+- 2026-11-18: Grok's design review is in; epic 7 added to 1.1.
+- 2026-11-18: 7.4 merged (#52): the audit walk now shows each theme, counts from Home and lists stopped journeys.
+  Next: Opus settles epic 7 step 1, then Sonnet builds 7.1 to 7.3.
 
 ## Release scope
 - **1.1 (approved and frozen 2026-11-16, reopened and frozen again 2026-11-18):** epic 1 "Ring only when it
   matters", stories 1.1 to 1.4, and epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5, in one release.
   New ideas go to 1.2.
-- **Waits for 1.2:** items 2 to 6 and 8 to 10 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
+- **Waits for 1.2:** items 2 to 6 and 8 to 11 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
 - **Purchases approved:** none new.
 - **Go-aheads:** merge, standing for all 1.1 items (epic 7 included, 2026-11-18) as each passes review, when the merge uploads and deploys nothing
   (2026-11-16). Test build: none yet. Ship: none yet.
@@ -186,7 +188,9 @@ cost me the alarm.
   it starts.
 - Given I tap Undo before the start, then its alarm comes back exactly as it was.
 - Nothing is written to the calendar. App state only.
-- Checked by: unit tests in Model/ and a walk step that undoes after 10 seconds.
+- Given any text size up to Accessibility XXXL, when the toast shows, then the toast and its Undo are on screen
+  (the 2026-11-18 audit drew Undo below the screen edge at XXXL).
+- Checked by: unit tests in Model/, a walk step that undoes after 10 seconds, and J2 and J3 Undo at big text.
 
 #### 7.3 Alarm screen: clear countdown and controls (D-4, GR-4, GR-7, GR-8; built with story 1.3)
 As someone whose alarm is ringing, I want to see how long I have and what each button does, so I act without
@@ -204,6 +208,8 @@ thinking.
 - J3 pictures the Not going state as well as the Undo.
 - A journey that stops early counts as a failed check in SUMMARY.md.
 - Checked by: an `[audit]` run with the fixed journeys before 1.1's own audit.
+- Done 2026-11-18 (#52), walk on 57f9d4e. Known limit until 7.1: the ⋯ menu often doesn't open Settings in the
+  iPad and small-phone walks, so those benchmarks are mostly not done.
 
 #### 7.5 Requirement: iPad App Store screenshots are upright (GR-3)
 - The screenshot pipeline stores landscape iPad frames the right way round before they are published.
@@ -234,6 +240,14 @@ scrolling isn't enough at XXXL, and only with Graham's approval.
 ### 10. Settings as a native Form: try one page (approved 2026-11-18, for 1.2)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
 - Sonnet builds the trial; Opus and Graham decide.
+
+### 11. Requirement: demo mode saves nothing (approved 2026-11-18, for 1.2)
+- Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise
+  me. Today the theme is saved (the `gumColor` didSet runs in `init`) and a saved Surprise me is kept, though
+  `docs/audit/ux-audit.md` says demo mode saves nothing.
+- Checked by: a unit test that starts each demo scene and compares the saved settings before and after.
+- Out of scope: changing what demo mode shows.
+- Steps: Sonnet builds with the test; Opus reviews.
 
 ### 2. Polish each theme before its drop (from the 1.0 handoff)
 - Polish each theme ahead of its Monday on the release calendar. Next dates: Fireworks 2026-12-14, Duck 2027-01-04.
