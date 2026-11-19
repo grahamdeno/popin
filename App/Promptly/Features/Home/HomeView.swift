@@ -91,7 +91,8 @@ struct HomeView: View {
         .hapticRamp(until: model.upcoming(at: .now).first?.start, enabled: model.buzz && model.arrived == nil)
         .overlay { DiscoLights().ignoresSafeArea().environment(\.themeStill, quiet || PowerWatch.shared.strained) }
         .overlay(alignment: .bottom) { undoToast }
-        .sheet(isPresented: $showGallery) {
+        // A theme picked here applies when the sheet closes, as from Settings (8.15).
+        .sheet(isPresented: $showGallery, onDismiss: { model.applyPendingTheme() }) {
             NavigationStack { ThemeGalleryPage() }
                 .environment(model)
                 .sheet(isPresented: Binding(get: { model.showPro }, set: { model.showPro = $0 })) {
@@ -119,7 +120,7 @@ struct HomeView: View {
                 .onDisappear { model.settingsOpen = false }
         }
         .onChange(of: model.closeSettings) { _, close in
-            if close { showCalendars = false; model.closeSettings = false }
+            if close { showCalendars = false; showGallery = false; model.closeSettings = false }
         }
     }
 
@@ -267,6 +268,7 @@ struct HomeView: View {
             Menu {
                 Button("Add a reminder", systemImage: "plus") { addingReminder = true }
                 Button("Pop for fun", systemImage: "circle.hexagongrid") { playing = true }
+                Button("Theme", systemImage: "paintpalette") { showGallery = true }
                 if let until = model.pausedUntil, until > .now {
                     Button("Resume alerts", systemImage: "bell") { model.resume() }
                 } else {

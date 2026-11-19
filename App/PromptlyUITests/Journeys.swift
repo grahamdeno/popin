@@ -603,6 +603,25 @@ final class Journeys: XCTestCase {
                 a.check("the footer says this device", a.any(containing: "this device").exists, severity: 1)
             }
         }
+        // 8.15: Theme in the ⋯ menu opens the gallery; picking a theme takes 3 taps from Home.
+        a.launch("home")
+        a.begin("Change the theme")
+        var themeDone = false
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
+           a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
+            a.pause(0.8)
+            a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
+            let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
+            if a.tap("Coral", coral, severity: 2) {
+                // "See it on Home" applies the pick and closes the gallery (not counted: the job is done at the pick).
+                let seeIt = a.app.buttons["See it on Home"].firstMatch
+                if seeIt.waitForExistence(timeout: 2) { seeIt.tap() }
+                a.pause(1.0)
+                themeDone = a.check("the gallery closes", !a.app.navigationBars.firstMatch.exists, severity: 2)
+                a.shot("theme-applied", note: "Home after picking Coral from the ⋯ menu: the bubble should be Coral")
+            }
+        }
+        a.done("Change the theme", themeDone)
         a.launch("playground", settle: 3)
         a.shot("pop-for-fun")
         let ball = a.app.descendants(matching: .any).matching(NSPredicate(format: "label ENDSWITH 'bubble'")).firstMatch
