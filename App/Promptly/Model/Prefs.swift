@@ -375,6 +375,13 @@ final class Prefs: @unchecked Sendable {
         get { Set(defaults.stringArray(forKey: "clearedMeetingIDs") ?? []) }
         set { defaults.set(Array(newValue).sorted(), forKey: "clearedMeetingIDs") }
     }
+
+    /// The cleared meetings that were skipped with Not going (not popped), so they can be brought back until they
+    /// start (item 7.2). Always a subset of `clearedMeetingIDs`. Added in 1.1; older versions ignore it.
+    var skippedMeetingIDs: Set<String> {
+        get { Set(defaults.stringArray(forKey: "skippedMeetingIDs") ?? []) }
+        set { defaults.set(Array(newValue).sorted(), forKey: "skippedMeetingIDs") }
+    }
 }
 
 /// Written by the alarm's Join button (OpenMeetingIntent) and read when the app opens.
