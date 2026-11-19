@@ -244,11 +244,12 @@ final class CalendarGroupsTests: XCTestCase {
         XCTAssertEqual(prefs.popChoice, .pop)
     }
 
-    func testAlarmVolumeRampsOverLastTwoMinutes() {
+    /// Story 1.2: the ring inside Pop In starts at full volume and stays there (the two-minute rise is gone).
+    func testAlarmVolumeIsSteadyAtFull() {
         let start = Date(timeIntervalSince1970: 10_000)
-        XCTAssertEqual(AlarmLoop.volume(now: start.addingTimeInterval(-300), start: start), AlarmLoop.quiet)
-        XCTAssertEqual(AlarmLoop.volume(now: start.addingTimeInterval(-60), start: start), (AlarmLoop.quiet + 1) / 2, accuracy: 0.001)
-        XCTAssertEqual(AlarmLoop.volume(now: start, start: start), 1)
+        for offset in [-300.0, -120, -60, -1, 0, 60, 600] {
+            XCTAssertEqual(AlarmLoop.volume(now: start.addingTimeInterval(offset), start: start), 1, "offset \(offset)")
+        }
     }
 }
 
