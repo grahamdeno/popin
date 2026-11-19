@@ -473,10 +473,7 @@ struct PlayBall: View {
                     Circle().strokeBorder(AngularGradient(colors: GumPalette.rainbow + [GumPalette.rainbow[0]], center: .center),
                                           lineWidth: max(2, w * 0.04))
                 }
-                Ellipse().fill(Color.white.opacity(0.5))
-                    .frame(width: w * 0.3, height: w * 0.17)
-                    .rotationEffect(.degrees(-24))
-                    .offset(x: -w * 0.18, y: -w * 0.24)
+                BallLight(size: w, soft: palette == .fortune)
                 ThemeTopper(palette: palette, w: w)
             }
             .frame(width: w, height: w)
