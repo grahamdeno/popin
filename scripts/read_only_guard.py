@@ -34,11 +34,15 @@ SETTINGS = [
     (r"UserDefaults\s*\(\s*suiteName", "a UserDefaults suite"),
     (r"\bPrefs\s*\(\s*\)", "Prefs() (use Prefs.current)"),
     (r"@AppStorage\s*\((?![^)]*store:)", "@AppStorage without a store"),
+    (r"\bUserDefaults\s*\(\s*\)", "UserDefaults()"),
+    (r"\?\?\s*\.standard\b", "a fallback to UserDefaults.standard"),
 ]
 SETTINGS_ALLOWED = {
     ("Shared/SettingsSuite.swift", "a UserDefaults suite"),
     ("Model/Prefs.swift", "a UserDefaults suite"),
     ("Model/Prefs.swift", "Prefs() (use Prefs.current)"),
+    ("Model/Prefs.swift", "UserDefaults()"),
+    ("Model/Prefs.swift", "a fallback to UserDefaults.standard"),
     # Saved alarm IDs; demo mode never syncs alarms and cancelOwned returns early in demo mode.
     ("Services/AlarmService.swift", "UserDefaults.standard"),
     # The widget's snapshot; AppModel never writes it in demo mode.
@@ -103,6 +107,9 @@ def selftest() -> int:
     assert scan_settings('@AppStorage("k") private var k = 0', "Promptly/Features/Home/HomeView.swift")
     assert not scan_settings('@AppStorage("k", store: Prefs.current.defaults) private var k = 0', "Promptly/Features/Home/HomeView.swift")
     assert not scan_settings("let p = Prefs.current", "Promptly/App/AppModel.swift")
+    assert scan_settings("let d = UserDefaults()", "Promptly/Services/ProStore.swift")
+    assert scan_settings('let d = UserDefaults(suiteName: "x") ?? .standard', "Promptly/Services/ProStore.swift")
+    assert scan_settings("let d = Prefs.current.defaults ?? .standard", "Promptly/Services/ProStore.swift")
     assert not scan_settings('UserDefaults(suiteName: name)', "Shared/SettingsSuite.swift")
     print("Read-only guard self-test passed.")
     return 0

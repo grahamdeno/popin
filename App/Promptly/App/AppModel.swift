@@ -361,6 +361,8 @@ final class AppModel {
             case .grenade: .grenade
             default: ScreenshotMode.theme ?? .bubblegum
             }
+            // The scene's theme goes into the demo store explicitly, so GumPalette.current draws it (item 11).
+            prefs.gumColor = gumColor
             ballStyle = .bubble
             leadMinutes = 2
             cleared = []
