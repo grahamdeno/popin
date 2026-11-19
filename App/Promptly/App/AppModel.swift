@@ -440,6 +440,20 @@ final class AppModel {
         return open.filter { $0.start < meeting.start && isMissed($0, among: open, now: now) }.sorted { $0.start < $1.start }
     }
 
+    /// Story 1.3: ringing meetings in the same minute as this one, which share its alarm screen, each with a Join.
+    func sameMinute(as meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return open.filter { $0.id != meeting.id && NewestWins.sameMinute($0.start, meeting.start)
+            && ringsFully($0) && !isPaused($0, now: now) }
+    }
+
+    /// Story 1.3: what clears with this meeting's alarm (see NewestWins.stack).
+    func stack(clearingWith meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return NewestWins.stack(for: meeting, among: open, now: now, lead: TimeInterval(leadMinutes * 60),
+                                rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
+    }
+
     // MARK: Permissions and first run
 
     func requestPermissions() async {
@@ -529,10 +543,15 @@ final class AppModel {
     var lastCleared: Meeting?
     /// True when `lastCleared` was skipped with Not going, false when it was popped. The toast says which.
     var lastClearedSkipped = false
+    /// The meetings that cleared along with `lastCleared` (story 1.3), so Undo brings them back too.
+    @ObservationIgnored var lastClearedStack: [Meeting] = []
 
     func undoClear() {
         guard let meeting = lastCleared else { return }
         lastCleared = nil
+        // The stack that cleared with it comes back too (story 1.3).
+        for m in lastClearedStack { cleared.remove(m.id) }
+        lastClearedStack = []
         bringBack(meeting)
     }
 
@@ -834,6 +853,10 @@ final class AppModel {
     private func markCleared(_ meeting: Meeting, skipped: Bool) {
         alarmService.stopAlerting()
         AlarmLoop.stop()
+        // Story 1.3: popping or Not going on the ringing alarm clears the whole stack with it.
+        let alongWith = stack(clearingWith: meeting)
+        for m in alongWith { cleared.insert(m.id); self.skipped.remove(m.id) }
+        lastClearedStack = alongWith
         cleared.insert(meeting.id)
         if skipped { self.skipped.insert(meeting.id) } else { self.skipped.remove(meeting.id) }
         if meeting.calendarID == "test" { testPlanned.removeAll { $0.meeting.id == meeting.id } }

@@ -479,6 +479,33 @@ final class NewestWinsTests: XCTestCase {
         XCTAssertFalse(NewestWins.isMissed(old, among: [old, next], now: now, lead: 120, rings: { _ in true }))
     }
 
+    /// Story 1.3: the stack is the missed earlier meetings and same-minute ringing meetings, once the alarm is due.
+    func testStackHoldsMissedAndSameMinuteMeetings() {
+        let now = Date()
+        let old = m("old", now.addingTimeInterval(-25 * 60))
+        let current = m("current", now.addingTimeInterval(60))
+        let twin = m("twin", now.addingTimeInterval(60 + 20))
+        let later = m("later", now.addingTimeInterval(3600))
+        let stack = NewestWins.stack(for: current, among: [old, current, twin, later], now: now, lead: 120, rings: { _ in true })
+        XCTAssertEqual(stack.map(\.id), ["old", "twin"])
+    }
+
+    /// Popping early from Home, before the alarm is due, clears nothing else.
+    func testNoStackBeforeTheRingTime() {
+        let now = Date()
+        let current = m("current", now.addingTimeInterval(20 * 60))
+        let twin = m("twin", now.addingTimeInterval(20 * 60))
+        XCTAssertTrue(NewestWins.stack(for: current, among: [current, twin], now: now, lead: 120, rings: { _ in true }).isEmpty)
+    }
+
+    /// Quiet meetings never join a stack.
+    func testQuietMeetingsStayOutOfTheStack() {
+        let now = Date()
+        let current = m("current", now.addingTimeInterval(60))
+        let quiet = m("quiet", now.addingTimeInterval(60))
+        XCTAssertTrue(NewestWins.stack(for: current, among: [current, quiet], now: now, lead: 120, rings: { $0.id != "quiet" }).isEmpty)
+    }
+
     func testQuietMeetingsDoNotTakeOver() {
         let now = Date()
         let old = m("old", now.addingTimeInterval(-25 * 60))
@@ -515,7 +542,15 @@ final class SimulatedDayTests: XCTestCase {
             if let (named, what) = actions.first(where: { abs($0.key.timeIntervalSince(t)) < 15 })?.value,
                let id = named == "*" ? state.showing : named {
                 switch what {
-                case .pop, .notGoing: cleared.insert(id); if state.showing == id { state.showing = nil }
+                case .pop, .notGoing:
+                    // Story 1.3: the ringing alarm's stack clears with it, as AppModel.markCleared does.
+                    let openNow = meetings.filter { !cleared.contains($0.id) && $0.end > t }
+                    if let m = openNow.first(where: { $0.id == id }) {
+                        for s in NewestWins.stack(for: m, among: openNow, now: t, lead: 120, rings: { rings($0) && !paused($0) }) {
+                            cleared.insert(s.id)
+                        }
+                    }
+                    cleared.insert(id); if state.showing == id { state.showing = nil }
                 case .snooze: state.snoozedUntil[id] = t.addingTimeInterval(Snooze.length); if state.showing == id { state.showing = nil }
                 }
             }
@@ -555,11 +590,27 @@ final class SimulatedDayTests: XCTestCase {
         XCTAssertEqual(log.shown.last?.1, snoozeAt.addingTimeInterval(Snooze.length), "rings again two minutes after the snooze")
     }
 
-    func testTwoAtTheSameTimeBothShowOneAfterTheOther() {
+    /// Story 1.3: two meetings in the same minute share one alarm screen; popping it clears both.
+    func testTwoAtTheSameTimeShareOneScreen() {
         let log = run([meeting("Standup", 10, 0), meeting("Reminder", 10, 0, minutes: 5, cal: OwnReminder.calendarID)],
                       from: at(9, 50), to: at(10, 6), actions: [at(9, 59): ("*", .pop)])
-        XCTAssertEqual(Set(log.shown.map(\.0)), ["Standup", "Reminder"])
-        XCTAssertEqual(log.shown.count, 2)
+        XCTAssertEqual(log.shown.count, 1)
+    }
+
+    /// Story 1.3: popping the current alarm clears the missed stack, so the older meeting never comes back.
+    func testPoppingClearsTheMissedStack() {
+        let log = run([meeting("A", 9, 0, minutes: 60), meeting("B", 9, 30)], from: at(8, 50), to: at(9, 50),
+                      actions: [at(9, 29): ("B", .pop)])
+        XCTAssertEqual(log.shown.map(\.0), ["A", "B"])
+        XCTAssertNil(log.homeNext[at(9, 40)], "A was in B's stack, so it doesn't return after the pop")
+    }
+
+    /// Story 1.3: Not going on the current alarm clears the stack too.
+    func testNotGoingClearsTheMissedStack() {
+        let log = run([meeting("A", 9, 0, minutes: 60), meeting("B", 9, 30)], from: at(8, 50), to: at(9, 50),
+                      actions: [at(9, 29): ("B", .notGoing)])
+        XCTAssertEqual(log.shown.map(\.0), ["A", "B"])
+        XCTAssertNil(log.homeNext[at(9, 40)])
     }
 
     func testQuietMeetingsNeverTakeOverOrShow() {

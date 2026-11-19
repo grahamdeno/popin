@@ -90,6 +90,25 @@ enum NewestWins {
     }
 }
 
+extension NewestWins {
+    /// Two meetings share an alarm when they start in the same minute (as AlarmPlanner merges them).
+    static func sameMinute(_ a: Date, _ b: Date) -> Bool { abs(a.timeIntervalSince(b)) < 60 }
+
+    /// Story 1.3: what clears with the alarm that is ringing: the earlier meetings it took over from (the "Also
+    /// missed" line) and ringing meetings in the same minute that share its alarm. Before `current` reaches its own
+    /// ring time nothing else clears, so popping one meeting early from Home leaves the others alone.
+    static func stack(for current: Meeting, among open: [Meeting], now: Date, lead: TimeInterval,
+                      rings: (Meeting) -> Bool) -> [Meeting] {
+        guard now >= current.start.addingTimeInterval(-lead) else { return [] }
+        return open.filter { m in
+            guard m.id != current.id, rings(m) else { return false }
+            if sameMinute(m.start, current.start) { return true }
+            return m.start < current.start && isMissed(m, among: open, now: now, lead: lead, rings: rings)
+        }
+        .sorted { $0.start < $1.start }
+    }
+}
+
 /// Apple's rating prompt, asked once: after someone has popped into a few meetings and come back to Pop In, so the
 /// question lands when the app has just worked for them, never while an alarm is ringing or a call is opening.
 enum ReviewPrompt {
