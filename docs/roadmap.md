@@ -43,6 +43,8 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-19 | The seven findings first proposed for later (GR-16, GR-20, GR-21, GR-22, D-15, D-18, D-20) are in 1.1 as stories 8.13 to 8.17 | Graham: handle them in 1.1 |
+| 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
 | 2026-11-19 | Story 1.2 changes: a missed alarm keeps ringing at one steady volume until it's dismissed or a later ringing meeting reaches its ring time. The 7-minute auto-stop is dropped | Graham's decision. A missed meeting should never go quiet on its own |
@@ -144,12 +146,14 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
 - Given a snooze, then the meeting rings again after 2 minutes and follows these rules from there.
 - Given no later meeting takes over before the missed meeting ends, then the alarm stops when the meeting ends
   (settled by Graham, 2026-11-19).
-- How it's built (assumptions to confirm on the phone, from Apple's developer forums, 2026-11-19): AlarmKit has no
-  setting for how long an alert sounds, and iOS mutes an alert after its own default; a later alarm that fires
+- How it's built (2026-11-19): AlarmKit has no setting for how long an alert sounds. iPhone alarms ring for about
+  15 minutes and then stop on their own, and AlarmKit alarms ring the way Clock does, so Pop In plans on 15 minutes
+  (confirmed on Graham's phone with the first test build, no separate test). Unlocking the phone takes the
+  full-screen alert away, but the alarm keeps sounding until it's stopped from the Live Activity or Pop In is opened.
+  Also, a later alarm that fires
   while an earlier one still sounds can be silenced. So Pop In schedules repeat alarms for an unhandled meeting,
   spaced so that none is still sounding when the next meeting's alarm is due. Dismiss on any repeat cancels the
-  rest (a stop intent). While Pop In is open it stops the old alarm itself at the handover. The phone check measures
-  iOS's default alert length and sets the spacing from it.
+  rest (a stop intent). While Pop In is open it stops the old alarm itself at the handover.
 - Build risks to cover: `stopAlerting()` stops every ringing alarm, so a stop at the handover must name the old
   alarm only; `sync()` reschedules any missing alarm, so a dismissed meeting needs its own saved state ("dismissed,
   not cleared"); repeats count against the planner's limit of 24; the one-minute safety backup becomes the first
@@ -319,9 +323,7 @@ scrolling isn't enough at XXXL, and only with Graham's approval.
 
 ### 8. Epic: Design polish (approved 2026-11-18, in 1.1, shaped 2026-11-19)
 Goal: the rest of the app matches the care of Home and the alarm. From Grok's design review (D-7, D-9 to D-11,
-D-14, D-16, D-17, D-19; GR-10, GR-12 to GR-15, GR-17 to GR-19). Proposed out of scope, waiting for Graham's yes:
-GR-16 (touches the Not going rule), GR-21 and D-18 (rework first run), GR-22 and D-20 (redesign the site), GR-20 and
-D-15 (optional polish). Steps: Opus builds each story on its own branch; Fable reviews; one audit walk before the test build.
+D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding is in 1.1 (Graham, 2026-11-19). Steps: Opus builds each story on its own branch; Fable reviews; one audit walk before the test build.
 
 #### 8.1 Settings rows show their values (D-7, M3)
 - Given Settings, then every row that opens a choice shows its current value on the right in secondary ("2 min",
@@ -401,6 +403,33 @@ D-15 (optional polish). Steps: Opus builds each story on its own branch; Fable r
   Screen; and the alarm screen's alt text names the bubble, Not going and Snooze.
 - This deploys the site (`site/**`): it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
 - Checked by: review of `site/` against the app's strings.
+
+#### 8.13 Your own reminders say Skip (GR-16)
+- Given your own reminder is next, then its card offers "Skip" instead of "Not going", and the toast says "Skipped
+  [title] · Undo". Meetings keep "Not going" unchanged.
+- Checked by: J13 own-reminder scene: "Skip" shows and "Not going" doesn't; a unit test of the words.
+
+#### 8.14 First run in fewer steps (GR-21, D-18)
+- Given a first run, then the hello screen and the calendar screen are one: "Never miss the start of a meeting", the
+  reason Pop In needs the calendar, and "Allow calendar access". First run takes one tap fewer.
+- The card sits in the top third, and the bubble is fully visible above the buttons.
+- Checked by: J1 pictures; the walk's first-run tap count is one lower than today.
+
+#### 8.15 Theme in the ⋯ menu (GR-20)
+- Given the ⋯ menu, then "Theme" opens the theme gallery directly.
+- Checked by: a walk check and benchmark "Change the theme" in 3 taps from Home.
+
+#### 8.16 Motion that links the toast to the card (D-15)
+- Given a pop or a skip, then the toast rises from the bottom edge with a quick, firm spring. Given an alarm is set,
+  then the bell beside "Rings…" wiggles once. With Reduce Motion, both simply appear.
+- Checked by: review; Graham's phone check.
+
+#### 8.17 The site looks like the app (GR-22, D-20)
+- Given popin.tangomike.app, then the hero and "How it works" are white with the bubble's pink, and the dark band is
+  used only for Pro and the price. A one-page brand sheet (`docs/brand.md`) records the white ground, ink #141414,
+  the bubble as the only color mass, and the type.
+- This deploys the site: it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
+- Checked by: a picture of the site at 1280 and 390 wide; review of `site/` and `docs/brand.md`.
 
 ### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, shaped 2026-11-19)
 Goal: the widgets and the Live Activity read like Home, on every Home Screen look. From GR-11, D-12, D-13 (M5).
