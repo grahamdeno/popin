@@ -9,6 +9,8 @@ enum ScreenshotScene: String {
     /// Edge cases for the simulator walk-through: a missed meeting under a new alarm, alerts paused, a meeting
     /// outside work hours, an own reminder, the same meeting twice, and the Pop for fun playground.
     case missed, paused, outside, reminder, dupes, playground
+    /// Item 10: the Alarm group as a native Form, for comparing pictures with today's Settings.
+    case formtrial
 }
 
 enum ScreenshotMode {

@@ -384,6 +384,11 @@ final class Journeys: XCTestCase {
         a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
                 detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
+        // Item 10: the Alarm group as a native Form, pictured beside today's Settings for the decision (D-8).
+        a.launch("formtrial")
+        a.pause(1.5)
+        a.shot("form-trial-alarm", note: "Item 10 trial: the Alarm group as a native Form")
+        a.accessibility("form-trial-alarm")
     }
 
     // J7. A long list of calendars: fold, search, turn a whole account off.
