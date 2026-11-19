@@ -74,13 +74,13 @@ enum AlarmLoop {
     /// louder or softer). Kept as a function so the rule stays unit tested.
     nonisolated static func volume(now: Date, start: Date) -> Float { 1 }
 
-    static func start(meetingStart: Date? = nil) {
+    static func start(meetingStart: Date? = nil, quiet: Bool = false) {
         guard player?.isPlaying != true, let url = soundURL(Prefs.current.alarmSound),
               let p = try? AVAudioPlayer(contentsOf: url) else { return }
         try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.duckOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
         p.numberOfLoops = -1
-        p.volume = 1
+        p.volume = quiet ? InMeetingRule.quietVolume : 1
         p.play()
         player = p
     }

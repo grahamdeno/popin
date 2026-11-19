@@ -727,11 +727,19 @@ final class AppModel {
                                             dismissed: prefs.dismissedMeetingIDs, now: now, limit: AlarmPlanner.defaultLimit,
                                             openUntil: isForeground ? now.addingTimeInterval(Self.openQuietWindow) : nil,
                                             showing: shownNowFor)
-        let headsUp = Set(early.map(\.id))
-        toSchedule = plan.firstRings + plan.repeats
-        prefs.repeatAlarmIDs = Dictionary(grouping: plan.repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
+        // Story 1.4: alarms that ring while a popped meeting is still running use the quieter sound.
+        let popped = InMeetingRule.popped(meetings, cleared: cleared, skipped: skipped)
+        let protected = Set((testPlanned + snoozePlanned).map(\.id))
+        let firsts = InMeetingRule.apply(plan.firstRings, popped: popped, except: protected)
+        let repeatsQ = InMeetingRule.apply(plan.repeats, popped: popped)
+        // A heads-up keeps its no-Dismiss-intent rule in its quiet version too.
+        let earlyIDs = Set(early.map(\.id))
+        let headsUp = earlyIDs.union(earlyIDs.map(InMeetingRule.quietID))
+        toSchedule = firsts.alarms + repeatsQ.alarms
+        prefs.repeatAlarmIDs = Dictionary(grouping: repeatsQ.alarms, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
         do {
-            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)), headsUp: headsUp)
+            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)), headsUp: headsUp,
+                                        quiet: firsts.quiet.union(repeatsQ.quiet))
             syncProblem = nil
             scheduledAlarms = alarmService.scheduledCount
         } catch {
@@ -832,7 +840,11 @@ final class AppModel {
         guard !settingsOpen else { return }   // the watcher tries again once settings close
         shownNowFor.insert(meeting.id)
         arrived = meeting
-        if ring && isForeground { AlarmLoop.start(meetingStart: meeting.start) }
+        if ring && isForeground {
+            // Story 1.4: quieter while a popped meeting is still running.
+            let popped = InMeetingRule.popped(meetings, cleared: cleared, skipped: skipped).filter { $0.id != meeting.id }
+            AlarmLoop.start(meetingStart: meeting.start, quiet: InMeetingRule.isInMeeting(at: .now, popped: popped))
+        }
         Task { await syncAlarms() }   // drops the backup alarm for this meeting
     }
 
