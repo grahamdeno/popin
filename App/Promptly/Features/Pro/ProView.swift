@@ -17,12 +17,17 @@ struct ProView: View {
         ("ipad.landscape", "Desk mode: keep the screen on while Pop In is open"),
     ]
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    /// Story 8.2 (M4): a centred trio of theme balls, a centred title and one line, the features in two columns (one at
+    /// accessibility sizes), and a bar fixed at the bottom on the plate with the App Store price, Unlock Pro and
+    /// Restore purchase. Feature icons are hidden from VoiceOver; each feature reads as its words.
     var body: some View {
         let store = model.store
         ZStack {
             Color.white.ignoresSafeArea()
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(spacing: 20) {
                     HStack {
                         Spacer()
                         Button { dismiss() } label: {
@@ -31,48 +36,89 @@ struct ProView: View {
                         }
                         .accessibilityLabel("Close")
                     }
-                    GumBall()
-                        .frame(width: 96, height: 96)
-                        .frame(maxWidth: .infinity)
-                    Text(store.isPro ? "You have Pop In Pro" : "Pop In Pro")
-                        .font(.system(size: titleSize, weight: .semibold))
-                        .tracking(-0.8)
-                        .foregroundStyle(Brand.ink)
-                    Text(store.betaAccess && !store.purchased
-                         ? "Unlocked for TestFlight testing. In the App Store version this is a one-time \(store.price) purchase."
-                         : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked, and new themes arrive on their own. There's a tip jar at the bottom of Settings if you ever want to give more."
-                                       : "One purchase, yours for good. No subscription. The free app keeps every alarm, the bubble and the widgets.")
-                        .font(.callout)
-                        .foregroundStyle(Brand.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    VStack(alignment: .leading, spacing: 14) {
-                        ForEach(features, id: \.1) { item in
-                            HStack(alignment: .firstTextBaseline, spacing: 12) {
-                                Image(systemName: item.0).foregroundStyle(Brand.coralDark).frame(width: 24)
-                                Text(item.1).font(.body).foregroundStyle(Brand.ink)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
+                    HStack(spacing: -18) {
+                        ForEach([GumPalette.bubblegum, .waterBalloon, .fortune], id: \.self) { palette in
+                            SwatchBall(palette: palette).frame(width: 64, height: 64)
                         }
                     }
-                    .glassCard()
+                    .accessibilityHidden(true)
+                    VStack(spacing: 8) {
+                        Text(store.isPro ? "You have Pop In Pro" : "Pop In Pro")
+                            .font(.system(size: titleSize, weight: .semibold))
+                            .tracking(-0.8)
+                            .foregroundStyle(Brand.ink)
+                        Text(store.betaAccess && !store.purchased
+                             ? "Unlocked for TestFlight testing. In the App Store version this is a one-time \(store.price) purchase."
+                             : store.isPro ? "Thanks for supporting Pop In. Everything below is unlocked, and new themes arrive on their own."
+                                           : "One purchase, yours for good. The free app keeps every alarm, the bubble and the widgets.")
+                            .font(.callout)
+                            .foregroundStyle(Brand.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .multilineTextAlignment(.center)
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12, alignment: .top),
+                                             count: typeSize.isAccessibilitySize ? 1 : 2),
+                              alignment: .leading, spacing: 16) {
+                        ForEach(features, id: \.1) { item in feature(icon: item.0, words: item.1) }
+                    }
                     if let message = store.message {
                         Text(message).font(.subheadline).foregroundStyle(Brand.ink)
                     }
-                    if !store.isPro {   // also shown in the TestFlight free preview
-                        Button(store.purchasing ? "One moment…"
-                               : store.betaAccess ? "Test the purchase (free in TestFlight)" : "Unlock for \(store.price), one time") {
-                            Task { await store.buy() }
-                        }
-                        .buttonStyle(PrimaryButtonStyle(height: 56))
-                        .disabled(store.purchasing)
-                        Button("Restore purchase") { Task { await store.restore() } }
-                            .buttonStyle(SecondaryButtonStyle(height: 44, fill: true))
-                    }
                 }
                 .padding(.horizontal, 24)
-                .padding(.bottom, 32)
+                .padding(.bottom, 24)
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if !store.isPro { buyBar(store) }   // also shown in the TestFlight free preview
+        }
         .task { await store.load() }
+    }
+
+    private func feature(icon: String, words: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Image(systemName: icon)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(Brand.accentText)
+                .frame(width: 28, height: 28)
+                .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Brand.coralLight.opacity(0.45)))
+                .accessibilityHidden(true)
+            Text(words)
+                .font(.subheadline)
+                .foregroundStyle(Brand.ink)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+    }
+
+    /// "$6.99 One time · no subscription", Unlock Pro and Restore purchase, fixed at the bottom on the plate.
+    private func buyBar(_ store: ProStore) -> some View {
+        VStack(spacing: 10) {
+            (Text(store.price).fontWeight(.semibold).foregroundColor(Brand.ink)
+             + Text("  One time · no subscription").foregroundColor(Brand.secondary))
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            Button(store.purchasing ? "One moment…" : store.betaAccess ? "Test the purchase (free in TestFlight)" : "Unlock Pro") {
+                Task { await store.buy() }
+            }
+            .buttonStyle(PrimaryButtonStyle(height: 56))
+            .disabled(store.purchasing)
+            Button { Task { await store.restore() } } label: {
+                Text("Restore purchase")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Brand.accentText)
+                    .frame(minHeight: 44)
+                    .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 14)
+        .padding(.bottom, 6)
+        .frame(maxWidth: .infinity)
+        .plate(cornerRadius: 28)
+        .padding(.horizontal, 12)
     }
 }
