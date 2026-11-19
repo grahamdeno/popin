@@ -16,7 +16,11 @@ struct WelcomeView: View {
     var body: some View {
         switch step {
         case .choose:
+            // Story 8.9: the calendar choices keep first run's 640 pt column on a wide iPad.
             CalendarsView(onDone: { step = .covered })
+                .frame(maxWidth: 640)
+                .frame(maxWidth: .infinity)
+                .background(Color.white.ignoresSafeArea())
         default:
             ZStack {
                 Color.white.ignoresSafeArea()

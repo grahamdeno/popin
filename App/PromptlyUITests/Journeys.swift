@@ -108,11 +108,13 @@ final class Journeys: XCTestCase {
         a.check("hello says why Pop In needs the calendar", a.text(containing: "never changes them").exists, severity: 2)
         a.check("hello has no separate Get started step", !a.app.buttons["Get started"].exists, severity: 3)
         let allow = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Allow calendar")).firstMatch
-        if allow.waitForExistence(timeout: 2) {
-            let card = a.text(containing: "Never miss the start").frame
+        let title = a.text(containing: "Never miss the start")
+        if allow.waitForExistence(timeout: 2), title.exists {
+            let card = title.frame
             a.check("the card sits in the top third", card.minY < a.app.frame.height / 3, severity: 2,
                     detail: "card top \(card.minY) of \(a.app.frame.height)")
         }
+        a.begin("Finish first run")
         a.tap("Allow calendar access", a.button(startingWith: "Allow calendar"), severity: 4)
         a.pause(1.2)
         a.shot("alarms-why")
@@ -132,7 +134,7 @@ final class Journeys: XCTestCase {
         a.tap("Done (covered)", a.app.buttons["Done"], severity: 4)
         a.pause(1.5)
         a.shot("home-after-first-run")
-        a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4)
+        a.done("Finish first run", a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4))
     }
 
     // J2. Home with a meeting minutes away: read it, pop to join, Undo.

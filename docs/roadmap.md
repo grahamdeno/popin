@@ -416,8 +416,10 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 #### 8.14 First run in fewer steps (GR-21, D-18)
 - Given a first run, then the hello screen and the calendar screen are one: "Never miss the start of a meeting", the
   reason Pop In needs the calendar, and "Allow calendar access". First run takes one tap fewer.
-- The card sits in the top third, and the bubble is fully visible above the buttons.
-- Checked by: J1 pictures; the walk's first-run tap count is one lower than today.
+- The card sits in the top third, and the bubble is fully visible above the buttons on the first screen at standard
+  text sizes; on later steps and at larger sizes the column scrolls.
+- Checked by: J1 pictures (including the small phone); the walk's "Finish first run" benchmark, 4 taps from the first
+  screen (5 before).
 
 #### 8.15 Theme in the ⋯ menu (GR-20)
 - Given the ⋯ menu, then "Theme" opens the theme gallery directly.
