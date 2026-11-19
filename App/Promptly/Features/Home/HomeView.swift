@@ -90,9 +90,12 @@ struct HomeView: View {
         })
         .hapticRamp(until: model.upcoming(at: .now).first?.start, enabled: model.buzz && model.arrived == nil)
         .overlay { DiscoLights().ignoresSafeArea().environment(\.themeStill, quiet || PowerWatch.shared.strained) }
-        .overlay(alignment: .bottom) { undoToast }
         // 8.16: the toast rises from the bottom edge with a quick, firm spring; with Reduce Motion it simply appears.
-        .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: model.lastCleared?.id)
+        // The animation is scoped to the toast, so the card and bubble don't animate with it.
+        .overlay(alignment: .bottom) {
+            ZStack { undoToast }
+                .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: model.lastCleared?.id)
+        }
         .sheet(isPresented: $showGallery) {
             NavigationStack { ThemeGalleryPage() }
                 .environment(model)
@@ -365,6 +368,7 @@ struct HomeView: View {
         } icon: {
             Image(systemName: rings ? "bell.fill" : "bell.slash")
                 .symbolEffect(.wiggle, options: .nonRepeating, isActive: rings && !reduceMotion)
+                .accessibilityHidden(true)
         }
             .font(.footnote.weight(.medium))
             .foregroundStyle(rings ? Brand.accentText : Brand.secondary)
