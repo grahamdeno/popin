@@ -508,6 +508,9 @@ final class AppModel {
         snoozedUntil[meeting.id] = when
         snoozePlanned.removeAll { $0.meeting.id == meeting.id }
         snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: meeting, fireDate: when, countdownSeconds: nil))
+        // Story 1.2: repeats follow the rules from the snooze ring, and a snooze undoes a Lock Screen Dismiss.
+        prefs.snoozeRings[meeting.id] = when
+        prefs.dismissedMeetingIDs.remove(meeting.id)
         arrived = nil
         Task { await syncAlarms() }
     }
@@ -666,6 +669,8 @@ final class AppModel {
         // Dismissals only matter while their meeting is still on the calendar (story 1.2).
         let keptDismissals = prefs.dismissedMeetingIDs.intersection(liveIDs)
         if keptDismissals != prefs.dismissedMeetingIDs { prefs.dismissedMeetingIDs = keptDismissals }
+        let keptSnoozes = prefs.snoozeRings.filter { liveIDs.contains($0.key) }
+        if keptSnoozes.count != prefs.snoozeRings.count { prefs.snoozeRings = keptSnoozes }
         writeWidgetSnapshot()
         await syncAlarms()
     }
@@ -706,25 +711,21 @@ final class AppModel {
         } else {
             toSchedule = all
         }
-        toSchedule += early
         // Story 1.2: a missed alarm keeps ringing through repeats until it's dismissed, the next ringing meeting's
-        // ring time, or its meeting's end, with a quiet gap rather than an overlap. Planned after every first ring.
-        let dismissed = prefs.dismissedMeetingIDs
-        let anchors = alarmMeetings.filter { $0.end > now && !cleared.contains($0.id) }.map { m in
-            MissedAlarmRule.Anchor(meeting: m,
-                                   firstRing: snoozePlanned.first { $0.meeting.id == m.id }?.fireDate
-                                       ?? m.start.addingTimeInterval(-TimeInterval(leadMinutes * 60)))
-        }
-        var repeats = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: dismissed, now: now,
-                                                   budget: AlarmPlanner.defaultLimit - toSchedule.count)
-        if isForeground {
-            let soonCutoff = now.addingTimeInterval(Self.openQuietWindow)
-            repeats = repeats.filter { $0.scheduleDate > soonCutoff }
-        }
-        toSchedule += repeats
-        prefs.repeatAlarmIDs = Dictionary(grouping: repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
+        // ring time, or its meeting's end, with a quiet gap rather than an overlap. Planned in Model/ and tested there.
+        let snoozeRings = prefs.snoozeRings.filter { id, _ in !cleared.contains(id) && meetings.contains { $0.id == id && $0.end > now } }
+        if snoozeRings.count != prefs.snoozeRings.count { prefs.snoozeRings = snoozeRings }
+        let anchors = MissedAlarmRule.anchors(meetings: alarmMeetings, cleared: cleared, snoozeRings: snoozeRings,
+                                              leadMinutes: leadMinutes, now: now)
+        let plan = MissedAlarmRule.schedule(firstRings: toSchedule + early, anchors: anchors,
+                                            dismissed: prefs.dismissedMeetingIDs, now: now, limit: AlarmPlanner.defaultLimit,
+                                            openUntil: isForeground ? now.addingTimeInterval(Self.openQuietWindow) : nil,
+                                            showing: shownNowFor)
+        let headsUp = Set(early.map(\.id))
+        toSchedule = plan.firstRings + plan.repeats
+        prefs.repeatAlarmIDs = Dictionary(grouping: plan.repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
         do {
-            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)))
+            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)), headsUp: headsUp)
             syncProblem = nil
             scheduledAlarms = alarmService.scheduledCount
         } catch {

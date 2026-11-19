@@ -405,6 +405,13 @@ final class Prefs: @unchecked Sendable {
         set { defaults.set(Array(newValue).sorted(), forKey: "dismissedMeetingIDs") }
     }
 
+    /// When each snoozed meeting's snooze rang (or will), kept after it fires so its repeats stay anchored there
+    /// (story 1.2). Pruned when the meeting is cleared, over or gone.
+    var snoozeRings: [String: Date] {
+        get { ((defaults.dictionary(forKey: "snoozeRings") as? [String: Double]) ?? [:]).mapValues { Date(timeIntervalSince1970: $0) } }
+        set { defaults.set(newValue.mapValues(\.timeIntervalSince1970), forKey: "snoozeRings") }
+    }
+
     /// The repeat alarms scheduled for each meeting, so Dismiss can cancel them even when Pop In isn't running.
     var repeatAlarmIDs: [String: [String]] {
         get { (defaults.dictionary(forKey: "repeatAlarmIDs") as? [String: [String]]) ?? [:] }

@@ -204,4 +204,79 @@ final class MissedAlarmRuleTests: XCTestCase {
             }
         }
     }
+
+    // MARK: Part 2: anchors and the schedule (Fable's review of #78)
+
+    private func planned(_ m: Meeting, _ date: Date) -> PlannedAlarm {
+        PlannedAlarm(id: UUID(), meeting: m, fireDate: date, countdownSeconds: nil)
+    }
+
+    /// Anchors skip cleared and finished meetings and use the main ring time (2 minutes before here).
+    func testAnchorsSkipClearedAndOverMeetings() {
+        let a = meeting("a", 10, 0), b = meeting("b", 11, 0), c = meeting("c", 8, 0, minutes: 30)
+        let anchors = MissedAlarmRule.anchors(meetings: [a, b, c], cleared: ["b"], snoozeRings: [:], leadMinutes: 2, now: at(9, 0))
+        XCTAssertEqual(anchors.map(\.meeting.id), ["a"])
+        XCTAssertEqual(anchors.first?.firstRing, ring(a))
+    }
+
+    /// A snoozed meeting's chain runs from the snooze ring, even after the snooze has fired, so no repeat sounds over it.
+    func testSnoozedChainFollowsTheSnoozeRing() {
+        let a = meeting("a", 10, 0, minutes: 60)
+        let snooze = at(10, 1)
+        let anchors = MissedAlarmRule.anchors(meetings: [a], cleared: [], snoozeRings: ["a": snooze], leadMinutes: 2, now: at(10, 5))
+        XCTAssertEqual(anchors.first?.firstRing, snooze)
+        let repeats = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: [], now: at(10, 5), budget: 24)
+        XCTAssertFalse(repeats.isEmpty)
+        for r in repeats { XCTAssertGreaterThanOrEqual(r.fireDate, snooze.addingTimeInterval(MissedAlarmRule.alertLength)) }
+    }
+
+    /// The heads-up alarm doesn't move the chain: repeats start after the main ring's alert, not the heads-up's.
+    func testHeadsUpDoesNotAnchorTheChain() {
+        let a = meeting("a", 10, 0, minutes: 60)
+        let anchors = MissedAlarmRule.anchors(meetings: [a], cleared: [], snoozeRings: [:], leadMinutes: 2, now: at(9, 0))
+        let first = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: [], now: at(9, 0), budget: 24).first
+        XCTAssertEqual(first?.fireDate, ring(a).addingTimeInterval(MissedAlarmRule.alertLength + MissedAlarmRule.regap))
+    }
+
+    /// At the handover, dismissing one meeting leaves the next meeting's chain whole.
+    func testDismissAtHandoverKeepsTheNextChain() {
+        let a = meeting("a", 10, 0, minutes: 60), b = meeting("b", 10, 45, minutes: 60)
+        let anchors = [anchor(a), anchor(b)]
+        let both = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: [], now: at(9, 0), budget: 24)
+        let afterDismiss = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: ["a"], now: at(9, 0), budget: 24)
+        XCTAssertEqual(afterDismiss.map(\.id), both.filter { $0.meeting.id == "b" }.map(\.id))
+    }
+
+    /// When first rings fill the limit, the soonest repeats still get reserved slots and the latest first rings wait.
+    func testScheduleReservesSlotsForRepeats() {
+        let a = meeting("a", 10, 0, minutes: 120)
+        let firsts = (0..<24).map { planned(meeting("f\($0)", 12 + $0 / 4, ($0 % 4) * 15), at(12 + $0 / 4, ($0 % 4) * 15)) }
+        let plan = MissedAlarmRule.schedule(firstRings: firsts, anchors: [anchor(a)], dismissed: [], now: at(9, 0),
+                                            limit: 24, openUntil: nil, showing: [])
+        XCTAssertEqual(plan.repeats.count, MissedAlarmRule.reservedSlots)
+        XCTAssertEqual(plan.firstRings.count + plan.repeats.count, 24)
+        XCTAssertEqual(plan.firstRings.map(\.id), Array(firsts.prefix(24 - MissedAlarmRule.reservedSlots)).map(\.id))
+    }
+
+    /// With room to spare, nothing is dropped.
+    func testScheduleKeepsEverythingWithRoom() {
+        let a = meeting("a", 10, 0, minutes: 60)
+        let plan = MissedAlarmRule.schedule(firstRings: [planned(a, ring(a))], anchors: [anchor(a)], dismissed: [], now: at(9, 0),
+                                            limit: 24, openUntil: nil, showing: [])
+        XCTAssertEqual(plan.firstRings.count, 1)
+        XCTAssertEqual(plan.repeats.map(\.id), MissedAlarmRule.repeatAlarms(anchors: [anchor(a)], dismissed: [], now: at(9, 0), budget: 24).map(\.id))
+    }
+
+    /// While Pop In is open, repeats in the open window are left out only for a meeting Pop In is ringing itself.
+    func testOpenWindowDropsRepeatsOnlyForTheShownMeeting() {
+        let a = meeting("a", 10, 0, minutes: 60)
+        let now = at(10, 10), window = now.addingTimeInterval(20 * 60)
+        let notShown = MissedAlarmRule.schedule(firstRings: [], anchors: [anchor(a)], dismissed: [], now: now, limit: 24,
+                                                openUntil: window, showing: [])
+        XCTAssertTrue(notShown.repeats.contains { $0.scheduleDate <= window }, "a killed Pop In still has Apple's alarm")
+        let shown = MissedAlarmRule.schedule(firstRings: [], anchors: [anchor(a)], dismissed: [], now: now, limit: 24,
+                                             openUntil: window, showing: ["a"])
+        XCTAssertTrue(shown.repeats.allSatisfy { $0.scheduleDate > window })
+        XCTAssertFalse(shown.repeats.isEmpty)
+    }
 }

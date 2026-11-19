@@ -161,6 +161,9 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
   alarm only; `sync()` reschedules any missing alarm, so a dismissed meeting needs its own saved state ("dismissed,
   not cleared"); repeats count against the planner's limit of 24; the one-minute safety backup becomes the first
   repeat; Lock Screen Dismiss needs a stop intent (none today) and can only be checked on the phone.
+- iOS limit (2026-11-19): when Pop In isn't running, the first alarm's own alert can't be cut short, so it may
+  sound for up to 15 minutes past the meeting's end or into the next meeting's ring time. Repeats keep the rule.
+  Dismiss on the early heads-up only stops the heads-up; the main ring and its repeats stay.
 - Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a meeting that
   ends before the next alarm, a dismiss at the handover, a later meeting skipped with Not going, a heads-up that
   doesn't take over); a unit test that no repeat

@@ -101,6 +101,35 @@ enum MissedAlarmRule {
         return Array(out.sorted { $0.fireDate < $1.fireDate }.prefix(budget))
     }
 
+    /// The anchors for every meeting still to ring or ringing: open (not cleared, not over), first ring at its snooze
+    /// ring if it was snoozed (the chain follows the rules from there), otherwise at its ring time.
+    static func anchors(meetings: [Meeting], cleared: Set<String>, snoozeRings: [String: Date], leadMinutes: Int,
+                        now: Date) -> [Anchor] {
+        meetings.filter { $0.end > now && !cleared.contains($0.id) }.map { m in
+            Anchor(meeting: m, firstRing: snoozeRings[m.id] ?? m.start.addingTimeInterval(-TimeInterval(leadMinutes * 60)))
+        }
+    }
+
+    /// Slots kept for the soonest repeats even when first rings fill the budget, so a missed alarm today is never
+    /// crowded out by alarms planned for tomorrow.
+    static let reservedSlots = 4
+
+    /// What to hand AlarmKit: first rings plus repeats within `limit`. Repeats inside the open window are left out
+    /// only for meetings Pop In is showing (its own loop is ringing them); every other repeat stays scheduled, so a
+    /// killed Pop In still has Apple's alarms. If the reserved repeats push past the limit, the latest first rings
+    /// wait for a later sync.
+    static func schedule(firstRings: [PlannedAlarm], anchors: [Anchor], dismissed: Set<String>, now: Date, limit: Int,
+                         openUntil: Date?, showing: Set<String>) -> (firstRings: [PlannedAlarm], repeats: [PlannedAlarm]) {
+        var candidates = repeatAlarms(anchors: anchors, dismissed: dismissed, now: now, budget: limit)
+        if let openUntil {
+            candidates = candidates.filter { !($0.scheduleDate <= openUntil && showing.contains($0.meeting.id)) }
+        }
+        let budget = max(limit - firstRings.count, min(reservedSlots, candidates.count))
+        let repeats = Array(candidates.prefix(max(0, min(budget, limit))))
+        let kept = Array(firstRings.sorted { $0.scheduleDate < $1.scheduleDate }.prefix(max(0, limit - repeats.count)))
+        return (kept, repeats)
+    }
+
     /// The same meeting and time give the same ID, so a re-sync never duplicates a repeat.
     static func repeatID(meetingID: String, at date: Date) -> UUID {
         let key = meetingID + "|repeat|" + String(Int(date.timeIntervalSince1970))
