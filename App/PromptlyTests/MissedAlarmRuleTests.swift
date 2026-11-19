@@ -258,6 +258,15 @@ final class MissedAlarmRuleTests: XCTestCase {
         XCTAssertEqual(plan.firstRings.map(\.id), Array(firsts.prefix(24 - MissedAlarmRule.reservedSlots)).map(\.id))
     }
 
+    /// With no repeats to place, first rings past the limit are all kept (the planner caps main rings and heads-ups).
+    func testScheduleDropsNoFirstRingsWithoutRepeats() {
+        let firsts = (0..<30).map { planned(meeting("f\($0)", 12 + $0 / 4, ($0 % 4) * 15), at(12 + $0 / 4, ($0 % 4) * 15)) }
+        let plan = MissedAlarmRule.schedule(firstRings: firsts, anchors: [], dismissed: [], now: at(9, 0),
+                                            limit: 24, openUntil: nil, showing: [])
+        XCTAssertEqual(plan.firstRings.count, 30)
+        XCTAssertTrue(plan.repeats.isEmpty)
+    }
+
     /// With room to spare, nothing is dropped.
     func testScheduleKeepsEverythingWithRoom() {
         let a = meeting("a", 10, 0, minutes: 60)

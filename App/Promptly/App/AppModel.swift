@@ -688,6 +688,12 @@ final class AppModel {
                                         countdown: countdownCard)
         let gentlePlanned = AlarmPlanner.plan(meetings: gentleMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared)
         testPlanned = testPlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
+        // A snooze still to ring survives Pop In being killed: rebuild it from the saved snooze time.
+        for (id, when) in prefs.snoozeRings where when > now && !snoozePlanned.contains(where: { $0.meeting.id == id }) {
+            if let m = meetings.first(where: { $0.id == id }) {
+                snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: m, fireDate: when, countdownSeconds: nil))
+            }
+        }
         snoozePlanned = snoozePlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
         // A snoozed meeting's original alarm is replaced by the snooze.
         let snoozedIDs = Set(snoozePlanned.map(\.meeting.id))
