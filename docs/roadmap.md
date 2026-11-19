@@ -348,7 +348,7 @@ D-15 (optional polish). Steps: Opus builds each story on its own branch; Fable r
 
 #### 8.4 One way to mark Pro (GR-13)
 - Given anything that needs Pro, then it's marked with the small "Pro" pill, a word. No "✦" and no "(Pro)" anywhere.
-- The pill's word measures at least 4.5:1 on its own background.
+- The pill is a white word on the theme's accent color and measures at least 4.5:1 on every theme.
 - Checked by: walk labels on every Settings page contain no "✦" or "(Pro)"; review.
 
 #### 8.5 One light on every ball (D-11)
@@ -367,7 +367,7 @@ D-15 (optional polish). Steps: Opus builds each story on its own branch; Fable r
 #### 8.7 Nothing coming up (D-16)
 - Given no meeting ahead, then Home shows a centred empty state on the plate: "Nothing coming up" (22 pt semibold at
   the default size, scaling with text size), one line, and "Try a pop" as a text button. The resting bubble below
-  stays as it is today (it pops for fun when tapped, as "Try a pop" does).
+  stays as it is today (not tappable).
 - Checked by: J8 picture; a walk check that "Try a pop" is at least 44 pt.
 
 #### 8.8 Tap areas and text that grows (GR-14, GR-18)
