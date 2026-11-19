@@ -189,6 +189,12 @@ final class Journeys: XCTestCase {
         }
         again.tap()
         a.check("the toast names the skip", a.any(containing: "Not going to Design review").waitForExistence(timeout: 2), severity: 2)
+        let toastUndo = a.app.buttons["Undo"]
+        if toastUndo.exists {
+            let screen = a.app.windows.firstMatch.frame
+            a.check("the toast's Undo is inside the bottom quarter", toastUndo.frame.minY >= screen.height * 0.75, severity: 2,
+                    detail: "Undo at \(toastUndo.frame), screen \(screen)")
+        }
         a.shot("not-going", note: "Toast: Not going to Design review · Undo")
         a.pause(10)
         a.check("the toast has gone after 5 seconds", !a.app.buttons["Undo"].exists, severity: 2)
