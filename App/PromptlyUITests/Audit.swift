@@ -217,6 +217,19 @@ final class Audit {
         return app.textFields[names.first ?? ""]
     }
 
+    /// Swipes up until the element's middle is inside the window. List rows can report hittable while off screen,
+    /// so `reveal` stopped early for "Pop sound" at the largest text (J6, November 19).
+    @discardableResult
+    func revealOnScreen(_ e: XCUIElement, tries: Int = 20) -> XCUIElement {
+        let screen = app.windows.firstMatch.frame
+        var i = 0
+        while i < tries && !(e.exists && screen.contains(CGPoint(x: e.frame.midX, y: e.frame.midY))) {
+            app.swipeUp(velocity: .slow)
+            i += 1
+        }
+        return e
+    }
+
     /// Scrolls the screen up until the element can be tapped (Settings grew past one screen, November 14).
     @discardableResult
     func reveal(_ e: XCUIElement, tries: Int = 6) -> XCUIElement {

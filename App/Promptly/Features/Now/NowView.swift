@@ -123,6 +123,8 @@ struct NowView: View {
                 .padding(.top, 14)
         }
         .glassCard()
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("alarm-card")
     }
 
     /// "Also missed: 1:00 PM Standup", wrapping, at least 44 pt, with its own Join while it has a link.
