@@ -5,7 +5,6 @@ import SwiftUI
 struct AddReminderSheet: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.dynamicTypeSize) private var typeSize
     @State private var title = ""
     @State private var choice: ReminderTime = .in30
     @State private var picked = Date.now.addingTimeInterval(30 * 60)
@@ -39,7 +38,11 @@ struct AddReminderSheet: View {
                         HStack {
                             Text("Your reminders")
                             Spacer()
-                            EditButton().font(.subheadline.weight(.semibold)).textCase(nil)
+                            EditButton()
+                                .font(.subheadline.weight(.semibold))
+                                .textCase(nil)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(.rect)
                         }
                     }
                 } footer: {
@@ -65,30 +68,31 @@ struct AddReminderSheet: View {
         .presentationDetents([.medium, .large])
     }
 
-    /// In 15 min · 30 min · 1 hour · Pick a time. Side by side, or one per row at accessibility sizes.
-    @ViewBuilder
+    /// In 15 min · 30 min · 1 hour · Pick a time: one row if it fits, else two rows of two, else one per row.
     private var chips: some View {
-        let layout = typeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-            : AnyLayout(HStackLayout(spacing: 8))
-        layout {
-            ForEach(ReminderTime.allCases) { option in
-                let on = option == choice
-                Button { choice = option } label: {
-                    Text(option.label)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(on ? .white : Brand.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.85)
-                        .padding(.horizontal, 12)
-                        .frame(minHeight: 44)
-                        .frame(maxWidth: typeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
-                        .background(Capsule().fill(on ? Brand.ink : Brand.ink.opacity(0.06)))
-                        .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(on ? .isSelected : [])
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 8) { ForEach(ReminderTime.allCases) { chip($0) } }
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) { chip(.in15); chip(.in30) }
+                HStack(spacing: 8) { chip(.in60); chip(.pick) }
             }
+            VStack(alignment: .leading, spacing: 8) { ForEach(ReminderTime.allCases) { chip($0) } }
         }
+    }
+
+    private func chip(_ option: ReminderTime) -> some View {
+        let on = option == choice
+        return Button { choice = option } label: {
+            Text(option.label)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(on ? .white : Brand.ink)
+                .fixedSize()
+                .padding(.horizontal, 12)
+                .frame(minHeight: 44)
+                .background(Capsule().fill(on ? Brand.ink : Brand.ink.opacity(0.06)))
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
 }

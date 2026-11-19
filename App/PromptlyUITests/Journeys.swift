@@ -529,6 +529,18 @@ final class Journeys: XCTestCase {
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
+        // 8.10: with a reminder saved, the sheet's list has an Edit button of at least 44 pt.
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
+           a.tap("Add a reminder", a.app.buttons["Add a reminder"], timeout: 2, severity: 2) {
+            a.pause(1)
+            let editButton = a.app.buttons["Edit"].firstMatch
+            if a.expect("Edit on your reminders", editButton, timeout: 2, severity: 2) {
+                a.check("Edit is at least 44 pt", editButton.frame.height >= 44, severity: 2,
+                        detail: "height \(editButton.frame.height)")
+            }
+            a.tap("Cancel", a.app.buttons["Cancel"].firstMatch, severity: 1)
+            a.pause(0.6)
+        }
         a.launch("dupes")
         a.shot("duplicate-merged", note: "Design review and its FW copy show as one meeting")
         a.launch("home")
