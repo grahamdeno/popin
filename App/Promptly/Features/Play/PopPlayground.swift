@@ -8,7 +8,8 @@ struct PopPlayground: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(AppModel.self) private var model
-    @AppStorage("popBestTarget") private var bestTarget = 0
+    /// Kept in standard defaults as in 1.0; in demo mode, in the throwaway store (item 11).
+    @AppStorage("popBestTarget", store: SettingsSuite.isDemo ? Prefs.current.defaults : UserDefaults.standard) private var bestTarget = 0
     @State private var bubbles: [PlayBubble] = []
     @State private var bursts: [PlayBurst] = []
     @State private var floaters: [PlayFloater] = []

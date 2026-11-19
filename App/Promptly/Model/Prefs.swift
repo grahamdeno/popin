@@ -150,17 +150,32 @@ enum CardStyle: String, CaseIterable, Sendable {
 
     /// The stored choice, or the plate.
     static var current: CardStyle {
-        UserDefaults(suiteName: Prefs.suite)?.string(forKey: key).flatMap(CardStyle.init(rawValue:)) ?? .plate
+        Prefs.current.defaults.string(forKey: key).flatMap(CardStyle.init(rawValue:)) ?? .plate
     }
 }
 
 /// Settings and small state, kept in the shared App Group so the widget (next sprint) can read them.
 final class Prefs: @unchecked Sendable {
-    static let suite = "group.com.grahamdeno.promptly"
+    static let suite = SettingsSuite.real
     let defaults: UserDefaults
 
     init(defaults: UserDefaults = UserDefaults(suiteName: Prefs.suite) ?? .standard) {
         self.defaults = defaults
+    }
+
+    /// The suite demo mode uses instead of the real one (item 11).
+    static let demoSuite = SettingsSuite.demo
+
+    /// The settings every part of the app uses: the real store, or in demo mode the throwaway one, emptied once at
+    /// launch. Code reads and writes settings only through this (the CI guard checks it).
+    static let current: Prefs = SettingsSuite.isDemo ? demo() : Prefs()
+
+    /// Demo mode's settings (item 11: demo mode saves nothing). A separate store, emptied at every demo launch, so a
+    /// demo never reads the owner's settings and never changes them, the theme and Surprise me included.
+    static func demo(suiteName: String = demoSuite) -> Prefs {
+        let store = UserDefaults(suiteName: suiteName) ?? UserDefaults()
+        store.removePersistentDomain(forName: suiteName)
+        return Prefs(defaults: store)
     }
 
     var onboarded: Bool {
@@ -392,13 +407,13 @@ struct PendingJoin: Codable, Sendable {
 
     private static let key = "pendingJoin"
 
-    static func save(meetingID: String, joinURL: String, defaults: UserDefaults = Prefs().defaults) {
+    static func save(meetingID: String, joinURL: String, defaults: UserDefaults = Prefs.current.defaults) {
         let value = PendingJoin(meetingID: meetingID, joinURL: joinURL, date: .now)
         if let data = try? JSONEncoder().encode(value) { defaults.set(data, forKey: key) }
     }
 
     /// Returns and removes the pending join if it is less than ten minutes old.
-    static func take(now: Date = .now, defaults: UserDefaults = Prefs().defaults) -> PendingJoin? {
+    static func take(now: Date = .now, defaults: UserDefaults = Prefs.current.defaults) -> PendingJoin? {
         guard let data = defaults.data(forKey: key) else { return nil }
         defaults.removeObject(forKey: key)
         guard let value = try? JSONDecoder().decode(PendingJoin.self, from: data),

@@ -302,7 +302,8 @@ final class AppModel {
     @ObservationIgnored private var shownNowFor: Set<String> = []
 
     init() {
-        let prefs = Prefs()
+        // Demo mode (screenshots and the audit walk) works on its own throwaway settings, so it saves nothing (item 11).
+        let prefs = Prefs.current
         self.prefs = prefs
         onboarded = prefs.onboarded
         leadMinutes = prefs.leadMinutes
@@ -360,6 +361,8 @@ final class AppModel {
             case .grenade: .grenade
             default: ScreenshotMode.theme ?? .bubblegum
             }
+            // The scene's theme goes into the demo store explicitly, so GumPalette.current draws it (item 11).
+            prefs.gumColor = gumColor
             ballStyle = .bubble
             leadMinutes = 2
             cleared = []
@@ -576,7 +579,7 @@ final class AppModel {
         isForeground = true
         if ScreenshotMode.isOn { return }
         // The old saved "show upcoming themes" flag (build 1054) is no longer read; clear it.
-        UserDefaults(suiteName: "group.com.grahamdeno.promptly")?.removeObject(forKey: "previewUpcomingThemes")
+        prefs.defaults.removeObject(forKey: "previewUpcomingThemes")
         surpriseIfNewDay()
         endTrialIfOver()
         matchIcon()
@@ -788,6 +791,8 @@ final class AppModel {
     }
 
     private func writeWidgetSnapshot() {
+        // Demo meetings never reach the real widget (item 11).
+        if ScreenshotMode.isOn { return }
         let items = meetings.filter { !cleared.contains($0.id) }.prefix(12).map {
             WidgetSnapshot.Item(id: $0.id, title: $0.title, start: $0.start, end: $0.end,
                                 service: $0.service?.rawValue ?? "", hasLink: $0.joinURL != nil)

@@ -36,7 +36,7 @@ final class ProStore {
     var message: String?
 
     @ObservationIgnored private var updates: Task<Void, Never>?
-    @ObservationIgnored private let defaults = UserDefaults(suiteName: "group.com.grahamdeno.promptly") ?? .standard
+    @ObservationIgnored private let defaults = Prefs.current.defaults
     /// Called when Pro turns off (for example after a refund), so Pro-only choices fall back to free ones.
     @ObservationIgnored var onLost: (() -> Void)?
 
