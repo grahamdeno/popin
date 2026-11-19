@@ -43,6 +43,10 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2 | Graham: one release; Pop In has no active users yet |
+| 2026-11-19 | Story 1.2 changes: a missed alarm keeps ringing at one steady volume until it's dismissed or a later ringing meeting reaches its ring time. The 7-minute auto-stop is dropped | Graham's decision. A missed meeting should never go quiet on its own |
+| 2026-11-19 | Graham's written exception for epic 7 and 1.1: Opus carries the work through review, merge, test builds and ship preparation, recording each upload or deploy trigger in its PR. Graham still presses Submit for Review and Release; deleting, purchases, secrets and release-calendar dates stay his | Speed: no active users, one release |
+| 2026-11-19 | Benchmark "Find and turn off one calendar" is 4 taps from Home (the gear, Calendars, search, the switch) | Search is the quick way through 22 calendars; it was 5 taps before 7.1 |
 | 2026-11-19 | Epic 7 step 1 settled: words never sit on the gum (Fortune's fortune excepted); words over the bubble sit on a white plate of at least 90%; ten accent text colors darken; Home's header stays fixed at every text size and the card scrolls over a bubble that keeps its size; "Pop the bubble to join" moves into the alarm card; the card is the white plate unless glass passes Apple's audit on every theme | A script over all 46 themes: white words on the gum fail on 41, one text color per theme fails on 17, a bare "Then" line fails on all 46. On a 90% plate, ink, secondary and every accent text pass 4.5:1 over any color, the darkest theme art included |
 | 2026-11-18 | 1.1 scope reopened and frozen again: epic 7 added (Home and the alarm work for everyone). Standing merge go extends to epic 7 | Grok's design review found a severity 4 (big-text Home) and a severity 3 (Not going can't be undone after 5 s) on 1.0; the playbook fixes both before the next release. The M1 Home layout goes in now so Home is rebuilt once |
 | 2026-11-18 | 1.2 will honor the widgets' tinted and clear Home Screen modes | It's how iOS draws widgets, not an app dark mode; the app stays light only |
@@ -65,16 +69,19 @@ Newest first. Refined decisions only.
 - 2026-11-18: 7.4 merged (#52): the audit walk now shows each theme, counts from Home and lists stopped journeys.
 - 2026-11-19: epic 7 step 1 settled (contrast, icons, the large-text Home); criteria added to 7.1 to 7.3. Next: Sonnet
   builds 7.1, then 7.2 and 7.3.
-- Known gap: the small-phone audit setup recorded nothing on 57f9d4e (failed to build or run). 7.1's walk needs it.
+- 2026-11-19: 7.1 merged (#56), reviewed by Opus. The small-phone audit runs again. 1.1 now carries epics 1 and 7
+  to 11 under Graham's written exception. Story 1.2 rewritten (a missed alarm keeps ringing).
 
 ## Release scope
-- **1.1 (approved and frozen 2026-11-16, reopened and frozen again 2026-11-18):** epic 1 "Ring only when it
-  matters", stories 1.1 to 1.4, and epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5, in one release.
-  New ideas go to 1.2.
-- **Waits for 1.2:** items 2 to 6 and 8 to 11 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
+- **1.1 (approved 2026-11-16, reopened 2026-11-18 and 2026-11-19, frozen):** epic 1 "Ring only when it matters",
+  stories 1.1 to 1.4; epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5; epic 8 design polish; epic 9
+  widgets; item 10 Settings as a native Form (one page first); item 11 demo mode saves nothing. One release. New
+  ideas go to 1.2.
+- **Waits for 1.2:** items 2 to 6 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
 - **Purchases approved:** none new.
-- **Go-aheads:** merge, standing for all 1.1 items (epic 7 included, 2026-11-18) as each passes review, when the merge uploads and deploys nothing
-  (2026-11-16). Test build: none yet. Ship: none yet.
+- **Go-aheads:** merge, standing for all 1.1 items as each passes review, when the merge uploads and deploys nothing
+  (2026-11-16, 2026-11-18). From 2026-11-19, Graham's written exception lets Opus also make 1.1 test builds and
+  prepare the ship, each trigger named in its PR. Submit for Review and Release stay Graham's.
 - **Target:** rough, not a deadline: after Fireworks drops on 2026-12-14.
 
 ## Dated checks
@@ -84,7 +91,7 @@ Newest first. Refined decisions only.
 
 ## Backlog
 
-Items 1 and 7 are in 1.1. Items 2 to 6 and 8 to 10 wait for 1.2.
+Items 1 and 7 to 11 are in 1.1. Items 2 to 6 wait for 1.2.
 
 ### 1. Epic: Ring only when it matters (approved 2026-11-16)
 **Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
@@ -111,18 +118,38 @@ the meeting I choose rings.
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
 
-#### 1.2 Alarms stop on their own after 7 minutes
-As someone who sometimes joins from another device, I want an unanswered alarm to stop on its own, so my phone
-isn't ringing for a meeting I already handled.
-- Given an alarm has rung for 7 minutes without a pop, snooze or Not going, then it stops ringing.
-- Then the meeting stays on the Lock Screen and in the Live Activity as "Started · Join" until the meeting ends.
-- The meeting counts as missed under newest-meeting-wins, the same as today.
-- Settled 2026-11-16: 7 minutes is fixed in 1.1, not a setting.
+#### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
+As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my
+next meeting takes over, so a missed meeting never goes quiet on its own and never rings over the next one.
+- Given an alarm rang and nobody popped, snoozed, chose Not going or dismissed it, then it keeps ringing at one
+  steady volume. It never gets louder or softer.
+- Given the person dismisses it (Dismiss on the Lock Screen, or opening Pop In), then it stops and doesn't ring
+  again for that meeting. The meeting stays on Home until it's missed or over, as today.
+- Given a later meeting that rings reaches its own ring time (the moment its bubble takes over on Home), then the
+  earlier alarm stops by itself, and the earlier meeting counts as missed (newest wins, as today).
+- Given the later meeting is skipped with Not going, paused, or set to a quiet notification, then it doesn't take
+  over: the earlier alarm keeps ringing.
+- Given two meetings start in the same minute, then they share one alarm (as today), and it follows these rules as
+  one.
+- Given the person dismisses in the same minute the next alarm comes due, then the earlier alarm stops and the next
+  one rings normally.
+- Given a snooze, then the meeting rings again after 2 minutes and follows these rules from there.
+- Open (Graham): when no later meeting comes before the missed one ends, does it keep ringing past its end?
+- How it's built (device facts, 2026-11-19): AlarmKit has no setting for how long an alert sounds, and iOS mutes an
+  alert after its own default; a later alarm that fires while an earlier one still sounds can be silenced. So Pop
+  In schedules repeat alarms for an unhandled meeting, spaced so that none is still sounding when the next meeting's
+  alarm is due. Dismiss on any repeat cancels the rest (a stop intent). While Pop In is open it stops the old alarm
+  itself at the handover. The phone check measures iOS's default alert length and sets the spacing from it.
+- Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a meeting that
+  ends before the next alarm, a dismiss at the handover, a later meeting skipped with Not going); a unit test that
+  no repeat is planned to sound within the alert length of the next ring time; Graham's phone check of a missed
+  alarm handing over to the next.
 
 #### 1.3 One alarm at a time
 As someone with back-to-back meetings, I want only one Pop In alarm ringing at a time, so when I come back to my
 phone I see what needs me now.
-- Given an older alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops.
+- Given an older alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops (1.2 says
+  how).
 - Given earlier meetings went unpopped, when the current alarm shows, then they appear as one quiet line
   ("Also missed: 1:00 Standup, 1:00 Design review"), each with Join while it's still running.
 - Given that stack, when the user pops or stops the current alarm, then the whole stack clears.
