@@ -663,6 +663,9 @@ final class AppModel {
         if pruned != cleared { cleared = pruned; prefs.clearedMeetingIDs = pruned }
         let keptSkips = skipped.intersection(pruned)
         if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
+        // Dismissals only matter while their meeting is still on the calendar (story 1.2).
+        let keptDismissals = prefs.dismissedMeetingIDs.intersection(liveIDs)
+        if keptDismissals != prefs.dismissedMeetingIDs { prefs.dismissedMeetingIDs = keptDismissals }
         writeWidgetSnapshot()
         await syncAlarms()
     }
@@ -704,6 +707,22 @@ final class AppModel {
             toSchedule = all
         }
         toSchedule += early
+        // Story 1.2: a missed alarm keeps ringing through repeats until it's dismissed, the next ringing meeting's
+        // ring time, or its meeting's end, with a quiet gap rather than an overlap. Planned after every first ring.
+        let dismissed = prefs.dismissedMeetingIDs
+        let anchors = alarmMeetings.filter { $0.end > now && !cleared.contains($0.id) }.map { m in
+            MissedAlarmRule.Anchor(meeting: m,
+                                   firstRing: snoozePlanned.first { $0.meeting.id == m.id }?.fireDate
+                                       ?? m.start.addingTimeInterval(-TimeInterval(leadMinutes * 60)))
+        }
+        var repeats = MissedAlarmRule.repeatAlarms(anchors: anchors, dismissed: dismissed, now: now,
+                                                   budget: AlarmPlanner.defaultLimit - toSchedule.count)
+        if isForeground {
+            let soonCutoff = now.addingTimeInterval(Self.openQuietWindow)
+            repeats = repeats.filter { $0.scheduleDate > soonCutoff }
+        }
+        toSchedule += repeats
+        prefs.repeatAlarmIDs = Dictionary(grouping: repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
         do {
             try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)))
             syncProblem = nil

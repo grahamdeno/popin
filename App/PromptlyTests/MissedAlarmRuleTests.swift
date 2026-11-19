@@ -22,13 +22,14 @@ final class MissedAlarmRuleTests: XCTestCase {
         }
     }
 
-    /// Back-to-back: 10:00 to 10:30, then 10:30. The first stops at the second's ring time, 10:28.
+    /// Back-to-back: 10:00 to 10:30, then 10:30. The first stops at the second's ring time, 10:28. A 15-minute
+    /// repeat from 10:13:30 would still sound at 10:28, so none is planned: the quiet gap Graham chose.
     func testBackToBackHandsOverAtTheNextRingTime() {
         let a = meeting("a", 10, 0), b = meeting("b", 10, 30)
         let stop = MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: later(b), rings: always)
         XCTAssertEqual(stop, at(10, 28))
         let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false, after: ring(a))
-        XCTAssertFalse(repeats.isEmpty)
+        XCTAssertTrue(repeats.isEmpty, "a repeat would overlap the next alarm")
         assertQuietAtStop(repeats, stop: stop)
         XCTAssertTrue(MissedAlarmRule.shouldRing(firstRing: ring(a), stop: stop, dismissed: false, now: at(10, 27)))
         XCTAssertFalse(MissedAlarmRule.shouldRing(firstRing: ring(a), stop: stop, dismissed: false, now: at(10, 28)))
@@ -79,7 +80,7 @@ final class MissedAlarmRuleTests: XCTestCase {
 
     /// After a snooze, the meeting rings again 2 minutes later and the rule runs from there.
     func testSnoozeRestartsFromTheSnoozeRing() {
-        let a = meeting("a", 10, 0)
+        let a = meeting("a", 10, 0, minutes: 120)
         let snoozeRing = ring(a).addingTimeInterval(Snooze.length)
         let repeats = MissedAlarmRule.repeats(firstRing: snoozeRing, stop: a.end, dismissed: false, after: snoozeRing)
         XCTAssertEqual(repeats.first, snoozeRing.addingTimeInterval(MissedAlarmRule.alertLength + MissedAlarmRule.regap))
@@ -90,11 +91,14 @@ final class MissedAlarmRuleTests: XCTestCase {
     /// now, so a long meeting never goes quiet early while Pop In gets a chance to run.
     func testRepeatsCoverTheWholeMeetingAcrossSyncs() {
         XCTAssertLessThanOrEqual(MissedAlarmRule.regap, 60)
-        let a = meeting("a", 10, 0, minutes: 30)
+        let a = meeting("a", 10, 0, minutes: 120)
         let step = MissedAlarmRule.alertLength + MissedAlarmRule.regap
-        // One sync plans at most the cap, counted from now.
+        // One sync plans at most the cap, counted from now; an all-day block reaches it.
         let first = MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false, after: ring(a))
-        XCTAssertEqual(first.count, MissedAlarmRule.maxRepeats)
+        XCTAssertLessThanOrEqual(first.count, MissedAlarmRule.maxRepeats)
+        let long = meeting("long", 10, 0, minutes: 600)
+        XCTAssertEqual(MissedAlarmRule.repeats(firstRing: ring(long), stop: long.end, dismissed: false, after: ring(long)).count,
+                       MissedAlarmRule.maxRepeats)
         // Sync every 5 minutes, as the app does when it runs; collect everything ever planned.
         var planned = Set<Date>()
         var t = ring(a)
@@ -133,6 +137,60 @@ final class MissedAlarmRuleTests: XCTestCase {
         let a = meeting("a", 10, 0)
         let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false, after: ring(a), firstRepeatAfter: 60)
         XCTAssertEqual(repeats.first, ring(a).addingTimeInterval(60))
+    }
+
+    /// The alert is planned as 15 minutes, like the Clock app.
+    func testAlertLengthIsFifteenMinutes() {
+        XCTAssertEqual(MissedAlarmRule.alertLength, 15 * 60)
+    }
+
+    // MARK: Part 2: the repeat alarms to schedule
+
+    private func anchor(_ m: Meeting) -> MissedAlarmRule.Anchor { .init(meeting: m, firstRing: ring(m)) }
+
+    /// A chain stops before the next meeting's first ring; the next meeting's chain runs to its own end.
+    func testChainsStopBeforeTheNextMeetingRings() {
+        let a = meeting("a", 10, 0, minutes: 60), b = meeting("b", 10, 45, minutes: 60)
+        let plan = MissedAlarmRule.repeatAlarms(anchors: [anchor(a), anchor(b)], dismissed: [], now: at(9, 0), budget: 24)
+        let aRepeats = plan.filter { $0.meeting.id == "a" }, bRepeats = plan.filter { $0.meeting.id == "b" }
+        XCTAssertFalse(aRepeats.isEmpty)
+        for r in aRepeats { XCTAssertLessThanOrEqual(r.fireDate.addingTimeInterval(MissedAlarmRule.alertLength), ring(b)) }
+        XCTAssertFalse(bRepeats.isEmpty)
+        for r in bRepeats { XCTAssertLessThanOrEqual(r.fireDate.addingTimeInterval(MissedAlarmRule.alertLength), b.end) }
+    }
+
+    /// Same-minute meetings share one chain, as they share one alarm.
+    func testSameMinuteMeetingsShareOneChain() {
+        let a = meeting("a", 10, 0, minutes: 60), b = meeting("b", 10, 0, minutes: 90)
+        let plan = MissedAlarmRule.repeatAlarms(anchors: [anchor(a), anchor(b)], dismissed: [], now: at(9, 0), budget: 24)
+        XCTAssertEqual(Set(plan.map(\.meeting.id)), ["a"])
+        XCTAssertEqual(Set(plan.map(\.fireDate)).count, plan.count, "no two repeats at the same moment")
+    }
+
+    /// A dismissed meeting gets no repeats; the others keep theirs.
+    func testDismissedMeetingGetsNoRepeats() {
+        let a = meeting("a", 10, 0, minutes: 60), b = meeting("b", 13, 0, minutes: 60)
+        let plan = MissedAlarmRule.repeatAlarms(anchors: [anchor(a), anchor(b)], dismissed: ["a"], now: at(9, 0), budget: 24)
+        XCTAssertTrue(plan.allSatisfy { $0.meeting.id == "b" })
+        XCTAssertFalse(plan.isEmpty)
+    }
+
+    /// The budget keeps the soonest repeats.
+    func testBudgetKeepsTheSoonest() {
+        let a = meeting("a", 10, 0, minutes: 240), b = meeting("b", 15, 0, minutes: 240)
+        let all = MissedAlarmRule.repeatAlarms(anchors: [anchor(a), anchor(b)], dismissed: [], now: at(9, 0), budget: 24)
+        let three = MissedAlarmRule.repeatAlarms(anchors: [anchor(a), anchor(b)], dismissed: [], now: at(9, 0), budget: 3)
+        XCTAssertEqual(three.map(\.fireDate), Array(all.map(\.fireDate).prefix(3)))
+        XCTAssertTrue(MissedAlarmRule.repeatAlarms(anchors: [anchor(a)], dismissed: [], now: at(9, 0), budget: 0).isEmpty)
+    }
+
+    /// Re-syncing gives the same IDs, so repeats are never duplicated.
+    func testRepeatIDsAreStable() {
+        let a = meeting("a", 10, 0, minutes: 120)
+        let one = MissedAlarmRule.repeatAlarms(anchors: [anchor(a)], dismissed: [], now: at(9, 0), budget: 24)
+        let two = MissedAlarmRule.repeatAlarms(anchors: [anchor(a)], dismissed: [], now: at(9, 30), budget: 24)
+        XCTAssertEqual(one.map(\.id), two.map(\.id))
+        XCTAssertEqual(Set(one.map(\.id)).count, one.count)
     }
 
     /// Over a whole simulated day of start times and gaps, no repeat is planned to sound into the stop time.

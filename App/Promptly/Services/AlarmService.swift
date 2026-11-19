@@ -101,7 +101,8 @@ final class AlarmService {
             countdownDuration: planned.countdownSeconds.map { Alarm.CountdownDuration(preAlert: $0, postAlert: nil) },
             schedule: .fixed(planned.scheduleDate),
             attributes: attributes,
-            stopIntent: nil,
+            // Dismiss on the Lock Screen ends this meeting's repeats too (story 1.2).
+            stopIntent: DismissMeetingIntent(meetingID: meeting.id, alarmID: planned.id.uuidString),
             secondaryIntent: OpenMeetingIntent(meetingID: meeting.id, joinURL: meeting.joinURL?.absoluteString ?? "",
                                                alarmID: planned.id.uuidString),
             sound: sound == .appleDefault ? .default : .named(sound.fileName)

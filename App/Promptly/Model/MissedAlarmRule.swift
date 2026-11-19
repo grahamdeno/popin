@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// Story 1.2 (docs/roadmap.md): a missed alarm keeps ringing, at one steady volume, until it's dismissed, a later
@@ -8,8 +9,8 @@ import Foundation
 /// ringing is built from repeats: each starts `regap` after the one before goes quiet, and none is planned to still
 /// be sounding when the stop time comes (a later alarm that fires over an earlier one can be silenced).
 enum MissedAlarmRule {
-    /// How long iOS lets one alert sound before muting it. An assumption until Graham's phone check measures it.
-    static let alertLength: TimeInterval = 60
+    /// How long iOS lets one alert sound before muting it: about 15 minutes, like the Clock app (roadmap story 1.2).
+    static let alertLength: TimeInterval = 15 * 60
     /// A muted alarm rings again this soon (the story says within 60 seconds).
     static let regap: TimeInterval = 30
     /// At most this many future repeats are planned at once, so they fit the planner's budget of alarms. Each sync
@@ -61,5 +62,52 @@ enum MissedAlarmRule {
     /// itself at the handover).
     static func shouldRing(firstRing: Date, stop: Date, dismissed: Bool, now: Date) -> Bool {
         !dismissed && now >= firstRing && now < stop
+    }
+
+    /// A meeting that rings fully, and when it first rang (or will): its ring time, or its snooze ring.
+    struct Anchor: Equatable, Sendable {
+        var meeting: Meeting
+        var firstRing: Date
+    }
+
+    /// Story 1.2 part 2: the repeat alarms to schedule now. Same-minute meetings share one chain (as they share one
+    /// alarm). Each chain stops at its meeting's end or the next anchor's first ring, whichever is first, with no
+    /// repeat still sounding then (the quiet gap Graham chose). Dismissed meetings get none. Soonest first, at most
+    /// `budget` (first rings are planned before any repeats, so repeats never crowd one out).
+    static func repeatAlarms(anchors: [Anchor], dismissed: Set<String>, now: Date, budget: Int) -> [PlannedAlarm] {
+        guard budget > 0 else { return [] }
+        // Merge anchors that ring in the same minute, as the planner merges their alarms.
+        var merged: [Anchor] = []
+        for a in anchors.sorted(by: { $0.firstRing < $1.firstRing }) {
+            if let last = merged.last, abs(last.firstRing.timeIntervalSince(a.firstRing)) < 60 {
+                let m = last.meeting
+                merged[merged.count - 1].meeting = Meeting(id: m.id, eventID: m.eventID, title: "\(m.title) + \(a.meeting.title)",
+                                                           start: min(m.start, a.meeting.start), end: max(m.end, a.meeting.end),
+                                                           calendarID: m.calendarID, joinURL: m.joinURL ?? a.meeting.joinURL)
+            } else {
+                merged.append(a)
+            }
+        }
+        var out: [PlannedAlarm] = []
+        for (i, a) in merged.enumerated() {
+            let later = merged[(i + 1)...].map { Later(meeting: $0.meeting, ringTime: $0.firstRing) }
+            let stop = stopTime(for: a.meeting, firstRing: a.firstRing, later: later, rings: { _ in true })
+            let isDismissed = dismissed.contains(a.meeting.id)
+            for date in repeats(firstRing: a.firstRing, stop: stop, dismissed: isDismissed, after: now) {
+                out.append(PlannedAlarm(id: repeatID(meetingID: a.meeting.id, at: date), meeting: a.meeting,
+                                        fireDate: date, countdownSeconds: nil))
+            }
+        }
+        return Array(out.sorted { $0.fireDate < $1.fireDate }.prefix(budget))
+    }
+
+    /// The same meeting and time give the same ID, so a re-sync never duplicates a repeat.
+    static func repeatID(meetingID: String, at date: Date) -> UUID {
+        let key = meetingID + "|repeat|" + String(Int(date.timeIntervalSince1970))
+        var b = Array(SHA256.hash(data: Data(key.utf8)).prefix(16))
+        b[6] = (b[6] & 0x0F) | 0x50
+        b[8] = (b[8] & 0x3F) | 0x80
+        return UUID(uuid: (b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
+                           b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15]))
     }
 }
