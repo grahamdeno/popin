@@ -148,7 +148,7 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
   (settled by Graham, 2026-11-19).
 - How it's built (2026-11-19): AlarmKit has no setting for how long an alert sounds. iPhone alarms ring for about
   15 minutes and then stop on their own, and AlarmKit alarms ring the way Clock does, so Pop In plans on 15 minutes
-  (confirmed on Graham's phone with the first test build, no separate test). Unlocking the phone takes the
+  (to be confirmed on Graham's phone with the first test build, no separate test). Unlocking the phone takes the
   full-screen alert away, but the alarm keeps sounding until it's stopped from the Live Activity or Pop In is opened.
   Also, a later alarm that fires
   while an earlier one still sounds can be silenced. So Pop In schedules repeat alarms for an unhandled meeting,
@@ -405,8 +405,9 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - Checked by: review of `site/` against the app's strings.
 
 #### 8.13 Your own reminders say Skip (GR-16)
-- Given your own reminder is next, then its card offers "Skip" instead of "Not going", and the toast says "Skipped
-  [title] · Undo". Meetings keep "Not going" unchanged.
+- Given your own reminder is next, then its card, its VoiceOver action, the alarm screen, the toast ("Skipped [title]
+  · Undo"), the quiet line ("Skipped: [time] [title]") and its Undo label say "Skip" or "Skipped" instead of "Not
+  going". Meetings keep "Not going" unchanged.
 - Checked by: J13 own-reminder scene: "Skip" shows and "Not going" doesn't; a unit test of the words.
 
 #### 8.14 First run in fewer steps (GR-21, D-18)
@@ -417,17 +418,18 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 
 #### 8.15 Theme in the ⋯ menu (GR-20)
 - Given the ⋯ menu, then "Theme" opens the theme gallery directly.
-- Checked by: a walk check and benchmark "Change the theme" in 3 taps from Home.
+- Checked by: a walk check and benchmark "Change the theme" in 3 taps from Home: ⋯, Theme, a theme (it applies
+  when the sheet closes).
 
-#### 8.16 Motion that links the toast to the card (D-15)
+#### 8.16 Motion that links the toast to the card (D-15; the glass morph is left out, since cards are on the plate)
 - Given a pop or a skip, then the toast rises from the bottom edge with a quick, firm spring. Given an alarm is set,
   then the bell beside "Rings…" wiggles once. With Reduce Motion, both simply appear.
 - Checked by: review; Graham's phone check.
 
-#### 8.17 The site looks like the app (GR-22, D-20)
+#### 8.17 The site looks like the app (GR-22, D-20; the store pictures follow the brand sheet in 7.5)
 - Given popin.tangomike.app, then the hero and "How it works" are white with the bubble's pink, and the dark band is
   used only for Pro and the price. A one-page brand sheet (`docs/brand.md`) records the white ground, ink #141414,
-  the bubble as the only color mass, and the type.
+  the bubble as the only color mass, and the type. Pink words on white measure at least 4.5:1.
 - This deploys the site: it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
 - Checked by: a picture of the site at 1280 and 390 wide; review of `site/` and `docs/brand.md`.
 
