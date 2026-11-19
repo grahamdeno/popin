@@ -124,6 +124,8 @@ the meeting I choose rings.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
+- Settled 2026-11-19 (Opus, from Fable's review): the "Not ringing" line also has Undo until the meeting starts, so a
+  mis-tapped pick can be reversed, as Not going can (7.2). A dropped meeting appears only on that line.
 
 #### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
 As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my

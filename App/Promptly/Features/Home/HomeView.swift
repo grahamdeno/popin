@@ -527,6 +527,18 @@ struct HomeView: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel("Join \(meeting.title)")
             }
+            // Until it starts, a pick can be undone, as Not going can (7.2).
+            if meeting.start > now {
+                Button { Feedback.undo(); model.unpick(meeting) } label: {
+                    Text("Undo")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Brand.ink)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Undo the pick, ring for \(meeting.title)")
+            }
         }
         .frame(minHeight: 44)
     }

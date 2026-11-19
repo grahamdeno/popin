@@ -9,6 +9,8 @@ enum ScreenshotScene: String {
     /// Edge cases for the simulator walk-through: a missed meeting under a new alarm, alerts paused, a meeting
     /// outside work hours, an own reminder, the same meeting twice, and the Pop for fun playground.
     case missed, paused, outside, reminder, dupes, playground
+    /// Story 1.1: two meetings at the same minute, so Home offers a pick.
+    case clash
 }
 
 enum ScreenshotMode {
@@ -56,6 +58,9 @@ enum ScreenshotMode {
                                  link: "https://zoom.us/j/5550100300"))
         case .reminder:
             extra.append(OwnReminder(id: "shot", title: "Pick up Nora", date: now.addingTimeInterval(4 * 60)).meeting)
+        case .clash:
+            extra.append(meeting("client", "Client call", firstStart, minutes: 30, calendar: "shot-home",
+                                 link: "https://teams.microsoft.com/l/meetup-join/client"))
         case .dupes:
             extra.append(meeting("design-fw", "FW: Design review", firstStart, minutes: 30, calendar: "shot-home",
                                  link: "https://zoom.us/j/5550100200?pwd=fw"))

@@ -621,6 +621,15 @@ final class SimulatedDayTests: XCTestCase {
         XCTAssertEqual(log.shown.count, 1)
     }
 
+    /// Story 1.1: a meeting dropped while snoozed never comes back to ring.
+    func testDroppedMeetingDoesNotReturnFromSnooze() {
+        let config = AlarmScreenRule.Config(lead: 120, rings: { $0.id != "B" }, paused: { _ in false })
+        let a = meeting("A", 10, 0), b = meeting("B", 10, 0)
+        let state = AlarmScreenRule.State(showing: nil, shown: ["A", "B"], snoozedUntil: ["B": at(10, 0)])
+        let (action, _) = AlarmScreenRule.tick(open: [a, b], state: state, now: at(10, 0).addingTimeInterval(1), config: config)
+        XCTAssertEqual(action, .none)
+    }
+
     /// Story 1.3: snoozing a shared alarm snoozes both, so the twin's screen doesn't come straight up.
     func testSnoozeOnASharedAlarmSnoozesBoth() {
         let snoozeAt = at(9, 58).addingTimeInterval(30)

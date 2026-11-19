@@ -422,7 +422,8 @@ final class AppModel {
     /// Meetings not yet cleared that haven't ended.
     func upcoming(at now: Date) -> [Meeting] {
         let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
-        return open.filter { !isMissed($0, among: open, now: now) }.sorted { $0.start < $1.start }
+        // A meeting dropped by a clash pick lives only on the quiet line (story 1.1).
+        return open.filter { !isMissed($0, among: open, now: now) && !clashDropped.contains($0.id) }.sorted { $0.start < $1.start }
     }
 
     /// The rules the alarm screen runs by right now.
@@ -441,6 +442,14 @@ final class AppModel {
     /// Story 1.1: only the picked meeting rings; the others drop to a quiet line with Join. The calendar is untouched.
     func pick(_ meeting: Meeting, from group: [Meeting]) {
         clashDropped.formUnion(ClashRule.dropped(picking: meeting, from: group))
+        clashDropped.remove(meeting.id)
+        if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        writeWidgetSnapshot()
+        Task { await syncAlarms() }
+    }
+
+    /// Story 1.1: Undo on the "Not ringing" line: the meeting rings again (and clashes again, so the pick shows).
+    func unpick(_ meeting: Meeting) {
         clashDropped.remove(meeting.id)
         if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
         writeWidgetSnapshot()
@@ -904,6 +913,7 @@ final class AppModel {
         lastClearedTwins = sharing.filter { !clashDropped.contains($0.id) }
         if !sharing.isEmpty {
             clashDropped.formUnion(sharing.map(\.id))
+            for m in sharing { snoozedUntil[m.id] = nil }
             if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
         }
         cleared.insert(meeting.id)

@@ -604,6 +604,18 @@ final class Journeys: XCTestCase {
             a.tap("Cancel", a.app.buttons["Cancel"].firstMatch, severity: 1)
             a.pause(0.6)
         }
+        // 1.1: two meetings at the same minute: Home says so and offers a pick; picking leaves a quiet line.
+        a.launch("clash")
+        a.shot("clash-pick", note: "Two meetings at the same minute: Pick one")
+        let pick = a.app.buttons["clash-pick"].firstMatch
+        if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
+            a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
+            if a.tap("Pick one", pick, severity: 2), a.tap("Design review", a.app.buttons["Design review"].firstMatch, severity: 2, timeout: 2) {
+                a.pause(1)
+                a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
+                a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
+            }
+        }
         a.launch("dupes")
         a.shot("duplicate-merged", note: "Design review and its FW copy show as one meeting")
         a.launch("home")

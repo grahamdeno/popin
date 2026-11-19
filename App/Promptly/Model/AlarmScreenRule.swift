@@ -54,7 +54,8 @@ enum AlarmScreenRule {
         let list = upcoming(open, now: now, config: config)
         if let hit = s.snoozedUntil.filter({ $0.value <= now }).min(by: { $0.value < $1.value }) {
             s.snoozedUntil[hit.key] = nil
-            if list.contains(where: { $0.id == hit.key }) {
+            // A snoozed meeting comes back only if it still rings (a clash pick can drop it meanwhile, story 1.1).
+            if let m = list.first(where: { $0.id == hit.key }), config.rings(m), !config.paused(m) {
                 s.showing = hit.key
                 s.shown.insert(hit.key)
                 return (closed ? .replace(hit.key) : .show(hit.key), s)
