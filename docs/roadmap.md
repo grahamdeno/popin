@@ -43,6 +43,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-19 | Epic 7 step 1 settled: words never sit on the gum (Fortune's fortune excepted); words over the bubble sit on a white plate of at least 90%; ten accent text colors darken; Home's header stays fixed at every text size and the card scrolls over a bubble that keeps its size; "Pop the bubble to join" moves into the alarm card; the card is the white plate unless glass passes Apple's audit on every theme | A script over all 46 themes: white words on the gum fail on 41, one text color per theme fails on 17, a bare "Then" line fails on all 46. On a 90% plate, ink, secondary and every accent text pass 4.5:1 over any color, the darkest theme art included |
 | 2026-11-18 | 1.1 scope reopened and frozen again: epic 7 added (Home and the alarm work for everyone). Standing merge go extends to epic 7 | Grok's design review found a severity 4 (big-text Home) and a severity 3 (Not going can't be undone after 5 s) on 1.0; the playbook fixes both before the next release. The M1 Home layout goes in now so Home is rebuilt once |
 | 2026-11-18 | 1.2 will honor the widgets' tinted and clear Home Screen modes | It's how iOS draws widgets, not an app dark mode; the app stays light only |
 | 2026-11-18 | Pro sheet follows mockup M4 (trio hero, two-column features, price bar, Restore link), in 1.2 | Graham preferred it to the current sheet |
@@ -62,7 +63,9 @@ Newest first. Refined decisions only.
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
 - 2026-11-18: Grok's design review is in; epic 7 added to 1.1.
 - 2026-11-18: 7.4 merged (#52): the audit walk now shows each theme, counts from Home and lists stopped journeys.
-  Next: Opus settles epic 7 step 1, then Sonnet builds 7.1 to 7.3.
+- 2026-11-19: epic 7 step 1 settled (contrast, icons, the large-text Home); criteria added to 7.1 to 7.3. Next: Sonnet
+  builds 7.1, then 7.2 and 7.3.
+- Known gap: the small-phone audit setup recorded nothing on 57f9d4e (failed to build or run). 7.1's walk needs it.
 
 ## Release scope
 - **1.1 (approved and frozen 2026-11-16, reopened and frozen again 2026-11-18):** epic 1 "Ring only when it
@@ -175,9 +178,45 @@ Settings.
 - Steady gets the same countdown and layout.
 - A debug-only switch, next to Bubble / Steady, shows the card as glass or near-opaque white (D-5). Graham picks on
   the phone; the other is removed before release.
-- Icons are SF Symbols, not emoji. Text on the bubble meets AA contrast.
-- Checked by: big-text, small-phone and iPad walk pictures; a walk check that ⋯ and the gear are hittable at XXXL;
-  benchmark "Ring before" from Home in 3 taps.
+- Icons are SF Symbols, not emoji (the list below). Text on the bubble meets AA contrast.
+- Settled 2026-11-19 (epic 7 step 1):
+  - **Contrast.** Given any theme and any bubble size, when words can have the bubble behind them, then they sit on a
+    white plate of at least 90% opacity and use ink, secondary or the theme's accent text. Checked by a unit test that,
+    for every theme, measures each of those colors on the plate over the theme's light, base and dark colors and over
+    black, and requires 4.5:1.
+  - Given any theme, then its accent text measures at least 4.5:1 on white and on the plate over black. Ten values
+    change: Fishbowl 0B6D97, Gumball machine 1E6B97, Orange A14E0F, Macaron A3446C, Sun 9B5309, Dandelion 546D34,
+    Marble 1E6B97, Rubber duck 816004, Easter egg 3A689E, Beach ball B83729.
+  - Given any text size, then no words are drawn on the gum, except Fortune's fortune.
+  - **Header.** Given Accessibility XXXL, when Home shows a meeting, then the wordmark, ⋯ and the gear stay fixed at
+    the top at their normal size on a white backing, each button at least 44 pt, and a long press shows the button's
+    name large.
+  - **Scrolling.** Given content taller than the space, then the paused line, the card, the "Then" strip and the new
+    themes card scroll under the header, and Not going is reachable and at least 44 pt.
+  - **Bubble.** Given any text size on iPhone, then the bubble keeps its size (it shows the time left), the card never
+    covers the bottom quarter of the screen, and the bubble is hittable there with the column scrolled to the top or
+    the bottom. On iPad the bubble sits beside the column, which scrolls at full height.
+  - **Countdown.** Given the hint line appears, then the countdown keeps its size. The countdown is 88 pt at the
+    default size and grows with text size up to the size where "23 h 59" still fits on one line of the smallest
+    supported iPhone.
+  - **Card at large sizes.** Given an accessibility text size, then the meta row stacks ("Next · service", then
+    "Rings…"), and the footer stacks: the hint, then a full-width Not going.
+  - **Then.** Given a meeting after the next one, then "Then [time] · [title]" shows in a quiet strip under the card,
+    on the plate. At accessibility sizes the title goes under the time, two lines at most, and the time never breaks.
+  - **Paused.** Given alerts are paused, then "Paused until [time] · Resume" is the first row of the column, at least
+    44 pt.
+  - **Card material.** The card is the white plate. The glass look stays behind the debug switch for Graham's phone
+    check, and can only be chosen if Apple's accessibility audit shows no contrast failure on Home for every theme.
+  - **VoiceOver.** ⋯ reads "More", the gear reads "Settings", and icons beside words are not read on their own.
+- Icons: ⋯ `ellipsis` in a 44 pt circle ("More"); gear `gearshape` ("Settings"); menu `plus` (Add a reminder),
+  `circle.hexagongrid` (Pop for fun), `pause` (Pause alerts), `bell` (Resume alerts); Settings leaves the menu;
+  paused line `pause.fill`; card `bell.fill` or `bell.slash` beside "Rings…", `hand.tap` beside the hint; new themes
+  card `xmark` ("Dismiss"). The mockups' emoji are not used. Theme art emoji stay as decoration, hidden from
+  VoiceOver.
+- Checked by: big-text, small-phone and iPad walk pictures, and walk checks that ⋯ and the gear are on screen and
+  hittable, the bubble is hittable with the column at the top and at the bottom, Not going is reachable, and the
+  countdown is the same height at 11 and 9 minutes; the contrast unit test; Apple's audit on Home for every J12
+  theme; benchmark "Ring before" from Home in 3 taps.
 
 #### 7.2 Bring back a skipped meeting (GR-2, GR-6)
 As someone who tapped Not going by mistake, I want to bring the meeting back until it starts, so a slow tap doesn't
@@ -190,6 +229,10 @@ cost me the alarm.
 - Nothing is written to the calendar. App state only.
 - Given any text size up to Accessibility XXXL, when the toast shows, then the toast and its Undo are on screen
   (the 2026-11-18 audit drew Undo below the screen edge at XXXL).
+- Settled 2026-11-19: given any text size up to Accessibility XXXL, then the toast sits above the bottom edge
+  inside the bottom quarter, its message wraps (three lines at most) with Undo on its own row at large sizes, and
+  Undo is at least 44 pt. Given the toast has gone, then the "Not going…" line sits in the same strip as "Then", on
+  the plate.
 - Checked by: unit tests in Model/, a walk step that undoes after 10 seconds, and J2 and J3 Undo at big text.
 
 #### 7.3 Alarm screen: clear countdown and controls (D-4, GR-4, GR-7, GR-8; built with story 1.3)
@@ -200,6 +243,12 @@ thinking.
 - At any text size, nothing overlaps the meeting time.
 - "Snooze 2 min" is the visible word and the VoiceOver name.
 - Story 1.3's "Also missed" line wraps, is at least 44 pt tall, and has its own Join for each meeting.
+- Settled 2026-11-19: the countdown is 96 pt at the default size, under "Starts in". Given a meeting with a link,
+  then the card shows "Pop the bubble to join" above the two buttons ("Pop the bubble when ready" without a link).
+  No words on the gum (mockup M2 drew them there; they fail contrast on 41 themes). All words follow 7.1's plate
+  rule. Given an accessibility text size, then Not going and "Snooze 2 min" stack full width inside the card, each
+  at least 44 pt. Icons: `zzz` on Snooze; `clock.badge.exclamationmark` on the missed line, not read on its own; each
+  missed meeting's Join reads "Join [title]".
 - Checked by: big-text and small-phone takeover pictures; the Apple accessibility audit on the screen.
 
 #### 7.4 Requirement: the audit walk shows what it claims
@@ -220,7 +269,7 @@ thinking.
 scrolling isn't enough at XXXL, and only with Graham's approval.
 
 **Steps:**
-1. Settle contrast on the bubble, the SF Symbols and the XXXL Home layout. (Opus.)
+1. Settle contrast on the bubble, the SF Symbols and the XXXL Home layout. (Opus.) Done 2026-11-19.
 2. Fix the audit walk first (7.4), then build 7.1 to 7.3 on their own branches, with tests. (Sonnet.)
 3. Review each PR. (Opus.)
 4. Phone checks: card style, big text, Undo after the toast. (Graham.)
