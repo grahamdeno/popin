@@ -105,8 +105,8 @@ struct SettingsView: View {
                     }
                     SettingsToggle("Buzz as it gets close", detail: "Builds over the last ten minutes while Pop In is open",
                                    isOn: Binding(get: { model.buzz }, set: { model.buzz = $0 }))
-                    SettingsToggle(model.store.isPro ? "Keep screen on" : "Keep screen on ✦",
-                                   detail: "Like a desk clock while Pop In is open",
+                    SettingsToggle("Keep screen on",
+                                   detail: "Like a desk clock while Pop In is open", pro: !model.store.isPro,
                                    isOn: Binding(get: { model.keepAwake }, set: { on in
                                        if on && !model.store.isPro { model.showPro = true } else { model.keepAwake = on }
                                    }))
@@ -349,21 +349,39 @@ struct SettingsLink<Destination: View>: View {
     }
 }
 
+/// The one way Pop In marks something that needs Pro: a small pill with the word (story 8.4).
+struct ProPill: View {
+    var body: some View {
+        Text("Pro")
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Brand.accentText)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(Capsule().fill(Brand.coralLight.opacity(0.5)))
+            .accessibilityLabel("Pro")
+    }
+}
+
 struct SettingsToggle: View {
     let title: String
     let detail: String
+    let pro: Bool
     @Binding var isOn: Bool
 
-    init(_ title: String, detail: String, isOn: Binding<Bool>) {
+    init(_ title: String, detail: String, pro: Bool = false, isOn: Binding<Bool>) {
         self.title = title
         self.detail = detail
+        self.pro = pro
         self._isOn = isOn
     }
 
     var body: some View {
         Toggle(isOn: $isOn) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.body).foregroundStyle(Brand.ink)
+                HStack(spacing: 8) {
+                    Text(title).font(.body).foregroundStyle(Brand.ink)
+                    if pro { ProPill() }
+                }
                 Text(detail).font(.footnote).foregroundStyle(Brand.secondary).fixedSize(horizontal: false, vertical: true)
             }
         }
@@ -430,11 +448,7 @@ struct ChoicePage<T: Hashable>: View {
                     } label: {
                         HStack {
                             Text(label(option)).font(.body).foregroundStyle(Brand.ink)
-                            if isLocked {
-                                Text("Pro").font(.caption.weight(.semibold)).foregroundStyle(Brand.accentText)
-                                    .padding(.horizontal, 8).padding(.vertical, 3)
-                                    .background(Capsule().fill(Brand.coralLight.opacity(0.5)))
-                            }
+                            if isLocked { ProPill() }
                             Spacer()
                             if option == selected {
                                 Image(systemName: "checkmark").font(.body.weight(.semibold)).foregroundStyle(Brand.ink)

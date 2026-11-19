@@ -298,6 +298,9 @@ final class Journeys: XCTestCase {
         a.shot("settings-top")
         a.accessibility("settings")
         a.labels("settings")
+        // 8.4: one way to mark Pro, the word in a pill. No "✦" and no "(Pro)".
+        a.check("no ✦ on Settings", !a.any(containing: "✦").exists, severity: 2)
+        a.check("no (Pro) on Settings", !a.any(containing: "(Pro)").exists, severity: 2)
         a.expect("Test the alarm is visible", a.any(containing: "Test the alarm"), severity: 3)
         for row in ["Calendars", "Ring before", "Sound"] {
             a.expect("row \(row) shows", a.any(containing: row), severity: 3)
@@ -333,6 +336,7 @@ final class Journeys: XCTestCase {
         a.tap("Theme", a.reveal(theme))
         a.pause(0.8)
         a.shot("theme-gallery")
+        a.check("no ✦ in the theme gallery", !a.any(containing: "✦").exists, severity: 2)
         a.accessibility("theme-gallery")
         let unicorn = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unicorn")).firstMatch
         a.tap("Unicorn (locked)", a.reveal(unicorn))
