@@ -365,6 +365,18 @@ final class Journeys: XCTestCase {
         a.shot("calendars")
         a.accessibility("calendars")
         a.labels("calendars")
+        // 8.4: the alert menu marks paid choices under a "Pro" heading, never "(Pro)". Open it, look, then pick Smart
+        // again so nothing changes.
+        let modeMenu = a.app.buttons.matching(NSPredicate(format: "label ENDSWITH %@", "alerts: Smart")).firstMatch
+        if modeMenu.exists && modeMenu.isHittable {
+            modeMenu.tap()
+            a.pause(0.6)
+            a.check("no (Pro) in the alert menu", !a.any(containing: "(Pro)").exists, severity: 2)
+            a.check("no ✦ in the alert menu", !a.any(containing: "✦").exists, severity: 2)
+            let smart = a.app.buttons["Smart: rings for video meetings"].firstMatch
+            if smart.waitForExistence(timeout: 2) { smart.tap() }
+            a.pause(0.6)
+        }
         let search = a.app.textFields["Find a calendar"]
         if a.expect("search shows with many calendars", search, severity: 2) {
             a.tap("search", search)

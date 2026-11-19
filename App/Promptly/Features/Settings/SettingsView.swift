@@ -349,15 +349,19 @@ struct SettingsLink<Destination: View>: View {
     }
 }
 
-/// The one way Pop In marks something that needs Pro: a small pill with the word (story 8.4).
+/// The one way Pop In marks something that needs Pro: a small pill with the word (story 8.4). White on the theme's
+/// accent text color, which measures at least 4.5:1 on every theme (ProPillTests).
 struct ProPill: View {
+    static let word = Color.white
+    static func fill(_ palette: GumPalette) -> Color { palette.accentText }
+
     var body: some View {
         Text("Pro")
             .font(.caption.weight(.semibold))
-            .foregroundStyle(Brand.accentText)
+            .foregroundStyle(Self.word)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background(Capsule().fill(Brand.coralLight.opacity(0.5)))
+            .background(Capsule().fill(Self.fill(GumPalette.current)))
             .accessibilityLabel("Pro")
     }
 }
