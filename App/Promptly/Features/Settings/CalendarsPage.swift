@@ -149,7 +149,7 @@ struct CalendarsList: View {
                         }
                         .font(.footnote.weight(.medium))
                         .foregroundStyle(Brand.accentText)
-                        .frame(minHeight: 32)
+                        .frame(minHeight: 44)
                         .padding(.trailing, 24)
                         .contentShape(Rectangle())
                     }
