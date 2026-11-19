@@ -24,14 +24,21 @@ final class Journeys: XCTestCase {
     private func openSettingsFromHome(_ a: Audit, severity: Int = 3) -> Bool {
         // A Settings sheet that was just closed is still fading out; two "Settings" bars at once break the next query
         // (J7 stopped early in every config, November 19). Wait for it to go first.
-        let closing = a.app.navigationBars["Settings"].firstMatch
-        if closing.exists {
-            _ = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: closing)], timeout: 4)
+        // The closing sheet may be on any page (J7 closes it from Calendars), so wait for every navigation bar to go;
+        // Home has none. A gear tap during the close was ignored (J7, every config, November 19).
+        let anyBar = a.app.navigationBars.firstMatch
+        if anyBar.exists {
+            _ = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: anyBar)], timeout: 5)
         }
         guard a.tap("Settings (gear)", a.app.buttons["home-settings"], severity: severity) else { return false }
         // The sheet rises after the tap. Wait for it, so the next query doesn't run against Home: J12 lost
-        // the Theme row in 10 of 40 themes without this wait (pro-light, November 18).
-        return a.expect("Settings opens", a.app.navigationBars["Settings"].firstMatch, timeout: 5, severity: severity)
+        // the Theme row in 10 of 40 themes without this wait (pro-light, November 18). One more tap if it didn't.
+        let bar = a.app.navigationBars["Settings"].firstMatch
+        if !bar.waitForExistence(timeout: 4) {
+            a.check("Settings opened on the first tap", false, severity: 1)
+            a.tap("Settings (gear), second try", a.app.buttons["home-settings"], severity: 1)
+        }
+        return a.expect("Settings opens", bar, timeout: 5, severity: severity)
     }
 
     // MARK: Home's layout (item 7.1)
@@ -243,33 +250,47 @@ final class Journeys: XCTestCase {
         a.labels("ringing")
         a.expect("Not going on the takeover", a.app.buttons["Not going"], severity: 4)
         a.expect("the meeting title", a.any(containing: "Design review"), severity: 4)
-        // 7.3: the card follows M2, its buttons are inside it, and nothing overlaps the meeting time.
-        a.expect("the card says Starts in", a.any(containing: "Starts in"), severity: 3)
-        let hint = a.app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch
-        a.expect("the card says how to join", hint, severity: 3)
-        let snooze = a.app.buttons["Snooze 2 min"]
-        a.expect("Snooze 2 min is the button's word and VoiceOver name", snooze, severity: 3)
-        let notGoing = a.reveal(a.app.buttons["Not going"], tries: 6)
-        let span = a.app.descendants(matching: .any).matching(identifier: "alarm-span").firstMatch
-        a.check("Not going is at least 44 pt", notGoing.exists && notGoing.frame.height >= 44, severity: 3,
-                detail: "height \(notGoing.frame.height)")
-        a.check("Snooze 2 min is at least 44 pt", snooze.exists && snooze.frame.height >= 44, severity: 3,
-                detail: "height \(snooze.frame.height)")
-        if span.exists {
-            let clear = !span.frame.intersects(notGoing.frame) && !span.frame.intersects(snooze.frame)
-            a.check("nothing overlaps the meeting time", clear, severity: 4,
-                    detail: "time \(span.frame), Not going \(notGoing.frame), Snooze \(snooze.frame)")
-        } else {
-            a.check("the meeting time is shown", false, severity: 3)
+        // 7.3: the card follows M2, its buttons are inside it, and nothing overlaps the meeting time. Queries stay
+        // inside the alarm card (Home sits under it with its own Not going), and nothing here swipes: a swipe on the
+        // alarm screen lands on the bubble and pops it (J5 stopped early in every config, November 19).
+        let card = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
+        if a.expect("the alarm card is shown", card, severity: 4) {
+            a.check("the card says Starts in", card.staticTexts["Starts in"].exists, severity: 3)
+            a.check("the card says how to join",
+                    card.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch.exists,
+                    severity: 3)
+            let snooze = card.buttons["Snooze 2 min"].firstMatch
+            let notGoing = card.buttons["Not going"].firstMatch
+            let span = card.descendants(matching: .any).matching(identifier: "alarm-span").firstMatch
+            a.check("Snooze 2 min is the button's word and VoiceOver name", snooze.exists, severity: 3)
+            a.check("Not going is in the card, at least 44 pt", notGoing.exists && notGoing.frame.height >= 44, severity: 3,
+                    detail: "Not going \(notGoing.frame)")
+            a.check("Snooze 2 min is at least 44 pt", snooze.exists && snooze.frame.height >= 44, severity: 3,
+                    detail: "Snooze \(snooze.frame)")
+            if span.exists {
+                let clear = !span.frame.intersects(notGoing.frame) && !span.frame.intersects(snooze.frame)
+                a.check("nothing overlaps the meeting time", clear, severity: 4,
+                        detail: "time \(span.frame), Not going \(notGoing.frame), Snooze \(snooze.frame)")
+            } else {
+                a.check("the meeting time is shown", false, severity: 3)
+            }
+            // The card's scroll area stops at three quarters of the screen, so the bubble can be tapped in the bottom
+            // quarter. (The card itself can be taller and scroll; its frame isn't clipped, so measure the scroll area.)
+            let screen = a.app.windows.firstMatch.frame
+            let scroll = a.app.descendants(matching: .any).matching(identifier: "alarm-scroll").firstMatch
+            a.check("the card leaves the bottom quarter for the bubble",
+                    scroll.exists && scroll.frame.maxY <= screen.height * 0.75 + 1,
+                    severity: 4, detail: "scroll area \(scroll.frame), screen \(screen)")
         }
-        a.check("the bubble can be tapped on the alarm screen",
-                a.any(containing: "Pop the bubble to join Design review").isHittable, severity: 4)
         a.launch("late", settle: 3)
         a.shot("late-50s", note: "50 s after the ring: the first bud should be out")
         a.pause(25)
         a.shot("late-75s", note: "75 s after the ring: two or three buds")
         a.begin("Pop the late bubble")
         a.done("Pop the late bubble", popBubble(a))
+        // The tap really popped: the alarm card is gone.
+        let lateCard = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
+        a.check("the pop closed the alarm", !lateCard.waitForExistence(timeout: 2), severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
     }
@@ -298,6 +319,9 @@ final class Journeys: XCTestCase {
         a.shot("settings-top")
         a.accessibility("settings")
         a.labels("settings")
+        // 8.4: one way to mark Pro, the word in a pill. No "✦" and no "(Pro)".
+        a.check("no ✦ on Settings", !a.any(containing: "✦").exists, severity: 2)
+        a.check("no (Pro) on Settings", !a.any(containing: "(Pro)").exists, severity: 2)
         a.expect("Test the alarm is visible", a.any(containing: "Test the alarm"), severity: 3)
         for row in ["Calendars", "Ring before", "Sound"] {
             a.expect("row \(row) shows", a.any(containing: row), severity: 3)
@@ -320,7 +344,7 @@ final class Journeys: XCTestCase {
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
         // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
-        a.reveal(popSound, tries: 20)
+        a.revealOnScreen(popSound, tries: 24)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
@@ -333,6 +357,7 @@ final class Journeys: XCTestCase {
         a.tap("Theme", a.reveal(theme))
         a.pause(0.8)
         a.shot("theme-gallery")
+        a.check("no ✦ in the theme gallery", !a.any(containing: "✦").exists, severity: 2)
         a.accessibility("theme-gallery")
         let unicorn = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unicorn")).firstMatch
         a.tap("Unicorn (locked)", a.reveal(unicorn))
@@ -361,6 +386,21 @@ final class Journeys: XCTestCase {
         a.shot("calendars")
         a.accessibility("calendars")
         a.labels("calendars")
+        // 8.4: the alert menu marks paid choices under a "Pro" heading, never "(Pro)". Open it, look, then pick Smart
+        // again so nothing changes.
+        let modeMenu = a.app.buttons.matching(NSPredicate(format: "label ENDSWITH %@", "alerts: Smart")).firstMatch
+        if modeMenu.exists && modeMenu.isHittable {
+            modeMenu.tap()
+            a.pause(0.6)
+            a.check("no (Pro) in the alert menu", !a.any(containing: "(Pro)").exists, severity: 2)
+            a.check("no ✦ in the alert menu", !a.any(containing: "✦").exists, severity: 2)
+            let smart = a.app.buttons["Smart: rings for video meetings"].firstMatch
+            if smart.waitForExistence(timeout: 2) { smart.tap() } else { a.tapAt(0.5, 0.05) }
+            a.pause(0.6)
+            a.check("the alert menu closed", !a.app.buttons["Smart: rings for video meetings"].exists, severity: 2)
+        } else {
+            a.check("the alert menu could be opened", false, severity: 2)
+        }
         let search = a.app.textFields["Find a calendar"]
         if a.expect("search shows with many calendars", search, severity: 2) {
             a.tap("search", search)
@@ -403,7 +443,10 @@ final class Journeys: XCTestCase {
         a.accessibility("empty")
         a.labels("empty")
         a.expect("says nothing is coming up", a.any(containing: "Nothing coming up"), severity: 3)
-        a.tap("Try a pop", a.app.buttons["Try a pop"], severity: 3)
+        let tryPop = a.app.buttons["Try a pop"]
+        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 44, severity: 2,
+                detail: "height \(tryPop.frame.height)")
+        a.tap("Try a pop", tryPop, severity: 3)
         a.pause(1.5)
         a.shot("demo")
         a.labels("demo")

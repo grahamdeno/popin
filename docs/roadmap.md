@@ -317,17 +317,111 @@ scrolling isn't enough at XXXL, and only with Graham's approval.
 3. Review each PR. (Opus.)
 4. Phone checks: card style, big text, Undo after the toast. (Graham.)
 
-### 8. Epic: Design polish (approved 2026-11-18, in 1.1, to shape)
-- From the review: Settings rows and Pro row (M3), the Pro sheet (M4), the theme gallery (M6, keeping Surprise me and
-  the groups), one shared ball highlight (D-11), haptics (D-14), empty state (D-16), pressed buttons (D-19), one PRO
-  tag (GR-13), tap areas (GR-14), Pro sheet icons hidden from VoiceOver (GR-12), Add reminder chips (GR-10), iPad
-  sizing (GR-15, GR-17), fixed sizes (GR-18), Calendars (D-17), copy on the site and support pages (GR-19).
-- Opus shapes; Sonnet builds.
+### 8. Epic: Design polish (approved 2026-11-18, in 1.1, shaped 2026-11-19)
+Goal: the rest of the app matches the care of Home and the alarm. From Grok's design review (D-7, D-9 to D-11,
+D-14, D-16, D-17, D-19; GR-10, GR-12 to GR-15, GR-17 to GR-19). Proposed out of scope, waiting for Graham's yes:
+GR-16 (touches the Not going rule), GR-21 and D-18 (rework first run), GR-22 and D-20 (redesign the site), GR-20 and
+D-15 (optional polish). Steps: Opus builds each story on its own branch; Fable reviews; one audit walk before the test build.
 
-### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, to shape)
-- M5: "8 min" as in the app, the big-bubble light, tinted and clear Home Screen modes, text styles (GR-11, D-12), and
-  the Live Activity (D-13).
-- Opus shapes; Sonnet builds.
+#### 8.1 Settings rows show their values (D-7, M3)
+- Given Settings, then every row that opens a choice shows its current value on the right in secondary ("2 min",
+  "Pop", "Bubblegum").
+- Given Pro isn't owned, then the Pro row shows three theme balls, two lines of text and a black capsule with the
+  price from the App Store (never a price written into the app). Given Pro is owned, the capsule is gone.
+- Checked by: J6 labels (each row's value); the price comes from StoreKit (review).
+
+#### 8.2 Pro sheet (D-9, M4, GR-12)
+- Given the Pro sheet, then it shows a centred trio of theme balls, a centred title and one line, the features in two
+  columns (one column at accessibility sizes), and a bar fixed at the bottom, on the plate (epic 7's card rule), with "[price] One time · no
+  subscription", a 56 pt "Unlock Pro" and a "Restore purchase" link.
+- The price comes from the App Store. The feature icons are hidden from VoiceOver; each feature reads as its words.
+- Given a purchase or restore succeeds, then the phone gives a success tap.
+- Checked by: J6 pro-sheet picture and labels; Apple's audit reports no "description" items on the sheet.
+
+#### 8.3 Theme gallery (D-10, M6)
+- Given the gallery, then each theme is a 64 pt ball with no box. The chosen one has a 2 pt ink ring and VoiceOver
+  reads it as selected. A locked theme shows the "Pro" pill. Surprise me and the groups stay.
+- Given a theme is picked, then the phone gives a selection tap.
+- Given the largest text, then names wrap under the balls and nothing is clipped.
+- Checked by: J12 and J6 gallery pictures; a walk check that the chosen theme reads "selected"; Graham's phone check
+  of the tap.
+
+#### 8.4 One way to mark Pro (GR-13)
+- Given anything that needs Pro, then it's marked with the small "Pro" pill, a word. No "✦" and no "(Pro)" anywhere.
+- The pill is a white word on the theme's accent color and measures at least 4.5:1 on every theme.
+- Checked by: walk labels on every Settings page contain no "✦" or "(Pro)"; review.
+
+#### 8.5 One light on every ball (D-11)
+- Given a small ball (Settings, the Pro sheet, the gallery), then it has the same gloss streak and window as the big
+  bubble, scaled to its size.
+- Checked by: gallery and Pro sheet pictures.
+
+#### 8.6 Taps you can feel and see (D-14, D-19)
+- Given Undo, then a light tap; given a theme pick, a selection tap; given an unlock, a success tap. The alarm's own
+  buzz is unchanged.
+- Given a button is pressed, then it shrinks slightly (0.97) and dims (0.9). With Reduce Motion it only dims.
+- These taps follow the iPhone's own System Haptics setting, not Pop In's "Buzz as it gets close" (that one is the
+  alarm's buzz).
+- Checked by: unit test of the pressed-state values with and without Reduce Motion; Graham's phone check of the taps.
+
+#### 8.7 Nothing coming up (D-16)
+- Given no meeting ahead, then Home shows a centred empty state on the plate: "Nothing coming up" (22 pt semibold at
+  the default size, scaling with text size), one line, and "Try a pop" as a text button. The resting bubble below
+  stays as it is today (not tappable).
+- Checked by: J8 picture; a walk check that "Try a pop" is at least 44 pt.
+
+#### 8.8 Tap areas and text that grows (GR-14, GR-18)
+- Given Calendars or Work hours, then each calendar's mode menu and each work-day circle is at least 44 pt (the look
+  stays the same; the tap area grows).
+- Given the largest text, then "Pop In can't see your calendar" grows with it, and the fortune words grow up to a cap.
+  The wordmark stays fixed.
+- Checked by: walk checks on the frames; Apple's audit reports no "dynamicType" item for those two texts.
+
+#### 8.9 iPad (GR-15, GR-17)
+- An iPad amendment to 7.1: given a regular-width iPad, then Home's countdown is 110 pt at the default size (growing
+  with text size up to 7.1's one-line cap), and the card sits centred vertically beside the bubble. When the column is
+  taller than the space it scrolls from the top under the header, as in 7.1. First run's column is at most 640 pt
+  wide, centred.
+- Checked by: iPad pictures (J1, J2, J4).
+
+#### 8.10 Add a reminder (GR-10)
+- Given the Add reminder sheet, then the time can be set with "In 15 min", "30 min", "1 hour" or "Pick a time".
+- Given no title, then Add is disabled. Given your reminders list, then an Edit button deletes without a swipe. The
+  footer says "this device".
+- Checked by: unit test of the chip times; J13 picture and checks (Add disabled, Edit present).
+
+#### 8.11 Calendars read calmly (D-17)
+- Given Calendars, then each switched-on calendar row ends with its mode in secondary ("Smart", "Always rings",
+  "Quiet") and a small chevron, one tappable menu of at least 44 pt. The accent color is gone from these labels.
+  Switches are ink. Calendar dots are 10 pt. Still read only.
+- Checked by: J7 picture; the read-only guard.
+
+#### 8.12 The site and support pages use the app's words (GR-19)
+- Given popin.tangomike.app and its support page, then they say Smart, Always rings and Quiet; "Open" for the Lock
+  Screen; and the alarm screen's alt text names the bubble, Not going and Snooze.
+- This deploys the site (`site/**`): it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
+- Checked by: review of `site/` against the app's strings.
+
+### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, shaped 2026-11-19)
+Goal: the widgets and the Live Activity read like Home, on every Home Screen look. From GR-11, D-12, D-13 (M5).
+The widgets stay light on a dark Home Screen (light only). Steps: Opus builds; Fable reviews; Graham checks them on
+his phone with the test build. The audit walk doesn't reach widgets, so the phone check is the check.
+
+#### 9.1 The count reads like the app (D-12)
+- Given a widget, then the count says "8 min" with the unit in secondary, refreshed each minute (no ticking seconds),
+  and the ball has the big bubble's light.
+- Checked by: unit tests of the count text and that timeline entries come a minute apart; Graham's phone check.
+
+#### 9.2 Tinted and clear Home Screens (GR-11)
+- Given a tinted or clear Home Screen, then the widget drops its white fill, draws the ball as an outline, and marks
+  the ball and count to take the tint. Text uses text styles, not fixed sizes.
+- Checked by: Graham's phone check on a tinted and a clear Home Screen.
+
+#### 9.3 Live Activity (D-13)
+- Given the Lock Screen, then the Live Activity shows the title (17 pt semibold at the default size, scaling), a count
+  (34 pt at the default size, scaling) and a thin progress bar in the accent. The compact Dynamic Island shows a small
+  ball and "8m".
+- Checked by: Graham's phone check.
 
 ### 10. Settings as a native Form: try one page (approved 2026-11-18, in 1.1)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
