@@ -376,6 +376,13 @@ final class Journeys: XCTestCase {
         a.shot("pro-sheet-from-locked")
         a.expect("a locked choice opens Pop In Pro", a.any(containing: "Pop In Pro"), severity: 3)
         a.expect("Restore purchase", a.reveal(a.app.buttons["Restore purchase"]), severity: 3)
+        // 8.2: the buy bar's buttons keep their sizes.
+        let unlock = a.app.buttons.matching(NSPredicate(format: "label == %@ OR label BEGINSWITH %@", "Unlock Pro", "Test the purchase")).firstMatch
+        a.check("Unlock Pro is at least 56 pt", unlock.exists && unlock.frame.height >= 56, severity: 2,
+                detail: unlock.exists ? "height \(unlock.frame.height)" : "not found")
+        let restore = a.app.buttons["Restore purchase"].firstMatch
+        a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
+                detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
     }
 
