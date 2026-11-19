@@ -481,7 +481,7 @@ struct HomeView: View {
             .foregroundStyle(Brand.secondary)
             .lineLimit(3)
             .fixedSize(horizontal: false, vertical: true)
-        let undo = Button { model.restore(meeting) } label: {
+        let undo = Button { Feedback.undo(); model.restore(meeting) } label: {
             Text("Undo")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Brand.ink)
@@ -530,7 +530,7 @@ struct HomeView: View {
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
             // The tappable area is the full 44 pt height, not just the word (the iPad audit's taps missed it).
-            let undo = Button { model.undoClear() } label: {
+            let undo = Button { Feedback.undo(); model.undoClear() } label: {
                 Text("Undo")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Brand.ink)

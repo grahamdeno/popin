@@ -74,5 +74,7 @@ struct ProView: View {
             }
         }
         .task { await store.load() }
+        // A success tap when the purchase or restore goes through (story 8.6).
+        .onChange(of: store.isPro) { _, isPro in if isPro { Feedback.unlocked() } }
     }
 }

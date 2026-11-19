@@ -125,6 +125,7 @@ struct ThemeGalleryPage: View {
                 return
             }
             model.pendingTheme = (palette == model.gumColor && !model.surprise) ? nil : palette
+            Feedback.pick()
             PopSound.play(file: palette.popFile)
             withAnimation(.spring(response: 0.25, dampingFraction: 0.45)) { bounced = palette }
             Task { @MainActor in
