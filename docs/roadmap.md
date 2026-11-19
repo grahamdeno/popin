@@ -43,6 +43,7 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
 | 2026-11-19 | Story 1.2 changes: a missed alarm keeps ringing at one steady volume until it's dismissed or a later ringing meeting reaches its ring time. The 7-minute auto-stop is dropped | Graham's decision. A missed meeting should never go quiet on its own |
 | 2026-11-19 | Graham's written exception for epic 7 and 1.1 (his handoff note, sent in the Pop In Product chat on 2026-11-19): Opus reviews and merges 1.1 work, makes test builds, and after the go-live verdict from a different model (Fable) runs the release triggers, naming each trigger, version and commit in its PR. Graham confirms this allowance in his own message before the first release trigger runs. Nobody reviews their own work. Graham still presses Submit for Review and Release. Deleting, force-pushing, renaming, archiving, transferring, purchases, prices, product IDs, secrets and release-calendar dates stay his | Speed: no active users, one release |
@@ -141,8 +142,8 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
 - Given the person dismisses in the same minute the next alarm comes due, then the earlier alarm stops and the next
   one rings normally.
 - Given a snooze, then the meeting rings again after 2 minutes and follows these rules from there.
-- Decision for Graham before the build: when no later meeting comes before the missed one ends, does it keep
-  ringing past its end (until dismissed), or stop when the meeting ends?
+- Given no later meeting takes over before the missed meeting ends, then the alarm stops when the meeting ends
+  (settled by Graham, 2026-11-19).
 - How it's built (assumptions to confirm on the phone, from Apple's developer forums, 2026-11-19): AlarmKit has no
   setting for how long an alert sounds, and iOS mutes an alert after its own default; a later alarm that fires
   while an earlier one still sounds can be silenced. So Pop In schedules repeat alarms for an unhandled meeting,
@@ -153,8 +154,9 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
   alarm only; `sync()` reschedules any missing alarm, so a dismissed meeting needs its own saved state ("dismissed,
   not cleared"); repeats count against the planner's limit of 24; the one-minute safety backup becomes the first
   repeat; Lock Screen Dismiss needs a stop intent (none today) and can only be checked on the phone.
-- Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a dismiss at the
-  handover, a later meeting skipped with Not going, a heads-up that doesn't take over); a unit test that no repeat
+- Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a meeting that
+  ends before the next alarm, a dismiss at the handover, a later meeting skipped with Not going, a heads-up that
+  doesn't take over); a unit test that no repeat
   is planned to sound within the alert length of the next ring time; a unit test that the in-app ring has no
   volume rise; Graham's phone check of a missed alarm, its repeat after iOS mutes it, a Lock Screen Dismiss, and
   the handover to the next.
