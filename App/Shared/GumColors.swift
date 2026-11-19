@@ -490,15 +490,65 @@ struct GumBall: View {
                     FortuneRim(lineWidth: max(1.5, s * 0.05))
                 }
                 ThemeMarks(palette: GumPalette.current, w: s, h: s)
+                BallLight(size: s, soft: GumPalette.current == .fortune)
                 ThemeTopper(palette: GumPalette.current, w: s)
-                Ellipse()
-                    .fill(.white.opacity(0.5))
-                    .frame(width: s * 0.32, height: s * 0.18)
-                    .rotationEffect(.degrees(-24))
-                    .position(x: s * 0.34, y: s * 0.22)
             }
         }
         .aspectRatio(1, contentMode: .fit)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Story 8.5: the big bubble's light (gloss streak, window, glint) on a small ball, so every ball in Pop In is lit
+/// the same way. Same positions, angles, arc and opacity as BubbleView; the parts are drawn larger so they read at
+/// 16 to 64 pt.
+struct BallLight: View {
+    let size: CGFloat
+    /// Fortune's black glass takes a softer streak, as on the big bubble.
+    var soft = false
+
+    struct Metrics: Equatable {
+        var streakWidth: CGFloat
+        var streakInset: CGFloat
+        var window: CGSize
+        var windowCenter: CGPoint
+        var showsGlint: Bool
+        var glint: CGSize
+        var glintCenter: CGPoint
+    }
+
+    /// As fractions of the width. BubbleView's positions: window at (31%, 25%), glint at 10% high (12% here so it
+    /// clears the edge), streak inset 7.5%. Sizes are 1.6 times BubbleView's (streak 3%, window 10% by 5.5%) and 1.4
+    /// times for the glint (5.5% by 2%). The glint is left out below 24 pt, where it would be a speck.
+    static func metrics(size s: CGFloat) -> Metrics {
+        Metrics(streakWidth: max(1.2, s * 0.03 * 1.6), streakInset: s * 0.075,
+                window: CGSize(width: s * 0.1 * 1.6, height: s * 0.055 * 1.6), windowCenter: CGPoint(x: s * 0.31, y: s * 0.25),
+                showsGlint: s >= 24,
+                glint: CGSize(width: s * 0.055 * 1.4, height: max(1, s * 0.02 * 1.4)), glintCenter: CGPoint(x: s * 0.6, y: s * 0.12))
+    }
+
+    var body: some View {
+        let m = Self.metrics(size: size)
+        ZStack {
+            Ellipse()
+                .trim(from: 0.56, to: 0.71)
+                .stroke(.white.opacity(soft ? 0.55 : 0.9), style: StrokeStyle(lineWidth: m.streakWidth, lineCap: .round))
+                .padding(m.streakInset)
+            Ellipse()
+                .fill(.white.opacity(0.8))
+                .frame(width: m.window.width, height: m.window.height)
+                .rotationEffect(.degrees(-32))
+                .position(m.windowCenter)
+            if m.showsGlint {
+                Ellipse()
+                    .fill(.white.opacity(0.85))
+                    .frame(width: m.glint.width, height: m.glint.height)
+                    .rotationEffect(.degrees(24))
+                    .position(m.glintCenter)
+            }
+        }
+        .frame(width: size, height: size)
+        .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 }

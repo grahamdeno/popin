@@ -14,6 +14,8 @@ struct HomeView: View {
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
     /// "Nothing coming up": 22 pt at the default size, growing with text size (story 8.7).
     @ScaledMetric(relativeTo: .title2) private var emptyTitleSize: CGFloat = 22
+    /// "Pop In can't see your calendar" grows with text size (story 8.8).
+    @ScaledMetric(relativeTo: .title) private var noticeTitleSize: CGFloat = 30
     /// The countdown: 88 pt at the default size, growing with text size up to `countdownCap`.
     @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 88
     @ScaledMetric(relativeTo: .title2) private var unitSize: CGFloat = 22
@@ -90,8 +92,14 @@ struct HomeView: View {
         })
         .hapticRamp(until: model.upcoming(at: .now).first?.start, enabled: model.buzz && model.arrived == nil)
         .overlay { DiscoLights().ignoresSafeArea().environment(\.themeStill, quiet || PowerWatch.shared.strained) }
-        .overlay(alignment: .bottom) { undoToast }
-        .sheet(isPresented: $showGallery) {
+        // 8.16: the toast rises from the bottom edge with a quick, firm spring; with Reduce Motion it simply appears.
+        // The animation is scoped to the toast, so the card and bubble don't animate with it.
+        .overlay(alignment: .bottom) {
+            ZStack { undoToast }
+                .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: model.lastCleared?.id)
+        }
+        // A theme picked here applies when the sheet closes, as from Settings (8.15).
+        .sheet(isPresented: $showGallery, onDismiss: { model.applyPendingTheme() }) {
             NavigationStack { ThemeGalleryPage() }
                 .environment(model)
                 .sheet(isPresented: Binding(get: { model.showPro }, set: { model.showPro = $0 })) {
@@ -119,7 +127,7 @@ struct HomeView: View {
                 .onDisappear { model.settingsOpen = false }
         }
         .onChange(of: model.closeSettings) { _, close in
-            if close { showCalendars = false; model.closeSettings = false }
+            if close { showCalendars = false; showGallery = false; model.closeSettings = false }
         }
     }
 
@@ -267,6 +275,7 @@ struct HomeView: View {
             Menu {
                 Button("Add a reminder", systemImage: "plus") { addingReminder = true }
                 Button("Pop for fun", systemImage: "circle.hexagongrid") { playing = true }
+                Button("Theme", systemImage: "paintpalette") { showGallery = true }
                 if let until = model.pausedUntil, until > .now {
                     Button("Resume alerts", systemImage: "bell") { model.resume() }
                 } else {
@@ -336,7 +345,7 @@ struct HomeView: View {
                 .accessibilityAction(named: meeting.joinURL == nil ? "Clear" : "Join") {
                     if let url = model.join(meeting) { openURL(url) }
                 }
-                .accessibilityAction(named: "Not going") { model.clear(meeting) }
+                .accessibilityAction(named: Text(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting)))) { model.clear(meeting) }
                 if !demo { countdown(parts) }
                 Text(demo ? "Practice: pop the bubble below." : Countdown.span(meeting, now: now))
                     .font(.callout)
@@ -357,7 +366,14 @@ struct HomeView: View {
             .font(.subheadline.weight(.medium))
             .foregroundStyle(Brand.secondary)
             .fixedSize(horizontal: false, vertical: true)
-        let right = Label(how, systemImage: rings ? "bell.fill" : "bell.slash")
+        // 8.16: when the alarm is set, the bell wiggles once (not with Reduce Motion).
+        let right = Label {
+            Text(how)
+        } icon: {
+            Image(systemName: rings ? "bell.fill" : "bell.slash")
+                .symbolEffect(.wiggle, options: .nonRepeating, isActive: rings && !reduceMotion)
+                .accessibilityHidden(true)
+        }
             .font(.footnote.weight(.medium))
             .foregroundStyle(rings ? Brand.accentText : Brand.secondary)
             .fixedSize(horizontal: false, vertical: true)
@@ -404,7 +420,7 @@ struct HomeView: View {
     private func footer(_ meeting: Meeting, now: Date, demo: Bool) -> some View {
         let hint = hintText(meeting, now: now, demo: demo)
         let notGoing = Button { model.clear(meeting) } label: {
-            Text(demo ? "Skip" : "Not going")
+            Text(demo ? "Skip" : SkipRule.skipWord(reminder: SkipRule.isReminder(meeting)))
         }
         .buttonStyle(SecondaryButtonStyle(height: 44, fill: typeSize.isAccessibilitySize))
         if typeSize.isAccessibilitySize {
@@ -478,7 +494,8 @@ struct HomeView: View {
 
     /// "Not going: 3:00 PM Design review · Undo" until the meeting starts. Undo brings it back with its alarm.
     private func skippedRow(_ meeting: Meeting, now: Date) -> some View {
-        let words = Text(SkipRule.line(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
+        let words = Text(SkipRule.line(title: meeting.title, time: Countdown.time(meeting.start, now: now),
+                                       reminder: SkipRule.isReminder(meeting)))
             .font(.subheadline)
             .foregroundStyle(Brand.secondary)
             .lineLimit(3)
@@ -491,7 +508,7 @@ struct HomeView: View {
                 .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Undo Not going, \(meeting.title)")
+        .accessibilityLabel("Undo \(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting))), \(meeting.title)")
         .accessibilityIdentifier("undo-skip")
         return Group {
             if typeSize.isAccessibilitySize {
@@ -537,7 +554,7 @@ struct HomeView: View {
     @ViewBuilder
     private var undoToast: some View {
         if let last = model.lastCleared {
-            let words = Text(SkipRule.toast(title: last.title, skipped: model.lastClearedSkipped))
+            let words = Text(SkipRule.toast(title: last.title, skipped: model.lastClearedSkipped, reminder: SkipRule.isReminder(last)))
                 .font(.subheadline)
                 .foregroundStyle(Brand.ink)
                 .lineLimit(3)
@@ -573,7 +590,7 @@ struct HomeView: View {
     private var permissionNotice: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(model.calendarAuthorized ? "Alarms are off" : "Pop In can't see your calendar")
-                .font(Brand.display(30))
+                .font(Brand.display(noticeTitleSize))
                 .tracking(-0.6)
                 .foregroundStyle(Brand.ink)
             Text(model.calendarAuthorized

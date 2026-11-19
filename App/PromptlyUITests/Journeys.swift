@@ -319,6 +319,10 @@ final class Journeys: XCTestCase {
         a.shot("settings-top")
         a.accessibility("settings")
         a.labels("settings")
+        // 8.1: choice rows show their value on the right ("Ring before" shows "2 min" in the demo).
+        let ringBefore = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Ring before")).firstMatch
+        a.check("Ring before shows its value", ringBefore.exists && ringBefore.label.contains("min"), severity: 2,
+                detail: ringBefore.exists ? ringBefore.label : "not found")
         // 8.4: one way to mark Pro, the word in a pill. No "✦" and no "(Pro)".
         a.check("no ✦ on Settings", !a.any(containing: "✦").exists, severity: 2)
         a.check("no (Pro) on Settings", !a.any(containing: "(Pro)").exists, severity: 2)
@@ -357,6 +361,9 @@ final class Journeys: XCTestCase {
         a.tap("Theme", a.reveal(theme))
         a.pause(0.8)
         a.shot("theme-gallery")
+        // 8.3: the chosen theme reads as selected.
+        let chosen = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Bubblegum")).firstMatch
+        a.check("the chosen theme reads as selected", chosen.exists && chosen.isSelected, severity: 2)
         a.check("no ✦ in the theme gallery", !a.any(containing: "✦").exists, severity: 2)
         a.accessibility("theme-gallery")
         let unicorn = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unicorn")).firstMatch
@@ -369,6 +376,13 @@ final class Journeys: XCTestCase {
         a.shot("pro-sheet-from-locked")
         a.expect("a locked choice opens Pop In Pro", a.any(containing: "Pop In Pro"), severity: 3)
         a.expect("Restore purchase", a.reveal(a.app.buttons["Restore purchase"]), severity: 3)
+        // 8.2: the buy bar's buttons keep their sizes.
+        let unlock = a.app.buttons.matching(NSPredicate(format: "label == %@ OR label BEGINSWITH %@", "Unlock Pro", "Test the purchase")).firstMatch
+        a.check("Unlock Pro is at least 56 pt", unlock.exists && unlock.frame.height >= 56, severity: 2,
+                detail: unlock.exists ? "height \(unlock.frame.height)" : "not found")
+        let restore = a.app.buttons["Restore purchase"].firstMatch
+        a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
+                detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
     }
 
@@ -407,6 +421,12 @@ final class Journeys: XCTestCase {
             search.typeText("soccer")
             a.pause(0.8)
             a.shot("search-soccer")
+            // 8.8: the calendar's mode menu is at least 44 pt tall.
+            let soccerMode = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Soccer alerts")).firstMatch
+            if a.expect("Soccer's mode menu is shown", soccerMode, timeout: 2, severity: 2) {
+                a.check("the mode menu is at least 44 pt", soccerMode.frame.height >= 44, severity: 2,
+                        detail: "height \(soccerMode.frame.height)")
+            }
             let toggle = a.app.switches["Soccer"]
             a.done("Find and turn off one calendar", a.tap("Soccer switch", toggle))
             a.pause(0.5)
@@ -572,6 +592,9 @@ final class Journeys: XCTestCase {
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
+        // 8.13: a reminder offers Skip; Not going stays for meetings.
+        a.expect("the reminder offers Skip", a.app.buttons["Skip"], timeout: 2, severity: 2)
+        a.check("the reminder doesn't say Not going", !a.app.buttons["Not going"].exists, severity: 2)
         // 8.10: with a reminder saved, the sheet's list has an Edit button of at least 44 pt.
         if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
            a.tap("Add a reminder", a.app.buttons["Add a reminder"], severity: 2, timeout: 2) {
@@ -603,6 +626,25 @@ final class Journeys: XCTestCase {
                 a.check("the footer says this device", a.any(containing: "this device").exists, severity: 1)
             }
         }
+        // 8.15: Theme in the ⋯ menu opens the gallery; picking a theme takes 3 taps from Home.
+        a.launch("home")
+        a.begin("Change the theme")
+        var themeDone = false
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
+           a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
+            a.pause(0.8)
+            a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
+            let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
+            if a.tap("Coral", coral, severity: 2) {
+                // "See it on Home" applies the pick and closes the gallery (not counted: the job is done at the pick).
+                let seeIt = a.app.buttons["See it on Home"].firstMatch
+                if seeIt.waitForExistence(timeout: 2) { seeIt.tap() }
+                a.pause(1.0)
+                themeDone = a.check("the gallery closes", !a.app.navigationBars.firstMatch.exists, severity: 2)
+                a.shot("theme-applied", note: "Home after picking Coral from the ⋯ menu: the bubble should be Coral")
+            }
+        }
+        a.done("Change the theme", themeDone)
         a.launch("playground", settle: 3)
         a.shot("pop-for-fun")
         let ball = a.app.descendants(matching: .any).matching(NSPredicate(format: "label ENDSWITH 'bubble'")).firstMatch

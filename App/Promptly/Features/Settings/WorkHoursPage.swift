@@ -38,6 +38,9 @@ struct WorkHoursPage: View {
                         .foregroundStyle(on ? .white : Brand.ink)
                         .frame(maxWidth: .infinity, minHeight: 40)
                         .background(Circle().fill(on ? GumColors.dark : Color.black.opacity(0.06)))
+                        // The circle looks the same; the tap area is at least 44 pt (story 8.8).
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(cal.weekdaySymbols[day - 1])

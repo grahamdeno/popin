@@ -74,7 +74,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     SettingsLink("Sound", value: model.alarmSound.label) {
                         ChoicePage(title: "Alarm sound",
-                                   note: "Tap one to hear it. It starts quietly and gets louder until the meeting starts. Apple plays Apple's alarm beep here and while Pop In is open, and Apple's default alarm on the Lock Screen.",
+                                   note: "Tap one to hear it. It rings at one steady volume. Apple plays Apple's alarm beep here and while Pop In is open, and Apple's default alarm on the Lock Screen.",
                                    options: AlarmSoundChoice.available, selected: model.alarmSound, label: \.label,
                                    locked: { $0.isPro && !model.store.isPro }) { choice in
                             model.alarmSound = choice
@@ -183,24 +183,21 @@ struct SettingsView: View {
 
     @Environment(\.dynamicTypeSize) private var typeSize
 
+    /// Story 8.1 (M3): three theme balls, two lines, and a black capsule with the App Store price (never written into
+    /// the app). Once Pro is owned the capsule goes.
     private var proRow: some View {
         Button { model.showPro = true } label: {
             HStack(spacing: 14) {
-                if !typeSize.isAccessibilitySize { GumBall().frame(width: 36, height: 36) }
+                if !typeSize.isAccessibilitySize { trio }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Pop In Pro").font(.body.weight(.semibold)).foregroundStyle(Brand.ink)
-                    Text(model.store.isPro ? "Unlocked" : "Unicorn mode, more sounds, desk mode")
+                    Text(model.store.isPro ? "Unlocked. Thank you." : "Unicorn mode, more sounds, desk mode")
                         .font(.footnote).foregroundStyle(Brand.secondary)
-                    if typeSize.isAccessibilitySize && !model.store.isPro {
-                        Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink)
-                    }
+                    if typeSize.isAccessibilitySize && !model.store.isPro { priceCapsule }
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 8)
-                if !model.store.isPro && !typeSize.isAccessibilitySize {
-                    Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink).fixedSize()
-                        .accessibilityLabel("\(model.store.price), one-time purchase")
-                }
+                if !model.store.isPro && !typeSize.isAccessibilitySize { priceCapsule }
                 Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Brand.secondary)
             }
             .padding(.horizontal, 18)
@@ -210,6 +207,27 @@ struct SettingsView: View {
         }
         .buttonStyle(.plain)
         .modifier(TestingProMenu(store: model.store))
+    }
+
+    /// Bubblegum, Water balloon and Fortune, overlapping.
+    private var trio: some View {
+        HStack(spacing: -12) {
+            ForEach([GumPalette.bubblegum, .waterBalloon, .fortune], id: \.self) { palette in
+                SwatchBall(palette: palette).frame(width: 30, height: 30)
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private var priceCapsule: some View {
+        Text(model.store.price)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(Capsule().fill(Brand.ink))
+            .fixedSize()
+            .accessibilityLabel("\(model.store.price), one-time purchase")
     }
 
     /// For the owner and for support: alarm count, test alarms, and the bubble rollback switch.
@@ -477,22 +495,30 @@ struct SwatchBall: View {
     let palette: GumPalette
 
     var body: some View {
-        ZStack {
-            Circle().fill(RadialGradient(colors: [palette.light, palette.base, palette.dark],
-                                         center: UnitPoint(x: 0.38, y: 0.26), startRadius: 0, endRadius: 30))
-            ThemeMarks(palette: palette, w: 44, h: 44)
-            ThemeTopper(palette: palette, w: 44)
-            if palette == .fortune {
-                FortuneRim(lineWidth: 2.5)
-                FourPointStar().fill(.white.opacity(0.9)).frame(width: 10, height: 10).offset(x: 3, y: -6)
+        GeometryReader { geo in
+            let w = min(geo.size.width, geo.size.height)
+            ZStack {
+                Circle().fill(RadialGradient(colors: [palette.light, palette.base, palette.dark],
+                                             center: UnitPoint(x: 0.38, y: 0.26), startRadius: 0, endRadius: w * 0.68))
+                ThemeMarks(palette: palette, w: w, h: w)
+                if palette == .fortune {
+                    FortuneRim(lineWidth: max(1.5, w * 0.057))
+                    FourPointStar().fill(.white.opacity(0.9)).frame(width: w * 0.23, height: w * 0.23)
+                        .offset(x: w * 0.07, y: -w * 0.14)
+                }
+                if palette == .unicorn {
+                    UnicornSheen(phase: 0.5).clipShape(Circle())
+                    Circle().strokeBorder(AngularGradient(colors: GumPalette.rainbow + [GumPalette.rainbow[0]], center: .center),
+                                          lineWidth: max(1.5, w * 0.045))
+                }
+                // Story 8.5: the same light as the big bubble, scaled.
+                BallLight(size: w, soft: palette == .fortune)
+                ThemeTopper(palette: palette, w: w)
             }
-            if palette == .unicorn {
-                UnicornSheen(phase: 0.5).clipShape(Circle())
-                Circle().strokeBorder(AngularGradient(colors: GumPalette.rainbow + [GumPalette.rainbow[0]], center: .center),
-                                      lineWidth: 2)
-            }
-            Ellipse().fill(.white.opacity(0.55)).frame(width: 14, height: 8).rotationEffect(.degrees(-24)).offset(x: -8, y: -11)
+            .frame(width: w, height: w)
+            .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
+        .aspectRatio(1, contentMode: .fit)
     }
 }
 
