@@ -319,6 +319,10 @@ final class Journeys: XCTestCase {
         a.shot("settings-top")
         a.accessibility("settings")
         a.labels("settings")
+        // 8.1: choice rows show their value on the right ("Ring before" shows "2 min" in the demo).
+        let ringBefore = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Ring before")).firstMatch
+        a.check("Ring before shows its value", ringBefore.exists && ringBefore.label.contains("min"), severity: 2,
+                detail: ringBefore.exists ? ringBefore.label : "not found")
         // 8.4: one way to mark Pro, the word in a pill. No "✦" and no "(Pro)".
         a.check("no ✦ on Settings", !a.any(containing: "✦").exists, severity: 2)
         a.check("no (Pro) on Settings", !a.any(containing: "(Pro)").exists, severity: 2)
