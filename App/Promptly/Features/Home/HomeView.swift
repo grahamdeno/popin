@@ -336,7 +336,7 @@ struct HomeView: View {
                 .accessibilityAction(named: meeting.joinURL == nil ? "Clear" : "Join") {
                     if let url = model.join(meeting) { openURL(url) }
                 }
-                .accessibilityAction(named: "Not going") { model.clear(meeting) }
+                .accessibilityAction(named: Text(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting)))) { model.clear(meeting) }
                 if !demo { countdown(parts) }
                 Text(demo ? "Practice: pop the bubble below." : Countdown.span(meeting, now: now))
                     .font(.callout)
@@ -404,7 +404,7 @@ struct HomeView: View {
     private func footer(_ meeting: Meeting, now: Date, demo: Bool) -> some View {
         let hint = hintText(meeting, now: now, demo: demo)
         let notGoing = Button { model.clear(meeting) } label: {
-            Text(demo ? "Skip" : "Not going")
+            Text(demo ? "Skip" : SkipRule.skipWord(reminder: SkipRule.isReminder(meeting)))
         }
         .buttonStyle(SecondaryButtonStyle(height: 44, fill: typeSize.isAccessibilitySize))
         if typeSize.isAccessibilitySize {
@@ -478,7 +478,8 @@ struct HomeView: View {
 
     /// "Not going: 3:00 PM Design review · Undo" until the meeting starts. Undo brings it back with its alarm.
     private func skippedRow(_ meeting: Meeting, now: Date) -> some View {
-        let words = Text(SkipRule.line(title: meeting.title, time: Countdown.time(meeting.start, now: now)))
+        let words = Text(SkipRule.line(title: meeting.title, time: Countdown.time(meeting.start, now: now),
+                                       reminder: SkipRule.isReminder(meeting)))
             .font(.subheadline)
             .foregroundStyle(Brand.secondary)
             .lineLimit(3)
@@ -491,7 +492,7 @@ struct HomeView: View {
                 .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Undo Not going, \(meeting.title)")
+        .accessibilityLabel("Undo \(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting))), \(meeting.title)")
         .accessibilityIdentifier("undo-skip")
         return Group {
             if typeSize.isAccessibilitySize {
@@ -537,7 +538,7 @@ struct HomeView: View {
     @ViewBuilder
     private var undoToast: some View {
         if let last = model.lastCleared {
-            let words = Text(SkipRule.toast(title: last.title, skipped: model.lastClearedSkipped))
+            let words = Text(SkipRule.toast(title: last.title, skipped: model.lastClearedSkipped, reminder: SkipRule.isReminder(last)))
                 .font(.subheadline)
                 .foregroundStyle(Brand.ink)
                 .lineLimit(3)

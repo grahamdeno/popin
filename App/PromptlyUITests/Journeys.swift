@@ -572,6 +572,9 @@ final class Journeys: XCTestCase {
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
+        // 8.13: a reminder offers Skip; Not going stays for meetings.
+        a.expect("the reminder offers Skip", a.app.buttons["Skip"], timeout: 2, severity: 2)
+        a.check("the reminder doesn't say Not going", !a.app.buttons["Not going"].exists, severity: 2)
         a.launch("dupes")
         a.shot("duplicate-merged", note: "Design review and its FW copy show as one meeting")
         a.launch("home")
