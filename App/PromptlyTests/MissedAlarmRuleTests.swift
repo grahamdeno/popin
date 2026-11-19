@@ -27,7 +27,7 @@ final class MissedAlarmRuleTests: XCTestCase {
         let a = meeting("a", 10, 0), b = meeting("b", 10, 30)
         let stop = MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: later(b), rings: always)
         XCTAssertEqual(stop, at(10, 28))
-        let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false)
+        let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false, after: ring(a))
         XCTAssertFalse(repeats.isEmpty)
         assertQuietAtStop(repeats, stop: stop)
         XCTAssertTrue(MissedAlarmRule.shouldRing(firstRing: ring(a), stop: stop, dismissed: false, now: at(10, 27)))
@@ -40,7 +40,7 @@ final class MissedAlarmRuleTests: XCTestCase {
         let stop = MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: later(b), rings: always)
         XCTAssertEqual(stop, a.end)
         XCTAssertEqual(MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: [], rings: always), a.end)
-        assertQuietAtStop(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false), stop: stop)
+        assertQuietAtStop(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false, after: ring(a)), stop: stop)
     }
 
     /// Two meetings in the same minute share one alarm and follow the rule as one.
@@ -57,7 +57,7 @@ final class MissedAlarmRuleTests: XCTestCase {
     func testDismissPlansNothingMore() {
         let a = meeting("a", 10, 0), b = meeting("b", 10, 30)
         let stop = MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: later(b), rings: always)
-        XCTAssertTrue(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: true).isEmpty)
+        XCTAssertTrue(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: true, after: ring(a)).isEmpty)
         XCTAssertFalse(MissedAlarmRule.shouldRing(firstRing: ring(a), stop: stop, dismissed: true, now: at(10, 28)))
     }
 
@@ -81,20 +81,58 @@ final class MissedAlarmRuleTests: XCTestCase {
     func testSnoozeRestartsFromTheSnoozeRing() {
         let a = meeting("a", 10, 0)
         let snoozeRing = ring(a).addingTimeInterval(Snooze.length)
-        let repeats = MissedAlarmRule.repeats(firstRing: snoozeRing, stop: a.end, dismissed: false)
+        let repeats = MissedAlarmRule.repeats(firstRing: snoozeRing, stop: a.end, dismissed: false, after: snoozeRing)
         XCTAssertEqual(repeats.first, snoozeRing.addingTimeInterval(MissedAlarmRule.alertLength + MissedAlarmRule.regap))
         assertQuietAtStop(repeats, stop: a.end)
     }
 
-    /// A muted alarm rings again within 60 seconds, and repeats stay within the budget.
-    func testRepeatsComeBackWithinAMinuteAndAreCapped() {
+    /// A muted alarm rings again within 60 seconds, all the way to the stop: each sync tops up the next repeats from
+    /// now, so a long meeting never goes quiet early while Pop In gets a chance to run.
+    func testRepeatsCoverTheWholeMeetingAcrossSyncs() {
         XCTAssertLessThanOrEqual(MissedAlarmRule.regap, 60)
-        let a = meeting("a", 10, 0, minutes: 240)
-        let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false)
-        XCTAssertEqual(repeats.count, MissedAlarmRule.maxRepeats)
-        for (x, y) in zip([ring(a)] + repeats, repeats) {
-            XCTAssertEqual(y.timeIntervalSince(x), MissedAlarmRule.alertLength + MissedAlarmRule.regap, accuracy: 0.001)
+        let a = meeting("a", 10, 0, minutes: 30)
+        let step = MissedAlarmRule.alertLength + MissedAlarmRule.regap
+        // One sync plans at most the cap, counted from now.
+        let first = MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false, after: ring(a))
+        XCTAssertEqual(first.count, MissedAlarmRule.maxRepeats)
+        // Sync every 5 minutes, as the app does when it runs; collect everything ever planned.
+        var planned = Set<Date>()
+        var t = ring(a)
+        while t < a.end {
+            planned.formUnion(MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false, after: t))
+            t = t.addingTimeInterval(300)
         }
+        let all = ([ring(a)] + planned.sorted())
+        for (x, y) in zip(all, all.dropFirst()) {
+            XCTAssertEqual(y.timeIntervalSince(x), step, accuracy: 0.001, "a gap between rings")
+        }
+        // The last ring ends within one step of the stop.
+        XCTAssertLessThanOrEqual(a.end.timeIntervalSince(all.last!.addingTimeInterval(MissedAlarmRule.alertLength)), step)
+        assertQuietAtStop(Array(planned), stop: a.end)
+    }
+
+    /// After a snooze, a later meeting that has already rung still ends the earlier alarm: nothing more rings.
+    func testSnoozeAfterTheNextMeetingRangPlansNothing() {
+        let a = meeting("a", 10, 0), b = meeting("b", 10, 5)
+        let snoozeRing = ring(b).addingTimeInterval(60)
+        let stop = MissedAlarmRule.stopTime(for: a, firstRing: snoozeRing, later: later(b), rings: always)
+        XCTAssertEqual(stop, ring(b))
+        XCTAssertTrue(MissedAlarmRule.repeats(firstRing: snoozeRing, stop: stop, dismissed: false, after: snoozeRing).isEmpty)
+        XCTAssertFalse(MissedAlarmRule.shouldRing(firstRing: snoozeRing, stop: stop, dismissed: false, now: snoozeRing))
+    }
+
+    /// When the time to the handover is shorter than one alert, the rule says so (only Pop In, running, can stop it).
+    func testFirstRingOverlapIsFlagged() {
+        let a = meeting("a", 10, 0)
+        XCTAssertTrue(MissedAlarmRule.firstRingOverlaps(firstRing: at(9, 58), stop: at(9, 58).addingTimeInterval(30)))
+        XCTAssertFalse(MissedAlarmRule.firstRingOverlaps(firstRing: at(9, 58), stop: a.end))
+    }
+
+    /// Part 2 can start the first repeat at the one-minute safety backup.
+    func testFirstRepeatCanStartAtTheSafetyBackup() {
+        let a = meeting("a", 10, 0)
+        let repeats = MissedAlarmRule.repeats(firstRing: ring(a), stop: a.end, dismissed: false, after: ring(a), firstRepeatAfter: 60)
+        XCTAssertEqual(repeats.first, ring(a).addingTimeInterval(60))
     }
 
     /// Over a whole simulated day of start times and gaps, no repeat is planned to sound into the stop time.
@@ -104,7 +142,7 @@ final class MissedAlarmRuleTests: XCTestCase {
                 let a = meeting("a", 9, startMinute)
                 let b = meeting("b", 9, startMinute + 30 + gap)
                 let stop = MissedAlarmRule.stopTime(for: a, firstRing: ring(a), later: later(b), rings: always)
-                assertQuietAtStop(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false), stop: stop)
+                assertQuietAtStop(MissedAlarmRule.repeats(firstRing: ring(a), stop: stop, dismissed: false, after: ring(a)), stop: stop)
             }
         }
     }
