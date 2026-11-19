@@ -471,6 +471,13 @@ final class AppModel {
             && ringsFully($0) && !isPaused($0, now: now) }
     }
 
+    /// Story 1.3: same-minute meetings sharing this meeting's alarm (see NewestWins.twins).
+    func twins(of meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return NewestWins.twins(of: meeting, among: open, now: now, lead: TimeInterval(leadMinutes * 60),
+                                rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
+    }
+
     /// Story 1.3: what clears with this meeting's alarm (see NewestWins.stack).
     func stack(clearingWith meeting: Meeting, now: Date = .now) -> [Meeting] {
         let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
@@ -545,6 +552,8 @@ final class AppModel {
         AlarmLoop.stop()
         let when = Date.now.addingTimeInterval(Snooze.length)
         snoozedUntil[meeting.id] = when
+        // Same-minute twins share the alarm, so they snooze with it (story 1.3).
+        for twin in sameMinute(as: meeting) { snoozedUntil[twin.id] = when }
         snoozePlanned.removeAll { $0.meeting.id == meeting.id }
         snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: meeting, fireDate: when, countdownSeconds: nil))
         arrived = nil
@@ -570,6 +579,8 @@ final class AppModel {
     var lastClearedSkipped = false
     /// The meetings that cleared along with `lastCleared` (story 1.3), so Undo brings them back too.
     @ObservationIgnored var lastClearedStack: [Meeting] = []
+    /// Same-minute twins dropped along with `lastCleared`, so Undo lets them ring again.
+    @ObservationIgnored var lastClearedTwins: [Meeting] = []
 
     func undoClear() {
         guard let meeting = lastCleared else { return }
@@ -577,6 +588,9 @@ final class AppModel {
         // The stack that cleared with it comes back too (story 1.3).
         for m in lastClearedStack { cleared.remove(m.id) }
         lastClearedStack = []
+        for m in lastClearedTwins { clashDropped.remove(m.id) }
+        if !lastClearedTwins.isEmpty, !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        lastClearedTwins = []
         bringBack(meeting)
     }
 
@@ -885,6 +899,13 @@ final class AppModel {
         let alongWith = stack(clearingWith: meeting)
         for m in alongWith { cleared.insert(m.id); self.skipped.remove(m.id) }
         lastClearedStack = alongWith
+        // Same-minute twins stop ringing but stay on Home with Join (stories 1.1 and 1.3).
+        let sharing = twins(of: meeting)
+        lastClearedTwins = sharing.filter { !clashDropped.contains($0.id) }
+        if !sharing.isEmpty {
+            clashDropped.formUnion(sharing.map(\.id))
+            if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        }
         cleared.insert(meeting.id)
         if skipped { self.skipped.insert(meeting.id) } else { self.skipped.remove(meeting.id) }
         if meeting.calendarID == "test" { testPlanned.removeAll { $0.meeting.id == meeting.id } }

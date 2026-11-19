@@ -479,15 +479,24 @@ final class NewestWinsTests: XCTestCase {
         XCTAssertFalse(NewestWins.isMissed(old, among: [old, next], now: now, lead: 120, rings: { _ in true }))
     }
 
-    /// Story 1.3: the stack is the missed earlier meetings and same-minute ringing meetings, once the alarm is due.
-    func testStackHoldsMissedAndSameMinuteMeetings() {
+    /// Story 1.3: the stack is the missed earlier meetings; same-minute meetings are twins, kept apart.
+    func testStackHoldsMissedMeetingsAndTwinsStayApart() {
         let now = Date()
         let old = m("old", now.addingTimeInterval(-25 * 60))
         let current = m("current", now.addingTimeInterval(60))
         let twin = m("twin", now.addingTimeInterval(60 + 20))
         let later = m("later", now.addingTimeInterval(3600))
-        let stack = NewestWins.stack(for: current, among: [old, current, twin, later], now: now, lead: 120, rings: { _ in true })
-        XCTAssertEqual(stack.map(\.id), ["old", "twin"])
+        let all = [old, current, twin, later]
+        XCTAssertEqual(NewestWins.stack(for: current, among: all, now: now, lead: 120, rings: { _ in true }).map(\.id), ["old"])
+        XCTAssertEqual(NewestWins.twins(of: current, among: all, now: now, lead: 120, rings: { _ in true }).map(\.id), ["twin"])
+    }
+
+    /// A meeting seconds later in the same minute (an own reminder) never takes over its neighbour.
+    func testSameMinuteNeighbourDoesNotTakeOver() {
+        let now = Date()
+        let meeting = m("meeting", now.addingTimeInterval(-10))
+        let reminder = m("reminder", now.addingTimeInterval(27))
+        XCTAssertFalse(NewestWins.isMissed(meeting, among: [meeting, reminder], now: now, lead: 120, rings: { _ in true }))
     }
 
     /// Popping early from Home, before the alarm is due, clears nothing else.
@@ -496,6 +505,7 @@ final class NewestWinsTests: XCTestCase {
         let current = m("current", now.addingTimeInterval(20 * 60))
         let twin = m("twin", now.addingTimeInterval(20 * 60))
         XCTAssertTrue(NewestWins.stack(for: current, among: [current, twin], now: now, lead: 120, rings: { _ in true }).isEmpty)
+        XCTAssertTrue(NewestWins.twins(of: current, among: [current, twin], now: now, lead: 120, rings: { _ in true }).isEmpty)
     }
 
     /// Quiet meetings never join a stack.
@@ -533,7 +543,8 @@ final class SimulatedDayTests: XCTestCase {
     private func run(_ meetings: [Meeting], from: Date, to: Date, actions: [Date: (String, Do)] = [:],
                      rings: @escaping (Meeting) -> Bool = { $0.calendarID != "quiet" },
                      paused: @escaping (Meeting) -> Bool = { _ in false }) -> Log {
-        let config = AlarmScreenRule.Config(lead: 120, rings: rings, paused: paused)
+        var dropped: Set<String> = []
+        let config = AlarmScreenRule.Config(lead: 120, rings: { rings($0) && !dropped.contains($0.id) }, paused: paused)
         var state = AlarmScreenRule.State()
         var cleared: Set<String> = []
         var log = Log()
@@ -549,9 +560,21 @@ final class SimulatedDayTests: XCTestCase {
                         for s in NewestWins.stack(for: m, among: openNow, now: t, lead: 120, rings: { rings($0) && !paused($0) }) {
                             cleared.insert(s.id)
                         }
+                        // Twins drop out of ringing (story 1.1's drop) but stay open on Home.
+                        for s in NewestWins.twins(of: m, among: openNow, now: t, lead: 120, rings: { rings($0) && !paused($0) }) {
+                            dropped.insert(s.id)
+                        }
                     }
                     cleared.insert(id); if state.showing == id { state.showing = nil }
-                case .snooze: state.snoozedUntil[id] = t.addingTimeInterval(Snooze.length); if state.showing == id { state.showing = nil }
+                case .snooze:
+                    state.snoozedUntil[id] = t.addingTimeInterval(Snooze.length)
+                    // Same-minute twins snooze with it (story 1.3), as AppModel.snooze does.
+                    if let m = meetings.first(where: { $0.id == id }) {
+                        for twin in meetings where twin.id != id && NewestWins.sameMinute(twin.start, m.start) {
+                            state.snoozedUntil[twin.id] = t.addingTimeInterval(Snooze.length)
+                        }
+                    }
+                    if state.showing == id { state.showing = nil }
                 }
             }
             let open = meetings.filter { !cleared.contains($0.id) && $0.end > t }
@@ -590,11 +613,21 @@ final class SimulatedDayTests: XCTestCase {
         XCTAssertEqual(log.shown.last?.1, snoozeAt.addingTimeInterval(Snooze.length), "rings again two minutes after the snooze")
     }
 
-    /// Story 1.3: two meetings in the same minute share one alarm screen; popping it clears both.
+    /// Story 1.3: two meetings in the same minute share one alarm screen; popping it stops both ringing, and the
+    /// other stays on Home.
     func testTwoAtTheSameTimeShareOneScreen() {
         let log = run([meeting("Standup", 10, 0), meeting("Reminder", 10, 0, minutes: 5, cal: OwnReminder.calendarID)],
                       from: at(9, 50), to: at(10, 6), actions: [at(9, 59): ("*", .pop)])
         XCTAssertEqual(log.shown.count, 1)
+    }
+
+    /// Story 1.3: snoozing a shared alarm snoozes both, so the twin's screen doesn't come straight up.
+    func testSnoozeOnASharedAlarmSnoozesBoth() {
+        let snoozeAt = at(9, 58).addingTimeInterval(30)
+        let log = run([meeting("A", 10, 0), meeting("B", 10, 0)], from: at(9, 50), to: at(10, 3),
+                      actions: [snoozeAt: ("*", .snooze), at(10, 1): ("*", .pop)])
+        XCTAssertEqual(log.shown.count, 2, "one screen, then one more after the snooze")
+        XCTAssertEqual(log.shown.last?.1, snoozeAt.addingTimeInterval(Snooze.length))
     }
 
     /// Story 1.3: popping the current alarm clears the missed stack, so the older meeting never comes back.

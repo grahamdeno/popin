@@ -85,7 +85,10 @@ enum NewestWins {
     static func isMissed(_ m: Meeting, among all: [Meeting], now: Date, lead: TimeInterval, rings: (Meeting) -> Bool) -> Bool {
         guard m.start <= now, rings(m) else { return false }
         return all.contains { n in
-            n.id != m.id && n.start > m.start && rings(n) && now >= n.start.addingTimeInterval(-lead)
+            // A meeting in the same minute shares the alarm and never takes over (an own reminder can start
+            // seconds after a meeting).
+            n.id != m.id && n.start > m.start && !sameMinute(n.start, m.start) && rings(n)
+                && now >= n.start.addingTimeInterval(-lead)
         }
     }
 }
@@ -94,18 +97,26 @@ extension NewestWins {
     /// Two meetings share an alarm when they start in the same minute (as AlarmPlanner merges them).
     static func sameMinute(_ a: Date, _ b: Date) -> Bool { abs(a.timeIntervalSince(b)) < 60 }
 
-    /// Story 1.3: what clears with the alarm that is ringing: the earlier meetings it took over from (the "Also
-    /// missed" line) and ringing meetings in the same minute that share its alarm. Before `current` reaches its own
-    /// ring time nothing else clears, so popping one meeting early from Home leaves the others alone.
+    /// Story 1.3: the earlier meetings the ringing alarm took over from (the "Also missed" line). They clear with it.
+    /// Before `current` reaches its own ring time nothing else clears, so popping early from Home leaves others alone.
     static func stack(for current: Meeting, among open: [Meeting], now: Date, lead: TimeInterval,
                       rings: (Meeting) -> Bool) -> [Meeting] {
         guard now >= current.start.addingTimeInterval(-lead) else { return [] }
         return open.filter { m in
-            guard m.id != current.id, rings(m) else { return false }
-            if sameMinute(m.start, current.start) { return true }
-            return m.start < current.start && isMissed(m, among: open, now: now, lead: lead, rings: rings)
+            m.id != current.id && rings(m) && m.start < current.start && !sameMinute(m.start, current.start)
+                && isMissed(m, among: open, now: now, lead: lead, rings: rings)
         }
         .sorted { $0.start < $1.start }
+    }
+
+    /// Story 1.3: ringing meetings in the same minute that share the ringing alarm. Popping it or Not going doesn't
+    /// clear them; they stop ringing and stay on Home as a quiet line with Join (story 1.1's drop), so a meeting is
+    /// never lost by answering its neighbour.
+    static func twins(of current: Meeting, among open: [Meeting], now: Date, lead: TimeInterval,
+                      rings: (Meeting) -> Bool) -> [Meeting] {
+        guard now >= current.start.addingTimeInterval(-lead) else { return [] }
+        return open.filter { $0.id != current.id && rings($0) && sameMinute($0.start, current.start) }
+            .sorted { $0.start < $1.start }
     }
 }
 
