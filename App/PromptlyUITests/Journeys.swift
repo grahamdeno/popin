@@ -94,7 +94,7 @@ final class Journeys: XCTestCase {
         a.pause(1.0)
     }
 
-    // J1. First run: hello, calendars, alarms, choose calendars, covered, Home.
+    // J1. First run: hello with the calendar reason, alarms, choose calendars, covered, Home (8.14: one tap fewer).
     func test01_FirstRun() {
         let a = Audit("J1-first-run")
         defer { a.finish() }
@@ -103,10 +103,18 @@ final class Journeys: XCTestCase {
         a.accessibility("hello")
         a.labels("hello")
         a.check("hello says what Pop In does", a.text(containing: "rings before each meeting").exists, severity: 2)
-        a.tap("Get started", a.app.buttons["Get started"], severity: 4)
-        a.pause(0.8)
-        a.shot("calendars-why")
-        a.accessibility("calendars-why")
+        // 8.14: hello and the calendar reason are one screen, so first run takes one tap fewer (4: calendars,
+        // alarms, Done, Done).
+        a.check("hello says why Pop In needs the calendar", a.text(containing: "never changes them").exists, severity: 2)
+        a.check("hello has no separate Get started step", !a.app.buttons["Get started"].exists, severity: 3)
+        let allow = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Allow calendar")).firstMatch
+        let title = a.text(containing: "Never miss the start")
+        if allow.waitForExistence(timeout: 2), title.exists {
+            let card = title.frame
+            a.check("the card sits in the top third", card.minY < a.app.frame.height / 3, severity: 2,
+                    detail: "card top \(card.minY) of \(a.app.frame.height)")
+        }
+        a.begin("Finish first run")
         a.tap("Allow calendar access", a.button(startingWith: "Allow calendar"), severity: 4)
         a.pause(1.2)
         a.shot("alarms-why")
@@ -126,7 +134,7 @@ final class Journeys: XCTestCase {
         a.tap("Done (covered)", a.app.buttons["Done"], severity: 4)
         a.pause(1.5)
         a.shot("home-after-first-run")
-        a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4)
+        a.done("Finish first run", a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4))
     }
 
     // J2. Home with a meeting minutes away: read it, pop to join, Undo.
@@ -384,6 +392,11 @@ final class Journeys: XCTestCase {
         a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
                 detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
+        // Item 10: the Alarm group as a native Form, pictured beside today's Settings for the decision (D-8).
+        a.launch("formtrial")
+        a.pause(1.5)
+        a.shot("form-trial-alarm", note: "Item 10 trial: the Alarm group as a native Form")
+        a.accessibility("form-trial-alarm")
     }
 
     // J7. A long list of calendars: fold, search, turn a whole account off.
@@ -592,6 +605,9 @@ final class Journeys: XCTestCase {
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
+        // 8.13: a reminder offers Skip; Not going stays for meetings.
+        a.expect("the reminder offers Skip", a.app.buttons["Skip"], timeout: 2, severity: 2)
+        a.check("the reminder doesn't say Not going", !a.app.buttons["Not going"].exists, severity: 2)
         // 8.10: with a reminder saved, the sheet's list has an Edit button of at least 44 pt.
         if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
            a.tap("Add a reminder", a.app.buttons["Add a reminder"], severity: 2, timeout: 2) {

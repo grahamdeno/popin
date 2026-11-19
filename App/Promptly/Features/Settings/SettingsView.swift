@@ -495,22 +495,30 @@ struct SwatchBall: View {
     let palette: GumPalette
 
     var body: some View {
-        ZStack {
-            Circle().fill(RadialGradient(colors: [palette.light, palette.base, palette.dark],
-                                         center: UnitPoint(x: 0.38, y: 0.26), startRadius: 0, endRadius: 30))
-            ThemeMarks(palette: palette, w: 44, h: 44)
-            ThemeTopper(palette: palette, w: 44)
-            if palette == .fortune {
-                FortuneRim(lineWidth: 2.5)
-                FourPointStar().fill(.white.opacity(0.9)).frame(width: 10, height: 10).offset(x: 3, y: -6)
+        GeometryReader { geo in
+            let w = min(geo.size.width, geo.size.height)
+            ZStack {
+                Circle().fill(RadialGradient(colors: [palette.light, palette.base, palette.dark],
+                                             center: UnitPoint(x: 0.38, y: 0.26), startRadius: 0, endRadius: w * 0.68))
+                ThemeMarks(palette: palette, w: w, h: w)
+                if palette == .fortune {
+                    FortuneRim(lineWidth: max(1.5, w * 0.057))
+                    FourPointStar().fill(.white.opacity(0.9)).frame(width: w * 0.23, height: w * 0.23)
+                        .offset(x: w * 0.07, y: -w * 0.14)
+                }
+                if palette == .unicorn {
+                    UnicornSheen(phase: 0.5).clipShape(Circle())
+                    Circle().strokeBorder(AngularGradient(colors: GumPalette.rainbow + [GumPalette.rainbow[0]], center: .center),
+                                          lineWidth: max(1.5, w * 0.045))
+                }
+                // Story 8.5: the same light as the big bubble, scaled.
+                BallLight(size: w, soft: palette == .fortune)
+                ThemeTopper(palette: palette, w: w)
             }
-            if palette == .unicorn {
-                UnicornSheen(phase: 0.5).clipShape(Circle())
-                Circle().strokeBorder(AngularGradient(colors: GumPalette.rainbow + [GumPalette.rainbow[0]], center: .center),
-                                      lineWidth: 2)
-            }
-            Ellipse().fill(.white.opacity(0.55)).frame(width: 14, height: 8).rotationEffect(.degrees(-24)).offset(x: -8, y: -11)
+            .frame(width: w, height: w)
+            .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
+        .aspectRatio(1, contentMode: .fit)
     }
 }
 

@@ -164,6 +164,9 @@ next meeting takes over, so a missed meeting never goes quiet on its own and nev
   alarm only; `sync()` reschedules any missing alarm, so a dismissed meeting needs its own saved state ("dismissed,
   not cleared"); repeats count against the planner's limit of 24; the one-minute safety backup becomes the first
   repeat; Lock Screen Dismiss needs a stop intent (none today) and can only be checked on the phone.
+- iOS limit (2026-11-19): when Pop In isn't running, the first alarm's own alert can't be cut short, so it may
+  sound for up to 15 minutes past the meeting's end or into the next meeting's ring time. Repeats keep the rule.
+  Dismiss on the early heads-up only stops the heads-up; the main ring and its repeats stay.
 - Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a meeting that
   ends before the next alarm, a dismiss at the handover, a later meeting skipped with Not going, a heads-up that
   doesn't take over); a unit test that no repeat
@@ -404,8 +407,9 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - Checked by: unit test of the chip times; J13 picture and checks (Add disabled, Edit present).
 
 #### 8.11 Calendars read calmly (D-17)
-- Given Calendars, then each switched-on calendar row ends with its mode in secondary ("Smart", "Always rings",
-  "Quiet") and a small chevron, one tappable menu of at least 44 pt. The accent color is gone from these labels.
+- Given Calendars, then each switched-on calendar row shows its mode under the name in secondary ("Smart", "Always
+  rings", "Quiet") with a small chevron, one tappable menu of at least 44 pt (wording amended 2026-11-19: the switch
+  keeps the row's end). The accent color is gone from these labels.
   Switches are ink. Calendar dots are 10 pt. Still read only.
 - Checked by: J7 picture; the read-only guard.
 
@@ -424,8 +428,10 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 #### 8.14 First run in fewer steps (GR-21, D-18)
 - Given a first run, then the hello screen and the calendar screen are one: "Never miss the start of a meeting", the
   reason Pop In needs the calendar, and "Allow calendar access". First run takes one tap fewer.
-- The card sits in the top third, and the bubble is fully visible above the buttons.
-- Checked by: J1 pictures; the walk's first-run tap count is one lower than today.
+- The card sits in the top third, and the bubble is fully visible above the buttons on the first screen at standard
+  text sizes; on later steps and at larger sizes the column scrolls.
+- Checked by: J1 pictures (including the small phone); the walk's "Finish first run" benchmark, 4 taps from the first
+  screen (5 before).
 
 #### 8.15 Theme in the ⋯ menu (GR-20)
 - Given the ⋯ menu, then "Theme" opens the theme gallery directly.
@@ -468,6 +474,8 @@ his phone with the test build. The audit walk doesn't reach widgets, so the phon
 ### 10. Settings as a native Form: try one page (approved 2026-11-18, in 1.1)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
 - Sonnet builds the trial; Opus and Graham decide.
+- The trial view and its `formtrial` demo scene are removed, or adopted, before the 1.1 go-live verdict, as with 7.1's
+  card switch (added 2026-11-19).
 
 ### 11. Requirement: demo mode saves nothing (approved 2026-11-18, in 1.1)
 - Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise

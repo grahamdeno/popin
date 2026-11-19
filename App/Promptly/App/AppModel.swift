@@ -565,6 +565,9 @@ final class AppModel {
         for twin in sameMinute(as: meeting) { snoozedUntil[twin.id] = when }
         snoozePlanned.removeAll { $0.meeting.id == meeting.id }
         snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: meeting, fireDate: when, countdownSeconds: nil))
+        // Story 1.2: repeats follow the rules from the snooze ring, and a snooze undoes a Lock Screen Dismiss.
+        prefs.snoozeRings[meeting.id] = when
+        prefs.dismissedMeetingIDs.remove(meeting.id)
         arrived = nil
         Task { await syncAlarms() }
     }
@@ -732,6 +735,11 @@ final class AppModel {
         if keptDrops != clashDropped { clashDropped = keptDrops; if !ScreenshotMode.isOn { prefs.clashDroppedIDs = keptDrops } }
         let keptSkips = skipped.intersection(pruned)
         if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
+        // Dismissals only matter while their meeting is still on the calendar (story 1.2).
+        let keptDismissals = prefs.dismissedMeetingIDs.intersection(liveIDs)
+        if keptDismissals != prefs.dismissedMeetingIDs { prefs.dismissedMeetingIDs = keptDismissals }
+        let keptSnoozes = prefs.snoozeRings.filter { liveIDs.contains($0.key) }
+        if keptSnoozes.count != prefs.snoozeRings.count { prefs.snoozeRings = keptSnoozes }
         writeWidgetSnapshot()
         await syncAlarms()
     }
@@ -750,6 +758,12 @@ final class AppModel {
                                         countdown: countdownCard)
         let gentlePlanned = AlarmPlanner.plan(meetings: gentleMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared)
         testPlanned = testPlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
+        // A snooze still to ring survives Pop In being killed: rebuild it from the saved snooze time.
+        for (id, when) in prefs.snoozeRings where when > now && !snoozePlanned.contains(where: { $0.meeting.id == id }) {
+            if let m = meetings.first(where: { $0.id == id }) {
+                snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: m, fireDate: when, countdownSeconds: nil))
+            }
+        }
         snoozePlanned = snoozePlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
         // A snoozed meeting's original alarm is replaced by the snooze.
         let snoozedIDs = Set(snoozePlanned.map(\.meeting.id))
@@ -773,9 +787,21 @@ final class AppModel {
         } else {
             toSchedule = all
         }
-        toSchedule += early
+        // Story 1.2: a missed alarm keeps ringing through repeats until it's dismissed, the next ringing meeting's
+        // ring time, or its meeting's end, with a quiet gap rather than an overlap. Planned in Model/ and tested there.
+        let snoozeRings = prefs.snoozeRings.filter { id, _ in !cleared.contains(id) && meetings.contains { $0.id == id && $0.end > now } }
+        if snoozeRings.count != prefs.snoozeRings.count { prefs.snoozeRings = snoozeRings }
+        let anchors = MissedAlarmRule.anchors(meetings: alarmMeetings, cleared: cleared, snoozeRings: snoozeRings,
+                                              leadMinutes: leadMinutes, now: now)
+        let plan = MissedAlarmRule.schedule(firstRings: toSchedule + early, anchors: anchors,
+                                            dismissed: prefs.dismissedMeetingIDs, now: now, limit: AlarmPlanner.defaultLimit,
+                                            openUntil: isForeground ? now.addingTimeInterval(Self.openQuietWindow) : nil,
+                                            showing: shownNowFor)
+        let headsUp = Set(early.map(\.id))
+        toSchedule = plan.firstRings + plan.repeats
+        prefs.repeatAlarmIDs = Dictionary(grouping: plan.repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
         do {
-            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)))
+            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)), headsUp: headsUp)
             syncProblem = nil
             scheduledAlarms = alarmService.scheduledCount
         } catch {
