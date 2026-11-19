@@ -50,8 +50,9 @@ struct MeetingCountdownActivity: Widget {
             } compactLeading: {
                 GumBall().frame(width: 18, height: 18)
             } compactTrailing: {
-                CountdownLabel(state: context.state)
-                    .font(.system(size: 15, weight: .semibold).monospacedDigit())
+                // 9.3: short and self-updating ("8:00"); iOS can't refresh a plain "8m" on its own.
+                CountdownLabel(state: context.state, showsHours: false)
+                    .font(.footnote.weight(.semibold).monospacedDigit())
                     .foregroundStyle(.white)
                     .frame(maxWidth: 52)
             } minimal: {
@@ -68,28 +69,33 @@ private struct LockScreenCard: View {
     let meta: MeetingAlarmMetadata?
 
     var body: some View {
-        HStack(spacing: 14) {
-            RingedBall(state: state, meta: meta)
-                .frame(width: 56, height: 56)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(meta?.title ?? "Meeting")
-                    .font(.system(size: 17, weight: .semibold))
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 14) {
+                RingedBall(state: state, meta: meta)
+                    .frame(width: 56, height: 56)
+                VStack(alignment: .leading, spacing: 2) {
+                    // 9.3: title 17 pt semibold and count 34 pt at the default size, both scaling with text size.
+                    Text(meta?.title ?? "Meeting")
+                        .font(.headline)
+                        .foregroundStyle(Color(white: 0.08))
+                        .lineLimit(1)
+                    Text(subtitle(meta))
+                        .font(.subheadline)
+                        .foregroundStyle(Color(white: 0.42))
+                        .lineLimit(1)
+                    Text("Tap to pop it")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(GumColors.dark)
+                }
+                Spacer(minLength: 8)
+                CountdownLabel(state: state)
+                    .font(.largeTitle.weight(.medium).monospacedDigit())
                     .foregroundStyle(Color(white: 0.08))
-                    .lineLimit(1)
-                Text(subtitle(meta))
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color(white: 0.42))
-                    .lineLimit(1)
-                Text("Tap to pop it")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(GumColors.dark)
+                    .multilineTextAlignment(.trailing)
+                    .minimumScaleFactor(0.7)
+                    .frame(maxWidth: 130, alignment: .trailing)
             }
-            Spacer(minLength: 8)
-            CountdownLabel(state: state)
-                .font(.system(size: 32, weight: .medium).monospacedDigit())
-                .foregroundStyle(Color(white: 0.08))
-                .multilineTextAlignment(.trailing)
-                .frame(maxWidth: 110, alignment: .trailing)
+            ProgressBar(state: state, meta: meta)
         }
         .padding(16)
     }
@@ -118,13 +124,35 @@ private struct RingedBall: View {
     }
 }
 
+/// 9.3: a thin bar in the accent that fills as the countdown runs. Apple draws and updates it.
+private struct ProgressBar: View {
+    let state: AlarmPresentationState
+    let meta: MeetingAlarmMetadata?
+
+    var body: some View {
+        if case .countdown(let countdown) = state.mode, let seconds = meta?.countdownSeconds, seconds > 0 {
+            let start = countdown.fireDate.addingTimeInterval(-seconds)
+            ProgressView(timerInterval: start...countdown.fireDate, countsDown: false) {
+                EmptyView()
+            } currentValueLabel: {
+                EmptyView()
+            }
+            .progressViewStyle(.linear)
+            .tint(GumColors.accent)
+            .frame(height: 4)
+            .accessibilityHidden(true)
+        }
+    }
+}
+
 private struct CountdownLabel: View {
     let state: AlarmPresentationState
+    var showsHours = true
 
     var body: some View {
         switch state.mode {
         case .countdown(let countdown):
-            Text(timerInterval: Date.now...countdown.fireDate, countsDown: true)
+            Text(timerInterval: Date.now...countdown.fireDate, countsDown: true, showsHours: showsHours)
         case .alert:
             Text("Now")
         default:

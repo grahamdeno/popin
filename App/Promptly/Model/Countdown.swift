@@ -13,16 +13,7 @@ enum Countdown {
     }
 
     /// The big number and its unit, as on the Home design: "12" "min", "2 h" "05", "Now".
-    static func parts(now: Date, start: Date) -> (big: String, unit: String) {
-        let seconds = Int(start.timeIntervalSince(now).rounded(.up))
-        if seconds <= 0 { return ("Now", "") }
-        let minutes = Int((Double(seconds) / 60).rounded(.up))
-        if minutes < 60 { return ("\(minutes)", "min") }
-        let hours = minutes / 60
-        if hours < 24 { return ("\(hours) h", String(format: "%02d", minutes % 60)) }
-        let days = hours / 24
-        return ("\(days)", days == 1 ? "day" : "days")
-    }
+    static func parts(now: Date, start: Date) -> (big: String, unit: String) { CountText.parts(now: now, start: start) }
 
     /// "10:00 to 10:30" in the phone's own time format.
     /// "Tomorrow 4:35 PM to 5:05 PM", or just the times for today.
