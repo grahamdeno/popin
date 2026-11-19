@@ -44,6 +44,7 @@ Newest first. Refined decisions only.
 | Date | Decision | Why |
 |---|---|---|
 | 2026-11-19 | The seven findings first proposed for later (GR-16, GR-20, GR-21, GR-22, D-15, D-18, D-20) are in 1.1 as stories 8.13 to 8.17 | Graham: handle them in 1.1 |
+| 2026-11-19 | A missed alarm goes quiet for up to 15 minutes before the next meeting's alarm rather than risk silencing it | Graham chose the quiet gap (option A): the meeting he can still make always rings |
 | 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
@@ -128,7 +129,9 @@ As someone who sometimes misses an alarm, I want it to keep ringing at the same 
 next meeting takes over, so a missed meeting never goes quiet on its own and never rings over the next one.
 - Given an alarm rang and nobody popped, snoozed, chose Not going or dismissed it, then it keeps ringing at one
   steady volume. It never gets louder or softer. Given iOS mutes the alert on its own, then it rings again within
-  60 seconds, at the same volume.
+  60 seconds, at the same volume, unless that repeat would still be sounding when the next meeting's alarm is due.
+- Given a repeat would overlap the next meeting's alarm, then it isn't planned: the missed alarm goes quiet for up to
+  15 minutes before the next meeting's alarm, so that alarm always rings (Graham chose this, 2026-11-19).
 - The ring inside Pop In starts at full volume (the two-minute rise before the start is removed). Story 1.4's
   quieter alarm, when it applies, stays steady at its own level.
 - Given the person taps Dismiss on the Lock Screen, then it stops and doesn't ring again for that meeting. The
@@ -405,7 +408,7 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - Checked by: review of `site/` against the app's strings.
 
 #### 8.13 Your own reminders say Skip (GR-16)
-- Given your own reminder is next, then its card, its VoiceOver action, the alarm screen, the toast ("Skipped [title]
+- Given your own reminder (or a timed one from Reminders) is next, then its card, its VoiceOver action, the alarm screen, the toast ("Skipped [title]
   · Undo"), the quiet line ("Skipped: [time] [title]") and its Undo label say "Skip" or "Skipped" instead of "Not
   going". Meetings keep "Not going" unchanged.
 - Checked by: J13 own-reminder scene: "Skip" shows and "Not going" doesn't; a unit test of the words.
