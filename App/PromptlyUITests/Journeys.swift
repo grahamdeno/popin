@@ -243,6 +243,27 @@ final class Journeys: XCTestCase {
         a.labels("ringing")
         a.expect("Not going on the takeover", a.app.buttons["Not going"], severity: 4)
         a.expect("the meeting title", a.any(containing: "Design review"), severity: 4)
+        // 7.3: the card follows M2, its buttons are inside it, and nothing overlaps the meeting time.
+        a.expect("the card says Starts in", a.any(containing: "Starts in"), severity: 3)
+        let hint = a.app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch
+        a.expect("the card says how to join", hint, severity: 3)
+        let snooze = a.app.buttons["Snooze 2 min"]
+        a.expect("Snooze 2 min is the button's word and VoiceOver name", snooze, severity: 3)
+        let notGoing = a.reveal(a.app.buttons["Not going"], tries: 6)
+        let span = a.app.descendants(matching: .any).matching(identifier: "alarm-span").firstMatch
+        a.check("Not going is at least 44 pt", notGoing.exists && notGoing.frame.height >= 44, severity: 3,
+                detail: "height \(notGoing.frame.height)")
+        a.check("Snooze 2 min is at least 44 pt", snooze.exists && snooze.frame.height >= 44, severity: 3,
+                detail: "height \(snooze.frame.height)")
+        if span.exists {
+            let clear = !span.frame.intersects(notGoing.frame) && !span.frame.intersects(snooze.frame)
+            a.check("nothing overlaps the meeting time", clear, severity: 4,
+                    detail: "time \(span.frame), Not going \(notGoing.frame), Snooze \(snooze.frame)")
+        } else {
+            a.check("the meeting time is shown", false, severity: 3)
+        }
+        a.check("the bubble can be tapped on the alarm screen",
+                a.any(containing: "Pop the bubble to join Design review").isHittable, severity: 4)
         a.launch("late", settle: 3)
         a.shot("late-50s", note: "50 s after the ring: the first bud should be out")
         a.pause(25)
@@ -299,7 +320,7 @@ final class Journeys: XCTestCase {
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
         // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
-        a.reveal(popSound, tries: 12)
+        a.reveal(popSound, tries: 20)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
@@ -484,8 +505,15 @@ final class Journeys: XCTestCase {
         let a = Audit("J13-edge-cases")
         defer { a.finish() }
         a.launch("missed")
-        a.shot("missed-under-new-alarm", note: "New alarm up; the unpopped earlier meeting shows as Missed with Join")
+        a.shot("missed-under-new-alarm", note: "New alarm up; the unpopped earlier meeting shows as Also missed with Join")
         a.accessibility("missed")
+        // 7.3: the missed line wraps, is at least 44 pt, and its Join is its own button named for the meeting.
+        a.expect("the missed line says Also missed", a.any(containing: "Also missed:"), severity: 3)
+        let joinOld = a.button(startingWith: "Join ")
+        if a.expect("the missed meeting has its own Join", joinOld, severity: 3) {
+            a.check("the missed meeting's Join is at least 44 pt", joinOld.frame.height >= 44, severity: 3,
+                    detail: "height \(joinOld.frame.height)")
+        }
         a.launch("paused")
         a.shot("paused-home", note: "Paused until is the first row of the column; card says Paused until")
         // 7.1: the Paused line is the first row of the column and at least 44 pt tall.
