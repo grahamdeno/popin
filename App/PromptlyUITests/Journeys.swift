@@ -592,6 +592,9 @@ final class Journeys: XCTestCase {
         a.shot("outside-work-hours", note: "Card says Outside work hours, quiet notification")
         a.launch("reminder")
         a.shot("own-reminder-next", note: "An own reminder is next: card label Reminder")
+        // 8.13: a reminder offers Skip; Not going stays for meetings.
+        a.expect("the reminder offers Skip", a.app.buttons["Skip"], timeout: 2, severity: 2)
+        a.check("the reminder doesn't say Not going", !a.app.buttons["Not going"].exists, severity: 2)
         // 8.10: with a reminder saved, the sheet's list has an Edit button of at least 44 pt.
         if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
            a.tap("Add a reminder", a.app.buttons["Add a reminder"], severity: 2, timeout: 2) {

@@ -16,13 +16,22 @@ enum SkipRule {
         skipped.contains(meeting.id) && meeting.start > now
     }
 
-    /// The toast's words: "Not going to Design review" or "Popped Design review".
-    static func toast(title: String, skipped: Bool) -> String {
-        skipped ? "Not going to \(title)" : "Popped \(title)"
+    /// True for a reminder (Pop In's own, or a timed one from Reminders) rather than a meeting.
+    static func isReminder(_ meeting: Meeting) -> Bool {
+        meeting.calendarID == OwnReminder.calendarID || meeting.calendarID == CalendarService.remindersCalendarID
     }
 
-    /// The quiet line once the toast has gone: "Not going: 3:00 PM Design review".
-    static func line(title: String, time: String) -> String {
-        "Not going: \(time) \(title)"
+    /// The skip button's word: "Skip" for a reminder, "Not going" for a meeting (story 8.13).
+    static func skipWord(reminder: Bool) -> String { reminder ? "Skip" : "Not going" }
+
+    /// The toast's words: "Not going to Design review", "Skipped Pick up Nora" or "Popped Design review".
+    static func toast(title: String, skipped: Bool, reminder: Bool = false) -> String {
+        guard skipped else { return "Popped \(title)" }
+        return reminder ? "Skipped \(title)" : "Not going to \(title)"
+    }
+
+    /// The quiet line once the toast has gone: "Not going: 3:00 PM Design review" or "Skipped: 3:00 PM Pick up Nora".
+    static func line(title: String, time: String, reminder: Bool = false) -> String {
+        "\(reminder ? "Skipped" : "Not going"): \(time) \(title)"
     }
 }

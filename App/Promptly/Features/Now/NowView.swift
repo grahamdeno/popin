@@ -166,7 +166,7 @@ struct NowView: View {
             skips += 1
             model.clear(meeting)
             leave {}
-        } label: { Text("Not going") }
+        } label: { Text(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting))) }
             .buttonStyle(SecondaryButtonStyle(height: 44, fill: stacked))
         let snooze = Button {
             model.snooze(meeting)
