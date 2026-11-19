@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 enum Brand {
     /// Accent colors follow the bubble color (violet for Fortune).
@@ -80,6 +81,38 @@ struct Wordmark: View {
     }
 }
 
+/// How a pressed button looks (story 8.6): slightly smaller and dimmer. With Reduce Motion it only dims.
+enum PressedLook {
+    static func scale(pressed: Bool, reduceMotion: Bool) -> CGFloat { pressed && !reduceMotion ? 0.97 : 1 }
+    static func opacity(pressed: Bool) -> Double { pressed ? 0.9 : 1 }
+}
+
+/// Applies the pressed look. A view (not the ButtonStyle) reads Reduce Motion, so it always gets the live value.
+private struct PressedLookView<Content: View>: View {
+    let isPressed: Bool
+    let content: Content
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        content
+            .scaleEffect(PressedLook.scale(pressed: isPressed, reduceMotion: reduceMotion))
+            .opacity(PressedLook.opacity(pressed: isPressed))
+            .animation(.snappy(duration: 0.2), value: isPressed)
+    }
+}
+
+extension View {
+    /// The pressed look for button styles (story 8.6).
+    func pressedLook(_ isPressed: Bool) -> some View { PressedLookView(isPressed: isPressed, content: self) }
+}
+
+/// Taps you can feel (story 8.6). They follow the iPhone's own System Haptics setting; the alarm's buzz is separate.
+enum Feedback {
+    @MainActor static func undo() { UIImpactFeedbackGenerator(style: .light).impactOccurred() }
+    @MainActor static func pick() { UISelectionFeedbackGenerator().selectionChanged() }
+    @MainActor static func unlocked() { UINotificationFeedbackGenerator().notificationOccurred(.success) }
+}
+
 /// Black pill, the main action.
 struct PrimaryButtonStyle: ButtonStyle {
     var height: CGFloat = 50
@@ -93,7 +126,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             .frame(minHeight: height)
             .frame(maxWidth: .infinity)
             .background(Capsule().fill(Brand.ink))
-            .opacity(configuration.isPressed ? 0.8 : 1)
+            .pressedLook(configuration.isPressed)
     }
 }
 
@@ -110,7 +143,7 @@ struct SecondaryButtonStyle: ButtonStyle {
             .padding(.vertical, 8)
             .frame(minHeight: height)
             .frame(maxWidth: fill ? .infinity : nil)
-            .background(Capsule().fill(Brand.ink.opacity(0.07)))
-            .opacity(configuration.isPressed ? 0.7 : 1)
+            .background(Capsule().fill(Brand.ink.opacity(0.06)))
+            .pressedLook(configuration.isPressed)
     }
 }
