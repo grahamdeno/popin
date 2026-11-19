@@ -374,8 +374,11 @@ final class Journeys: XCTestCase {
             a.check("no (Pro) in the alert menu", !a.any(containing: "(Pro)").exists, severity: 2)
             a.check("no ✦ in the alert menu", !a.any(containing: "✦").exists, severity: 2)
             let smart = a.app.buttons["Smart: rings for video meetings"].firstMatch
-            if smart.waitForExistence(timeout: 2) { smart.tap() }
+            if smart.waitForExistence(timeout: 2) { smart.tap() } else { a.tapAt(0.5, 0.05) }
             a.pause(0.6)
+            a.check("the alert menu closed", !a.app.buttons["Smart: rings for video meetings"].exists, severity: 2)
+        } else {
+            a.check("the alert menu could be opened", false, severity: 2)
         }
         let search = a.app.textFields["Find a calendar"]
         if a.expect("search shows with many calendars", search, severity: 2) {
