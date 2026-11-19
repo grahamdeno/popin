@@ -399,8 +399,9 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - Checked by: unit test of the chip times; J13 picture and checks (Add disabled, Edit present).
 
 #### 8.11 Calendars read calmly (D-17)
-- Given Calendars, then each switched-on calendar row ends with its mode in secondary ("Smart", "Always rings",
-  "Quiet") and a small chevron, one tappable menu of at least 44 pt. The accent color is gone from these labels.
+- Given Calendars, then each switched-on calendar row shows its mode under the name in secondary ("Smart", "Always
+  rings", "Quiet") with a small chevron, one tappable menu of at least 44 pt (wording amended 2026-11-19: the switch
+  keeps the row's end). The accent color is gone from these labels.
   Switches are ink. Calendar dots are 10 pt. Still read only.
 - Checked by: J7 picture; the read-only guard.
 
