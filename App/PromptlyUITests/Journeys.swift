@@ -369,7 +369,7 @@ final class Journeys: XCTestCase {
             a.shot("search-soccer")
             // 8.8: the calendar's mode menu is at least 44 pt tall.
             let soccerMode = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Soccer alerts")).firstMatch
-            if soccerMode.exists {
+            if a.expect("Soccer's mode menu is shown", soccerMode, timeout: 2, severity: 2) {
                 a.check("the mode menu is at least 44 pt", soccerMode.frame.height >= 44, severity: 2,
                         detail: "height \(soccerMode.frame.height)")
             }
