@@ -245,7 +245,8 @@ struct HomeView: View {
                     Text(item.title)
                         .font(.body)
                         .foregroundStyle(Brand.ink)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
@@ -278,6 +279,7 @@ struct HomeView: View {
                     .contentShape(Circle())
             }
             .accessibilityLabel("More")
+            .accessibilityIdentifier("home-more")
             .accessibilityShowsLargeContentViewer()
             Button { showCalendars = true } label: {
                 Image(systemName: "gearshape")
@@ -288,6 +290,7 @@ struct HomeView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Settings")
+            .accessibilityIdentifier("home-settings")
             .accessibilityShowsLargeContentViewer()
         }
         .dynamicTypeSize(.large)

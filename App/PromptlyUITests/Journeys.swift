@@ -17,15 +17,21 @@ final class Journeys: XCTestCase {
     }
 
     /// Home's header (7.1): ⋯ reads "More"; the gear reads "Settings" and opens Settings in one tap.
-    private static let more = "More"
+    private static let more = "home-more"
 
     /// From Home to Settings the way a person gets there: the gear in the header. One tap, counted.
     @discardableResult
     private func openSettingsFromHome(_ a: Audit, severity: Int = 3) -> Bool {
-        guard a.tap("Settings (gear)", a.app.buttons["Settings"], severity: severity) else { return false }
+        // A Settings sheet that was just closed is still fading out; two "Settings" bars at once break the next query
+        // (J7 stopped early in every config, November 19). Wait for it to go first.
+        let closing = a.app.navigationBars["Settings"].firstMatch
+        if closing.exists {
+            _ = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: closing)], timeout: 4)
+        }
+        guard a.tap("Settings (gear)", a.app.buttons["home-settings"], severity: severity) else { return false }
         // The sheet rises after the tap. Wait for it, so the next query doesn't run against Home: J12 lost
         // the Theme row in 10 of 40 themes without this wait (pro-light, November 18).
-        return a.expect("Settings opens", a.app.navigationBars["Settings"], timeout: 5, severity: severity)
+        return a.expect("Settings opens", a.app.navigationBars["Settings"].firstMatch, timeout: 5, severity: severity)
     }
 
     // MARK: Home's layout (item 7.1)
@@ -37,9 +43,12 @@ final class Journeys: XCTestCase {
     /// The header stays on screen and both buttons can be tapped.
     private func headerChecks(_ a: Audit, _ place: String) {
         let more = a.app.buttons[Journeys.more]
-        let gear = a.app.buttons["Settings"]
+        let gear = a.app.buttons["home-settings"]
         a.check("More is on screen and hittable (\(place))", more.waitForExistence(timeout: 3) && more.isHittable, severity: 4)
         a.check("the gear (Settings) is on screen and hittable (\(place))", gear.waitForExistence(timeout: 3) && gear.isHittable, severity: 4)
+        // VoiceOver reads these names.
+        a.check("VoiceOver names the ⋯ button More (\(place))", more.label == "More", severity: 3, detail: "label \(more.label)")
+        a.check("VoiceOver names the gear Settings (\(place))", gear.label == "Settings", severity: 3, detail: "label \(gear.label)")
     }
 
     /// Not going can be reached by scrolling the column, and is at least 44 pt tall.
@@ -125,7 +134,7 @@ final class Journeys: XCTestCase {
         a.expect("the card says how long", a.any(containing: "min"), severity: 3)
         a.expect("the card says it will ring", a.any(containing: "Rings"), severity: 3)
         a.expect("Not going is visible", a.app.buttons["Not going"], severity: 4)
-        a.expect("Settings is reachable", a.app.buttons["Settings"], severity: 3)
+        a.expect("Settings is reachable", a.app.buttons["home-settings"], severity: 3)
         // 7.1: the header is fixed, Not going is reachable and 44 pt, the bubble is tappable at both ends of the column.
         headerChecks(a, "column at the top")
         bubbleChecks(a)
@@ -135,17 +144,21 @@ final class Journeys: XCTestCase {
         a.launch("home")
         a.begin("Join the next meeting")
         let ok = popBubble(a)
-        a.pause(0.3)
-        a.shot("popping", note: "mid-pop")
         let undo = a.app.buttons["Undo"]
         a.done("Join the next meeting", ok)
-        // Undo lasts 5 s; tap it first and take the pictures after, so slow UI queries can't outlast it.
+        // Undo lasts 5 s and a picture takes 5 to 20 s, so tap Undo first and take the pictures after. The old order
+        // (picture, then Undo) lost Undo on small-phone (November 19).
         a.check("Undo is offered after the pop", undo.waitForExistence(timeout: 2), severity: 3)
         a.begin("Undo a pop")
         a.tap("Undo", undo)
         a.pause(1.2)
         a.shot("after-undo")
         a.done("Undo a pop", a.any(containing: "Pop the bubble to join Design review").waitForExistence(timeout: 3))
+        // The mid-pop picture, from a second pop at the end (not counted in either job).
+        if popBubble(a) {
+            a.pause(0.3)
+            a.shot("popping", note: "mid-pop")
+        }
     }
 
     // J3. Not going, then Undo.
@@ -154,19 +167,25 @@ final class Journeys: XCTestCase {
         defer { a.finish() }
         a.launch("home")
         a.begin("Skip a meeting")
-        a.tap("Not going", a.app.buttons["Not going"], severity: 4)
-        // Skipping is one tap; Undo is a separate job. Undo lasts 5 s, so tap it before any slow picture.
+        // At the largest text Not going is below the first screen: scroll the column to it (a swipe is not a tap).
+        let notGoing = a.reveal(a.app.buttons["Not going"], tries: 8)
+        a.tap("Not going", notGoing, severity: 4)
+        // Skipping is one tap; Undo is a separate job. Undo lasts 5 s and a picture takes longer, so tap Undo first.
         let undo = a.app.buttons["Undo"]
         let offered = undo.waitForExistence(timeout: 2)
         a.done("Skip a meeting", offered)
-        // The Not going state itself, while Undo is still up (a picture is quick; the slow checks wait until after).
-        a.shot("not-going", note: "Design review is put away; Undo is offered")
         a.check("Undo is offered", offered, severity: 3)
-        a.check("Undo is still up after the picture", undo.exists, severity: 2)
         a.tap("Undo", undo)
         a.pause(0.8)
         a.shot("after-undo")
         a.check("the meeting is back", a.any(containing: "Design review").waitForExistence(timeout: 3), severity: 3)
+        // The Not going state itself, from a second skip at the end.
+        let again = a.reveal(a.app.buttons["Not going"], tries: 8)
+        if again.exists && again.isHittable {
+            again.tap()
+            a.pause(0.3)
+            a.shot("not-going", note: "Design review is put away; Undo is offered")
+        }
     }
 
     // J4. Home a day ahead: the calm state.
@@ -425,7 +444,7 @@ final class Journeys: XCTestCase {
             a.pause(0.3)
             a.shot("\(theme)-pop")
             a.pause(1.0)
-            let gear = a.app.buttons["Settings"]
+            let gear = a.app.buttons["home-settings"]
             if gear.exists && gear.isHittable && openSettingsFromHome(a, severity: 2) {
                 checkTheme(a, theme, label, where: "same launch as the pictures")
             } else {
