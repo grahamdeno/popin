@@ -87,6 +87,25 @@ enum PressedLook {
     static func opacity(pressed: Bool) -> Double { pressed ? 0.9 : 1 }
 }
 
+/// Applies the pressed look. A view (not the ButtonStyle) reads Reduce Motion, so it always gets the live value.
+private struct PressedLookView<Content: View>: View {
+    let isPressed: Bool
+    let content: Content
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        content
+            .scaleEffect(PressedLook.scale(pressed: isPressed, reduceMotion: reduceMotion))
+            .opacity(PressedLook.opacity(pressed: isPressed))
+            .animation(.snappy(duration: 0.2), value: isPressed)
+    }
+}
+
+extension View {
+    /// The pressed look for button styles (story 8.6).
+    func pressedLook(_ isPressed: Bool) -> some View { PressedLookView(isPressed: isPressed, content: self) }
+}
+
 /// Taps you can feel (story 8.6). They follow the iPhone's own System Haptics setting; the alarm's buzz is separate.
 enum Feedback {
     @MainActor static func undo() { UIImpactFeedbackGenerator(style: .light).impactOccurred() }
@@ -97,7 +116,6 @@ enum Feedback {
 /// Black pill, the main action.
 struct PrimaryButtonStyle: ButtonStyle {
     var height: CGFloat = 50
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.callout.weight(.semibold))
@@ -108,9 +126,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             .frame(minHeight: height)
             .frame(maxWidth: .infinity)
             .background(Capsule().fill(Brand.ink))
-            .scaleEffect(PressedLook.scale(pressed: configuration.isPressed, reduceMotion: reduceMotion))
-            .opacity(PressedLook.opacity(pressed: configuration.isPressed))
-            .animation(.snappy(duration: 0.2), value: configuration.isPressed)
+            .pressedLook(configuration.isPressed)
     }
 }
 
@@ -118,7 +134,6 @@ struct PrimaryButtonStyle: ButtonStyle {
 struct SecondaryButtonStyle: ButtonStyle {
     var height: CGFloat = 50
     var fill = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.callout.weight(.medium))
@@ -129,8 +144,6 @@ struct SecondaryButtonStyle: ButtonStyle {
             .frame(minHeight: height)
             .frame(maxWidth: fill ? .infinity : nil)
             .background(Capsule().fill(Brand.ink.opacity(0.06)))
-            .scaleEffect(PressedLook.scale(pressed: configuration.isPressed, reduceMotion: reduceMotion))
-            .opacity(PressedLook.opacity(pressed: configuration.isPressed))
-            .animation(.snappy(duration: 0.2), value: configuration.isPressed)
+            .pressedLook(configuration.isPressed)
     }
 }
