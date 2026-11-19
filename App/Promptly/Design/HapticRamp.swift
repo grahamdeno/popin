@@ -70,15 +70,9 @@ enum PopHaptics {
 enum AlarmLoop {
     private static var player: AVAudioPlayer?
 
-    /// Volume while Pop In rings itself: quiet at first, rising over the last two minutes to full at the start time.
-    nonisolated static func volume(now: Date, start: Date) -> Float {
-        let remaining = start.timeIntervalSince(now)
-        if remaining <= 0 { return 1 }
-        if remaining >= 120 { return quiet }
-        return quiet + (1 - quiet) * Float(1 - remaining / 120)
-    }
-    nonisolated static let quiet: Float = 0.25
-    private static var ramp: Task<Void, Never>?
+    /// Volume while Pop In rings itself: full and steady from the first second (story 1.2: a missed alarm never gets
+    /// louder or softer). Kept as a function so the rule stays unit tested.
+    nonisolated static func volume(now: Date, start: Date) -> Float { 1 }
 
     static func start(meetingStart: Date? = nil) {
         guard player?.isPlaying != true, let url = soundURL(Prefs().alarmSound),
@@ -86,20 +80,9 @@ enum AlarmLoop {
         try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.duckOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
         p.numberOfLoops = -1
-        p.volume = meetingStart.map { volume(now: .now, start: $0) } ?? 1
+        p.volume = 1
         p.play()
         player = p
-        ramp?.cancel()
-        if let meetingStart {
-            ramp = Task { @MainActor in
-                while !Task.isCancelled, player === p {
-                    try? await Task.sleep(for: .milliseconds(500))
-                    let v = volume(now: .now, start: meetingStart)
-                    p.setVolume(v, fadeDuration: 0.5)
-                    if v >= 1 { break }
-                }
-            }
-        }
     }
 
     /// A short sample when a sound is picked in settings, so each choice can be heard right away.
@@ -137,8 +120,6 @@ enum AlarmLoop {
     static var isPlaying: Bool { player?.isPlaying == true }
 
     static func stop() {
-        ramp?.cancel()
-        ramp = nil
         previewEnd?.cancel()
         previewEnd = nil
         let wasPlaying = player != nil
