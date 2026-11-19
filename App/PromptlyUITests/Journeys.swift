@@ -437,7 +437,10 @@ final class Journeys: XCTestCase {
         a.accessibility("empty")
         a.labels("empty")
         a.expect("says nothing is coming up", a.any(containing: "Nothing coming up"), severity: 3)
-        a.tap("Try a pop", a.app.buttons["Try a pop"], severity: 3)
+        let tryPop = a.app.buttons["Try a pop"]
+        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 44, severity: 2,
+                detail: "height \(tryPop.frame.height)")
+        a.tap("Try a pop", tryPop, severity: 3)
         a.pause(1.5)
         a.shot("demo")
         a.labels("demo")
