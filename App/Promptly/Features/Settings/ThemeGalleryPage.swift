@@ -139,7 +139,7 @@ struct ThemeGalleryPage: View {
                 SwatchBall(palette: palette)
                     .frame(width: 64, height: 64)
                     .padding(4)
-                    .overlay(Circle().stroke(Brand.ink, lineWidth: selected ? 2 : 0))
+                    .overlay(Circle().stroke(Brand.ink, lineWidth: 2).opacity(selected ? 1 : 0))
                     .scaleEffect(bounced == palette ? 1.12 : 1)
                     .padding(.top, 6)
                 Text(palette.label)
