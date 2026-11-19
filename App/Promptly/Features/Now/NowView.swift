@@ -46,16 +46,21 @@ struct NowView: View {
                 DiscoLights().ignoresSafeArea()
                     .environment(\.themeStill, PowerWatch.shared.strained)
 
-                // The card scrolls when it's taller than the screen (large text); below it, the bubble can be tapped.
-                ScrollView {
-                    card(now: now)
-                        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { cardHeight = $0 }
+                // The card scrolls when it's taller than the space (large text). Like Home, it never reaches below
+                // three quarters of the screen, so the bubble can always be tapped in the bottom quarter.
+                GeometryReader { geo in
+                    let full = geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom
+                    let reach = max(0, full * 0.75 - geo.safeAreaInsets.top - 24)
+                    ScrollView {
+                        card(now: now)
+                            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { cardHeight = $0 }
+                    }
+                    .scrollBounceBehavior(.basedOnSize)
+                    .frame(maxWidth: 680, maxHeight: min(cardHeight, reach), alignment: .top)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 24)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 }
-                .scrollBounceBehavior(.basedOnSize)
-                .frame(maxWidth: 680, maxHeight: cardHeight, alignment: .top)
-                .padding(.horizontal, 12)
-                .padding(.top, 24)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
         .hapticRamp(until: meeting.start, enabled: model.buzz)

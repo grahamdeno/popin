@@ -224,7 +224,8 @@ final class Journeys: XCTestCase {
         a.expect("the meeting title", a.any(containing: "Design review"), severity: 4)
         // 7.3: the card follows M2, its buttons are inside it, and nothing overlaps the meeting time.
         a.expect("the card says Starts in", a.any(containing: "Starts in"), severity: 3)
-        a.expect("the card says how to join", a.any(containing: "Pop the bubble to join"), severity: 3)
+        let hint = a.app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Pop the bubble to join")).firstMatch
+        a.expect("the card says how to join", hint, severity: 3)
         let snooze = a.app.buttons["Snooze 2 min"]
         a.expect("Snooze 2 min is the button's word and VoiceOver name", snooze, severity: 3)
         let notGoing = a.reveal(a.app.buttons["Not going"], tries: 6)
@@ -240,6 +241,8 @@ final class Journeys: XCTestCase {
         } else {
             a.check("the meeting time is shown", false, severity: 3)
         }
+        a.check("the bubble can be tapped on the alarm screen",
+                a.any(containing: "Pop the bubble to join Design review").isHittable, severity: 4)
         a.launch("late", settle: 3)
         a.shot("late-50s", note: "50 s after the ring: the first bud should be out")
         a.pause(25)
