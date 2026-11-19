@@ -357,6 +357,9 @@ final class Journeys: XCTestCase {
         a.tap("Theme", a.reveal(theme))
         a.pause(0.8)
         a.shot("theme-gallery")
+        // 8.3: the chosen theme reads as selected.
+        let chosen = a.app.buttons.matching(NSPredicate(format: "isSelected == true")).firstMatch
+        a.check("the chosen theme reads as selected", chosen.exists, severity: 2)
         a.check("no ✦ in the theme gallery", !a.any(containing: "✦").exists, severity: 2)
         a.accessibility("theme-gallery")
         let unicorn = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Unicorn")).firstMatch
