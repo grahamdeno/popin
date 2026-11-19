@@ -5,6 +5,7 @@ import SwiftUI
 /// other pops can be tried (owner, 2026-11-14); the pick lands when Settings closes or on "See it on Home". Pro themes
 /// open Pop In Pro for free users. "Surprise me" picks a different theme each day.
 struct ThemeGalleryPage: View {
+    @Environment(\.dynamicTypeSize) private var galleryTypeSize
     @Environment(AppModel.self) private var model
     @State private var bounced: GumPalette?
     @State private var offer: GumPalette?
@@ -46,7 +47,7 @@ struct ThemeGalleryPage: View {
                             }
                         }
                         .padding(.horizontal, 18)
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: galleryTypeSize.isAccessibilitySize ? 2 : 3), spacing: 14) {
                             ForEach(themes, id: \.self) { tile($0) }
                         }
                         .padding(12)
@@ -126,6 +127,7 @@ struct ThemeGalleryPage: View {
                 return
             }
             model.pendingTheme = (palette == model.gumColor && !model.surprise) ? nil : palette
+            Feedback.pick()
             PopSound.play(file: palette.popFile)
             withAnimation(.spring(response: 0.25, dampingFraction: 0.45)) { bounced = palette }
             Task { @MainActor in
@@ -133,21 +135,23 @@ struct ThemeGalleryPage: View {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) { if bounced == palette { bounced = nil } }
             }
         } label: {
-            VStack(spacing: 8) {
+            // Story 8.3 (M6): a 64 pt ball with no box; the chosen one wears a 2 pt ink ring. Names wrap, never shrink.
+            VStack(spacing: 6) {
                 SwatchBall(palette: palette)
-                    .frame(width: 52, height: 52)
-                    .scaleEffect(bounced == palette ? 1.18 : 1)
-                    .padding(.top, 10)
+                    .frame(width: 64, height: 64)
+                    .padding(4)
+                    .overlay(Circle().stroke(Brand.ink, lineWidth: 2).opacity(selected ? 1 : 0))
+                    .scaleEffect(bounced == palette ? 1.12 : 1)
+                    .padding(.top, 6)
                 Text(palette.label)
                     .font(.footnote.weight(selected ? .semibold : .regular))
                     .foregroundStyle(Brand.ink)
                     .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
                 if locked { ProPill() }
             }
-            .frame(maxWidth: .infinity, minHeight: 104, alignment: .top)
-            .background(RoundedRectangle(cornerRadius: 14).stroke(selected ? Brand.ink : Brand.hairline, lineWidth: selected ? 2 : 1))
+            .frame(maxWidth: .infinity, alignment: .top)
+            .padding(.bottom, 6)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

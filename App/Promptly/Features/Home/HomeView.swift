@@ -96,7 +96,8 @@ struct HomeView: View {
             ZStack { undoToast }
                 .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: model.lastCleared?.id)
         }
-        .sheet(isPresented: $showGallery) {
+        // A theme picked here applies when the sheet closes, as from Settings (8.15).
+        .sheet(isPresented: $showGallery, onDismiss: { model.applyPendingTheme() }) {
             NavigationStack { ThemeGalleryPage() }
                 .environment(model)
                 .sheet(isPresented: Binding(get: { model.showPro }, set: { model.showPro = $0 })) {
@@ -124,7 +125,7 @@ struct HomeView: View {
                 .onDisappear { model.settingsOpen = false }
         }
         .onChange(of: model.closeSettings) { _, close in
-            if close { showCalendars = false; model.closeSettings = false }
+            if close { showCalendars = false; showGallery = false; model.closeSettings = false }
         }
     }
 
@@ -272,6 +273,7 @@ struct HomeView: View {
             Menu {
                 Button("Add a reminder", systemImage: "plus") { addingReminder = true }
                 Button("Pop for fun", systemImage: "circle.hexagongrid") { playing = true }
+                Button("Theme", systemImage: "paintpalette") { showGallery = true }
                 if let until = model.pausedUntil, until > .now {
                     Button("Resume alerts", systemImage: "bell") { model.resume() }
                 } else {
@@ -495,7 +497,7 @@ struct HomeView: View {
             .foregroundStyle(Brand.secondary)
             .lineLimit(3)
             .fixedSize(horizontal: false, vertical: true)
-        let undo = Button { model.restore(meeting) } label: {
+        let undo = Button { Feedback.undo(); model.restore(meeting) } label: {
             Text("Undo")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Brand.ink)
@@ -555,7 +557,7 @@ struct HomeView: View {
                 .lineLimit(3)
                 .fixedSize(horizontal: false, vertical: true)
             // The tappable area is the full 44 pt height, not just the word (the iPad audit's taps missed it).
-            let undo = Button { model.undoClear() } label: {
+            let undo = Button { Feedback.undo(); model.undoClear() } label: {
                 Text("Undo")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Brand.ink)

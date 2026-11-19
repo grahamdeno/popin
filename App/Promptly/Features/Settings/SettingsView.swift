@@ -74,7 +74,7 @@ struct SettingsView: View {
                     .buttonStyle(.plain)
                     SettingsLink("Sound", value: model.alarmSound.label) {
                         ChoicePage(title: "Alarm sound",
-                                   note: "Tap one to hear it. It starts quietly and gets louder until the meeting starts. Apple plays Apple's alarm beep here and while Pop In is open, and Apple's default alarm on the Lock Screen.",
+                                   note: "Tap one to hear it. It rings at one steady volume. Apple plays Apple's alarm beep here and while Pop In is open, and Apple's default alarm on the Lock Screen.",
                                    options: AlarmSoundChoice.available, selected: model.alarmSound, label: \.label,
                                    locked: { $0.isPro && !model.store.isPro }) { choice in
                             model.alarmSound = choice
@@ -183,24 +183,21 @@ struct SettingsView: View {
 
     @Environment(\.dynamicTypeSize) private var typeSize
 
+    /// Story 8.1 (M3): three theme balls, two lines, and a black capsule with the App Store price (never written into
+    /// the app). Once Pro is owned the capsule goes.
     private var proRow: some View {
         Button { model.showPro = true } label: {
             HStack(spacing: 14) {
-                if !typeSize.isAccessibilitySize { GumBall().frame(width: 36, height: 36) }
+                if !typeSize.isAccessibilitySize { trio }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Pop In Pro").font(.body.weight(.semibold)).foregroundStyle(Brand.ink)
-                    Text(model.store.isPro ? "Unlocked" : "Unicorn mode, more sounds, desk mode")
+                    Text(model.store.isPro ? "Unlocked. Thank you." : "Unicorn mode, more sounds, desk mode")
                         .font(.footnote).foregroundStyle(Brand.secondary)
-                    if typeSize.isAccessibilitySize && !model.store.isPro {
-                        Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink)
-                    }
+                    if typeSize.isAccessibilitySize && !model.store.isPro { priceCapsule }
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 8)
-                if !model.store.isPro && !typeSize.isAccessibilitySize {
-                    Text("\(model.store.price) once").font(.subheadline.weight(.semibold)).foregroundStyle(Brand.ink).fixedSize()
-                        .accessibilityLabel("\(model.store.price), one-time purchase")
-                }
+                if !model.store.isPro && !typeSize.isAccessibilitySize { priceCapsule }
                 Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Brand.secondary)
             }
             .padding(.horizontal, 18)
@@ -210,6 +207,27 @@ struct SettingsView: View {
         }
         .buttonStyle(.plain)
         .modifier(TestingProMenu(store: model.store))
+    }
+
+    /// Bubblegum, Water balloon and Fortune, overlapping.
+    private var trio: some View {
+        HStack(spacing: -12) {
+            ForEach([GumPalette.bubblegum, .waterBalloon, .fortune], id: \.self) { palette in
+                SwatchBall(palette: palette).frame(width: 30, height: 30)
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private var priceCapsule: some View {
+        Text(model.store.price)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(Capsule().fill(Brand.ink))
+            .fixedSize()
+            .accessibilityLabel("\(model.store.price), one-time purchase")
     }
 
     /// For the owner and for support: alarm count, test alarms, and the bubble rollback switch.
