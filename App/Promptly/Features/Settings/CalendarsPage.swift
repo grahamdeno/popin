@@ -122,7 +122,9 @@ struct CalendarsList: View {
         )
         let rule = model.rule(forCalendar: calendar.id)
         return HStack(alignment: .center, spacing: 12) {
-            Circle().fill(Brand.color(hex: calendar.colorHex)).frame(width: 12, height: 12)
+            // 8.11: calm rows: 10 pt dots, the mode in secondary with a small chevron, ink switches.
+            Circle().fill(Brand.color(hex: calendar.colorHex)).frame(width: 10, height: 10)
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text(calendar.title).font(.body).foregroundStyle(Brand.ink).fixedSize(horizontal: false, vertical: true)
                 if isOn.wrappedValue {
@@ -143,12 +145,13 @@ struct CalendarsList: View {
                             }
                         }
                     } label: {
-                        HStack(spacing: 3) {
+                        HStack(spacing: 4) {
                             Text(ruleText(rule))
-                            Image(systemName: "chevron.up.chevron.down").font(.caption2)
+                            Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
+                                .accessibilityHidden(true)
                         }
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(Brand.accentText)
+                        .font(.footnote)
+                        .foregroundStyle(Brand.secondary)
                         .frame(minHeight: 44)
                         .padding(.trailing, 24)
                         .contentShape(Rectangle())
@@ -159,7 +162,7 @@ struct CalendarsList: View {
                 }
             }
             Spacer()
-            Toggle("", isOn: isOn).labelsHidden().tint(Brand.coralDark)
+            Toggle("", isOn: isOn).labelsHidden().tint(Brand.ink)
                 .accessibilityLabel(calendar.title)
         }
         .frame(minHeight: 60)
