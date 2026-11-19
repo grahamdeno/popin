@@ -12,8 +12,21 @@ struct HomeView: View {
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
-    @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 60
+    /// The countdown: 88 pt at the default size, growing with text size up to `countdownCap`.
+    @ScaledMetric(relativeTo: .largeTitle) private var countSize: CGFloat = 88
     @ScaledMetric(relativeTo: .title2) private var unitSize: CGFloat = 22
+
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// The column's own height, so its scroll area is only as tall as its content (the bubble stays tappable below).
+    @State private var columnContentHeight: CGFloat = .infinity
+
+    /// The largest the countdown grows. "23 h 59" has to stay on one line on the smallest supported iPhone (375 pt
+    /// wide, a 303 pt card): at about 0.6 em a digit that is room for roughly 125 pt, so 112 keeps a margin. Checked
+    /// by the small-phone big-text picture and Apple's textClipped audit.
+    private static let countdownCap: CGFloat = 112
+    /// On iPhone the column's bottom stops at this share of the screen height; the bottom quarter stays for the bubble.
+    private static let columnReach: CGFloat = 0.75
 
     @State private var lastTouch = Date()
     @Environment(\.scenePhase) private var scenePhase
@@ -30,36 +43,37 @@ struct HomeView: View {
 
             Group {
             if sizeClass == .regular {
-                // iPad: the meeting and the rest of today on the left, the bubble on the right.
+                // iPad: the header and the scrolling column on the left, the bubble on the right.
                 ZStack {
                     Color.white.ignoresSafeArea()
                     HStack(spacing: 0) {
                         VStack(alignment: .leading, spacing: 0) {
                             header
-                            Spacer(minLength: 24).frame(maxHeight: 96)
-                            textColumn(now: now, upcoming: upcoming, next: next, showThen: false)
-                            if next != nil { todayList(Array(upcoming.dropFirst().prefix(5))) }
-                            Spacer()
+                            scrollColumn(now: now, upcoming: upcoming, next: next, onPhone: false)
                         }
                         .frame(maxWidth: 480, alignment: .leading)
-                        .padding(.horizontal, 48)
+                        .padding(.horizontal, 32)
                         bubble(next: next, progress: progress, overdue: overdue, maxSize: 760)
                             .frame(maxWidth: .infinity)
                             .ignoresSafeArea()
                     }
                 }
             } else {
-                ZStack {
-                    Color.white.ignoresSafeArea()
-                    bubble(next: next, progress: progress, overdue: overdue, maxSize: 880)
-                        .ignoresSafeArea()
-                    VStack(alignment: .leading, spacing: 0) {
-                        header
-                        Spacer(minLength: 24).frame(maxHeight: 64)
-                        textColumn(now: now, upcoming: upcoming, next: next, showThen: true)
-                        Spacer()
+                // iPhone: the bubble keeps its size underneath. The header is fixed on white; the column scrolls
+                // over the bubble and its bottom stops at three quarters of the screen height.
+                GeometryReader { geo in
+                    let full = geo.size.height + geo.safeAreaInsets.top + geo.safeAreaInsets.bottom
+                    let columnHeight = max(0, full * Self.columnReach - geo.safeAreaInsets.top)
+                    ZStack(alignment: .top) {
+                        Color.white.ignoresSafeArea()
+                        bubble(next: next, progress: progress, overdue: overdue, maxSize: 880)
+                            .ignoresSafeArea()
+                        VStack(spacing: 0) {
+                            header
+                            scrollColumn(now: now, upcoming: upcoming, next: next, onPhone: true)
+                        }
+                        .frame(height: columnHeight, alignment: .top)
                     }
-                    .padding(.horizontal, 28)
                 }
             }
             }
@@ -132,9 +146,24 @@ struct HomeView: View {
         .environment(\.fortuneText, words)
     }
 
-    /// The text sits on a glass pane so it stays readable when the bubble rises behind it.
-    private func textColumn(now: Date, upcoming: [Meeting], next: Meeting?, showThen: Bool) -> some View {
+    /// The column scrolls under the fixed header. On iPhone it is only as tall as its content (up to the space the
+    /// header leaves), so the bubble below it can still be tapped.
+    private func scrollColumn(now: Date, upcoming: [Meeting], next: Meeting?, onPhone: Bool) -> some View {
+        ScrollView {
+            textColumn(now: now, upcoming: upcoming, next: next, showThen: onPhone, later: onPhone ? [] : Array(upcoming.dropFirst().prefix(5)))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { columnContentHeight = $0 }
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .frame(maxHeight: onPhone ? columnContentHeight : .infinity)
+    }
+
+    /// Everything the column holds, top to bottom: the paused line, the card, the "Then" strip, the new themes card.
+    /// Each sits on the white plate, so words read over any bubble.
+    private func textColumn(now: Date, upcoming: [Meeting], next: Meeting?, showThen: Bool, later: [Meeting]) -> some View {
         VStack(alignment: .leading, spacing: 14) {
+            if let until = model.pausedUntil, until > now { pausedLine(until) }
             Group {
                 if !model.calendarAuthorized || !model.alarmsAuthorized {
                     permissionNotice.glassCard()
@@ -145,8 +174,23 @@ struct HomeView: View {
                 }
             }
             whatsNewCard
+            if next != nil, !later.isEmpty { todayList(later) }
         }
-        .padding(.horizontal, -12)
+    }
+
+    /// "Paused until 3:00 PM · Resume": the first row of the column, at least 44 pt.
+    private func pausedLine(_ until: Date) -> some View {
+        Button { model.resume() } label: {
+            Label("Paused until \(until.formatted(date: .omitted, time: .shortened)) · Resume", systemImage: "pause.fill")
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(Brand.accentText)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .padding(.horizontal, 16)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .plate(cornerRadius: 22)
     }
 
     /// At most once a month: the themes that just arrived. Opening it or waving it away both count as seen.
@@ -176,7 +220,7 @@ struct HomeView: View {
             .padding(.leading, 16)
             .contentShape(Rectangle())
             .onTapGesture { model.whatsNewOpened(fresh); showGallery = true }
-            .glassEffect(.regular, in: .rect(cornerRadius: 22))
+            .plate(cornerRadius: 22)
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isButton)
         }
@@ -201,14 +245,17 @@ struct HomeView: View {
                     Text(item.title)
                         .font(.body)
                         .foregroundStyle(Brand.ink)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
     }
 
+    /// Fixed at the top on white, at its normal size at every text size. ⋯ holds the actions; the gear opens Settings.
+    /// A long press on either shows its name large (the large content viewer).
     private var header: some View {
-        HStack {
+        HStack(spacing: 8) {
             Wordmark()
             Spacer()
             Menu {
@@ -223,135 +270,194 @@ struct HomeView: View {
                         Button("For the rest of today") { model.pause(until: PauseRule.endOfDay(from: .now)) }
                     }
                 }
-                Divider()
-                Button("Settings", systemImage: "gearshape") { showCalendars = true }
             } label: {
-                Image(systemName: "ellipsis.circle")
-                    .font(.title2)
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Brand.ink)
                     .frame(width: 44, height: 44)
+                    .background(Circle().fill(Brand.ink.opacity(0.07)))
+                    .contentShape(Circle())
             }
-            .accessibilityLabel("More: add a reminder, pop for fun, pause alerts, settings")
+            .accessibilityLabel("More")
+            .accessibilityIdentifier("home-more")
+            .accessibilityShowsLargeContentViewer()
+            Button { showCalendars = true } label: {
+                Image(systemName: "gearshape")
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundStyle(Brand.ink)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Settings")
+            .accessibilityIdentifier("home-settings")
+            .accessibilityShowsLargeContentViewer()
         }
+        .dynamicTypeSize(.large)
+        .padding(.horizontal, 24)
         .padding(.top, 8)
-        .overlay(alignment: .bottomLeading) {
-            if let until = model.pausedUntil, until > .now {
-                Button { model.resume() } label: {
-                    Label("Paused until \(until.formatted(date: .omitted, time: .shortened)) · Resume", systemImage: "pause.fill")
-                        .font(.footnote.weight(.medium))
-                        .foregroundStyle(Brand.accentText)
-                        .padding(.horizontal, 14)
-                        .frame(minHeight: 36)
-                }
-                .buttonStyle(.plain)
-                .glassEffect(.regular, in: .capsule)
-                .offset(y: 42)
-            }
-        }
+        .padding(.bottom, 4)
+        .background(Color.white, ignoresSafeAreaEdges: .top)
     }
 
-    /// One card holds the meeting and its countdown; what comes after is a quiet line below it.
+    /// One card holds the meeting and its countdown (mockup M1): the meta row, the title, the countdown, the time
+    /// span, then the hint and Not going. What comes after is a quiet line below it.
     private func meetingBlock(_ meeting: Meeting, now: Date, then: Meeting?) -> some View {
         let parts = Countdown.parts(now: now, start: meeting.start)
         let started = meeting.start <= now
+        let demo = isDemo(meeting)
         let nextWord = model.gumColor == .moon ? "Next transmission" : "Next"
-        let label = isDemo(meeting) ? "Practice" : meeting.calendarID == OwnReminder.calendarID || meeting.calendarID == CalendarService.remindersCalendarID ? "Reminder" : [started ? "Happening now" : nextWord, meeting.service?.rawValue].compactMap { $0 }.joined(separator: " · ")
+        let label = demo ? "Practice" : meeting.calendarID == OwnReminder.calendarID || meeting.calendarID == CalendarService.remindersCalendarID ? "Reminder" : [started ? "Happening now" : nextWord, meeting.service?.rawValue].compactMap { $0 }.joined(separator: " · ")
         // How Pop In will alert, so a quiet one is never a surprise.
         let paused = model.isPaused(meeting, now: now)
         let rings = model.ringsFully(meeting) && !paused
         let how: String = paused ? "Paused until \(model.pausedUntil.map { $0.formatted(date: .omitted, time: .shortened) } ?? "later")"
             : rings ? (model.earlyMinutes > model.leadMinutes ? "Rings \(model.earlyMinutes) and \(model.leadMinutes) min before" : "Rings \(model.leadMinutes) min before")
             : model.workHours.contains(meeting.start) ? "Quiet notification only" : "Outside work hours, quiet notification"
-        return VStack(alignment: .leading, spacing: 22) {
-            VStack(alignment: .leading, spacing: 20) {
+        return VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(label)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Brand.secondary)
-                        .padding(.bottom, 4)
-                    if !isDemo(meeting) && !started {
-                        Label(how, systemImage: rings ? "bell.fill" : "bell.slash")
-                            .font(.footnote.weight(.medium))
-                            .foregroundStyle(rings ? Brand.accentText : Brand.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.bottom, 10)
-                    }
+                    metaRow(label: label, how: how, rings: rings, showsHow: !demo && !started)
                     Text(meeting.title)
                         .font(.system(size: titleSize, weight: .semibold))
                         .tracking(-0.8)
                         .foregroundStyle(Brand.ink)
                         .lineLimit(4)
                         .fixedSize(horizontal: false, vertical: true)
-                    if !isDemo(meeting) {
-                        HStack(alignment: .lastTextBaseline, spacing: 8) {
-                            Text(parts.big)
-                                .font(.system(size: countSize, weight: .medium))
-                                .tracking(-2.5)
-                                .monospacedDigit()
-                                .contentTransition(.numericText())
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            if !parts.unit.isEmpty {
-                                Text(parts.unit)
-                                    .font(.system(size: unitSize, weight: .medium))
-                                    .foregroundStyle(Brand.secondary)
-                            }
-                        }
-                        .foregroundStyle(Brand.ink)
-                        .padding(.top, 28)
-                    }
-                    Text(isDemo(meeting) ? "Practice: pop the bubble below." : Countdown.span(meeting, now: now))
-                        .font(.callout)
-                        .foregroundStyle(Brand.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, isDemo(meeting) ? 20 : 6)
+                        .padding(.top, 10)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityAction(named: meeting.joinURL == nil ? "Clear" : "Join") {
                     if let url = model.join(meeting) { openURL(url) }
                 }
                 .accessibilityAction(named: "Not going") { model.clear(meeting) }
-                if model.taughtPop, !isDemo(meeting), meeting.joinURL != nil,
-                   meeting.start.timeIntervalSince(now) < 10 * 60 {
-                    Label("Pop the bubble to join", systemImage: "hand.tap")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Brand.accentText)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                if !model.taughtPop {
-                    Text("Tap the bubble to pop it and join.")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Brand.ink)
-                        .transition(.opacity)
-                }
-                Button { model.clear(meeting) } label: {
-                    Text(isDemo(meeting) ? "Skip" : "Not going")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Brand.secondary)
-                        .underline()
-                        .padding(.vertical, 12)
-                        .padding(.trailing, 16)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .padding(.vertical, -8)
+                if !demo { countdown(parts) }
+                Text(demo ? "Practice: pop the bubble below." : Countdown.span(meeting, now: now))
+                    .font(.callout)
+                    .foregroundStyle(Brand.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, demo ? 12 : 4)
+                footer(meeting, now: now, demo: demo)
+                    .padding(.top, 18)
             }
-            .padding(.vertical, 8)
             .glassCard()
 
-            if let then {
-                Text("Then \(Countdown.time(then.start, now: now)), \(then.title)")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Brand.ink.opacity(0.85))
-                    .fixedSize(horizontal: false, vertical: true)
-                    // A glass pill, so the line reads over any bubble, including Fortune's black glass.
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 14)
-                    .glassEffect(.regular, in: .capsule)
-                    .padding(.horizontal, -14)
-                    .padding(.horizontal, 20)
+            if let then { thenStrip(then, now: now) }
+        }
+    }
+
+    /// "Next · service" on the leading side and "Rings…" on the trailing side. At accessibility sizes they stack.
+    @ViewBuilder
+    private func metaRow(label: String, how: String, rings: Bool, showsHow: Bool) -> some View {
+        let left = Text(label)
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(Brand.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        let right = Label(how, systemImage: rings ? "bell.fill" : "bell.slash")
+            .font(.footnote.weight(.medium))
+            .foregroundStyle(rings ? Brand.accentText : Brand.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        if typeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 6) {
+                left
+                if showsHow { right }
+            }
+        } else {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                left
+                Spacer(minLength: 8)
+                if showsHow { right.multilineTextAlignment(.trailing) }
             }
         }
+    }
+
+    /// The big countdown. It never shrinks to fit (no `minimumScaleFactor`), so it keeps its size when the hint
+    /// line appears; the title wraps instead.
+    private func countdown(_ parts: (big: String, unit: String)) -> some View {
+        HStack(alignment: .lastTextBaseline, spacing: 8) {
+            Text(parts.big)
+                .font(.system(size: min(countSize, Self.countdownCap), weight: .medium))
+                .tracking(-2.5)
+                .monospacedDigit()
+                .contentTransition(reduceMotion ? .identity : .numericText())
+                .lineLimit(1)
+            if !parts.unit.isEmpty {
+                Text(parts.unit)
+                    .font(.system(size: unitSize, weight: .medium))
+                    .foregroundStyle(Brand.secondary)
+                    .lineLimit(1)
+            }
+        }
+        .foregroundStyle(Brand.ink)
+        .padding(.top, 14)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("countdown")
+    }
+
+    /// The hint and a Not going button at least 44 pt. At accessibility sizes the hint goes first and Not going
+    /// follows, full width.
+    @ViewBuilder
+    private func footer(_ meeting: Meeting, now: Date, demo: Bool) -> some View {
+        let hint = hintText(meeting, now: now, demo: demo)
+        let notGoing = Button { model.clear(meeting) } label: {
+            Text(demo ? "Skip" : "Not going")
+        }
+        .buttonStyle(SecondaryButtonStyle(height: 44, fill: typeSize.isAccessibilitySize))
+        if typeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 12) {
+                if let hint { hintLabel(hint) }
+                notGoing
+            }
+        } else {
+            HStack(alignment: .center, spacing: 12) {
+                if let hint { hintLabel(hint) }
+                Spacer(minLength: 8)
+                notGoing
+            }
+        }
+    }
+
+    /// The line that teaches the bubble: before the first pop, how to pop; after it, a reminder in the last ten
+    /// minutes of a meeting with a link.
+    private func hintText(_ meeting: Meeting, now: Date, demo: Bool) -> (words: String, accent: Bool)? {
+        if !model.taughtPop { return ("Tap the bubble to pop it and join.", false) }
+        if !demo, meeting.joinURL != nil, meeting.start.timeIntervalSince(now) < 10 * 60 {
+            return ("Pop the bubble to join", true)
+        }
+        return nil
+    }
+
+    private func hintLabel(_ hint: (words: String, accent: Bool)) -> some View {
+        Label(hint.words, systemImage: "hand.tap")
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(hint.accent ? Brand.accentText : Brand.ink)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    /// "Then 10:30 AM · Title": a plain line under the card, on the plate. At accessibility sizes the title goes
+    /// under the time, two lines at most. The time is never split.
+    private func thenStrip(_ then: Meeting, now: Date) -> some View {
+        let time = Countdown.time(then.start, now: now)
+        return Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Then \(time)").fixedSize(horizontal: false, vertical: true)
+                    Text(then.title).lineLimit(2).fixedSize(horizontal: false, vertical: true)
+                }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text("Then \(time) ·").fixedSize()
+                    Text(then.title).lineLimit(2).fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .font(.subheadline.weight(.medium))
+        .foregroundStyle(Brand.ink)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .plate(cornerRadius: 18)
+        .accessibilityElement(children: .combine)
     }
 
     /// The "Try a pop" practice meeting: no countdown to wait for, just pop it.
