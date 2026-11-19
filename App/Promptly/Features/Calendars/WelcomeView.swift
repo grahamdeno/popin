@@ -1,16 +1,17 @@
 import SwiftUI
 
-/// First run: one screen per permission, each saying why before iOS asks (the alarm screen also shows how the
-/// alarm looks locked and unlocked, so nobody expects a takeover mid-app), then the calendar choices, then
-/// "You're covered" with the next meeting (or a demo pop when nothing is coming up).
+/// First run: hello and the calendar reason on one screen (story 8.14), then the alarm reason (which also shows how
+/// the alarm looks locked and unlocked, so nobody expects a takeover mid-app), each before iOS asks, then the
+/// calendar choices, then "You're covered" with the next meeting (or a demo pop when nothing is coming up).
 struct WelcomeView: View {
     @Environment(AppModel.self) private var model
     @State private var step: Step = .hello
     @State private var asking = false
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 34
     @ScaledMetric(relativeTo: .body) private var bodySize: CGFloat = 16
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    enum Step { case hello, calendars, alarms, choose, covered }
+    enum Step { case hello, alarms, choose, covered }
 
     var body: some View {
         switch step {
@@ -19,12 +20,10 @@ struct WelcomeView: View {
         default:
             ZStack {
                 Color.white.ignoresSafeArea()
-                BubbleView(progress: bubbleProgress, style: .bubble, popCount: 0).ignoresSafeArea()
                 // The words scroll if they're large (big text sizes); the button always stays on screen.
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         Wordmark().padding(.top, 8)
-                        Spacer(minLength: 24)
                         VStack(alignment: .leading, spacing: 12) {
                             Text(title)
                                 .font(.system(size: titleSize, weight: .semibold))
@@ -38,10 +37,18 @@ struct WelcomeView: View {
                             if step == .alarms { AlarmLooksPreview().padding(.top, 6) }
                         }
                         .glassCard()
-                        Spacer(minLength: 24)
+                        .padding(.top, 12)
+                        // Story 8.14: the card sits in the top third and the whole bubble shows above the buttons.
+                        GumBall()
+                            .frame(width: ballSide, height: ballSide)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .animation(reduceMotion ? nil : .timingCurve(0.2, 0.7, 0.3, 1, duration: 0.9), value: step)
                     }
-                    .frame(minHeight: 520)
                     .padding(.horizontal, 24)
+                    // Story 8.9: on a wide iPad the column is at most 640 pt, centred.
+                    .frame(maxWidth: 640)
+                    .frame(maxWidth: .infinity)
                 }
                 .scrollBounceBehavior(.basedOnSize)
                 .safeAreaInset(edge: .bottom) {
@@ -60,25 +67,26 @@ struct WelcomeView: View {
                     .padding(14)
                     .glassEffect(.regular, in: .rect(cornerRadius: 28))
                     .padding(.horizontal, 24)
+                    .frame(maxWidth: 640)
+                    .frame(maxWidth: .infinity)
                     .padding(.bottom, 16)
                 }
             }
         }
     }
 
-    private var bubbleProgress: Double {
+    /// The bubble grows a little with each step, as it inflates before a meeting.
+    private var ballSide: CGFloat {
         switch step {
-        case .hello: 0.2
-        case .calendars: 0.4
-        case .alarms: 0.6
-        default: 0.8
+        case .hello: 120
+        case .alarms: 150
+        default: 180
         }
     }
 
     private var title: String {
         switch step {
-        case .hello: "Never miss the start of a meeting."
-        case .calendars: "First, your calendars"
+        case .hello: "Never miss the start of a meeting"
         case .alarms: "Then, permission to ring"
         default: model.upcoming(at: .now).first.map { _ in "You're covered" } ?? "You're all set"
         }
@@ -87,9 +95,7 @@ struct WelcomeView: View {
     private var message: String {
         switch step {
         case .hello:
-            return "Pop In watches your calendar and rings before each meeting. Pop the bubble to join the call."
-        case .calendars:
-            return "Pop In reads the calendars on this device, including Google and Outlook accounts added in Settings. It never changes them, and nothing leaves this device."
+            return "Pop In rings before each meeting on your calendar. Pop the bubble to join the call. It reads the calendars on this device, including Google and Outlook accounts added in Settings, never changes them, and nothing leaves this device."
         case .alarms:
             return "Meetings with a video link ring like an alarm, even in Silent and Focus. Other events get a quiet notification. iPhone decides how the alarm looks:"
         default:
@@ -102,8 +108,7 @@ struct WelcomeView: View {
 
     private var buttonTitle: String {
         switch step {
-        case .hello: "Get started"
-        case .calendars: "Allow calendar access"
+        case .hello: "Allow calendar access"
         case .alarms: "Allow alarms"
         default: "Done"
         }
@@ -112,8 +117,6 @@ struct WelcomeView: View {
     private func advance() {
         switch step {
         case .hello:
-            step = .calendars
-        case .calendars:
             asking = true
             Task {
                 await model.requestCalendarAccess()
