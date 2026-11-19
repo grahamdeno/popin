@@ -317,6 +317,9 @@ thinking.
 - The screenshot pipeline stores landscape iPad frames the right way round before they are published.
 - Checked by: the pictures from `screenshots.yml`; Grok on the live store after 1.1 is approved. Publishing and
   uploading happen under 1.1's ship go.
+- Checked 2026-11-19 (Opus): the pipeline already stores iPad frames upright (`screenshots.yml` turns sideways frames;
+  the `appstore-screenshots` branch from run 43700633526 holds 2752 x 2064 upright pictures). The live store still has
+  the older sideways ones; they are replaced with 1.1's pictures under the ship go (Grok).
 
 **Out of scope:** the rest of the design review (items 8 to 10, 1.2). A "Join" word on the card: only if 7.1's
 scrolling isn't enough at XXXL, and only with Graham's approval.
