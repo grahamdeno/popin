@@ -43,6 +43,10 @@ Newest first. Refined decisions only.
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
+| 2026-11-19 | Story 1.2 changes: a missed alarm keeps ringing at one steady volume until it's dismissed or a later ringing meeting reaches its ring time. The 7-minute auto-stop is dropped | Graham's decision. A missed meeting should never go quiet on its own |
+| 2026-11-19 | Graham's written exception for epic 7 and 1.1 (his handoff note, sent in the Pop In Product chat on 2026-11-19): Opus reviews and merges 1.1 work, makes test builds, and after the go-live verdict from a different model (Fable) runs the release triggers, naming each trigger, version and commit in its PR. Graham confirms this allowance in his own message before the first release trigger runs. Nobody reviews their own work. Graham still presses Submit for Review and Release. Deleting, force-pushing, renaming, archiving, transferring, purchases, prices, product IDs, secrets and release-calendar dates stay his | Speed: no active users, one release |
+| 2026-11-19 | Benchmark "Find and turn off one calendar" is 4 taps from Home (the gear, Calendars, search, the switch) | Search is the quick way through 22 calendars. The walk on c4a63f1 (run 44508485401) counted 4 in every config; it was 5 before 7.1 |
 | 2026-11-19 | Epic 7 step 1 settled: words never sit on the gum (Fortune's fortune excepted); words over the bubble sit on a white plate of at least 90%; ten accent text colors darken; Home's header stays fixed at every text size and the card scrolls over a bubble that keeps its size; "Pop the bubble to join" moves into the alarm card; the card is the white plate unless glass passes Apple's audit on every theme | A script over all 46 themes: white words on the gum fail on 41, one text color per theme fails on 17, a bare "Then" line fails on all 46. On a 90% plate, ink, secondary and every accent text pass 4.5:1 over any color, the darkest theme art included |
 | 2026-11-18 | 1.1 scope reopened and frozen again: epic 7 added (Home and the alarm work for everyone). Standing merge go extends to epic 7 | Grok's design review found a severity 4 (big-text Home) and a severity 3 (Not going can't be undone after 5 s) on 1.0; the playbook fixes both before the next release. The M1 Home layout goes in now so Home is rebuilt once |
 | 2026-11-18 | 1.2 will honor the widgets' tinted and clear Home Screen modes | It's how iOS draws widgets, not an app dark mode; the app stays light only |
@@ -52,29 +56,34 @@ Newest first. Refined decisions only.
 | 2026-11-16 | 1.1 scope approved and frozen: epic 1, stories 1.1 to 1.4. Items 2 to 6 wait for 1.2. No new purchases | One release that fixes alarm pile-ups; theme work isn't blocked (Fireworks unlocks 2026-12-14 as built) |
 | 2026-11-16 | Standing merge go for 1.1: each 1.1 PR merges once its review passes, if the merge uploads and deploys nothing | Graham doesn't approve each PR |
 | 2026-11-16 | A clash means meetings that start in the same minute. Partial overlaps are not a clash | Simple and predictable; story 1.3 keeps partial overlaps from ringing together |
-| 2026-11-16 | The auto-stop is fixed at 7 minutes in 1.1, not a setting | No new setting; revisit after real use |
+| 2026-11-16 | (Superseded 2026-11-19 by the new story 1.2.) The auto-stop is fixed at 7 minutes in 1.1, not a setting | No new setting; revisit after real use |
 | 2026-11-16 | Pop In moves onto the playbook (1.0.0); 1.1 is the first release planned under it | One process across all apps |
 | 2026-11-16 | Epic "Ring only when it matters" approved as a 1.1 candidate | Found in real use on 1.0: several alarms rang at once |
 
-## Where things stand (2026-11-18)
+## Where things stand (2026-11-19)
 - 1.0 (build 1056) approved and live in the US App Store, EU excluded. Grok checked on 2026-11-16: the page,
   subtitle, icon, 8 screenshots, Pop In Pro $6.99 and all three tips are live, and it shows up in search
   (12th for "Pop In Meeting Alarms").
 - tangomike.app tag reads "On the App Store" (grahamdeno/tangomike PR #6).
 - 2026-11-18: Grok's design review is in; epic 7 added to 1.1.
 - 2026-11-18: 7.4 merged (#52): the audit walk now shows each theme, counts from Home and lists stopped journeys.
-- 2026-11-19: epic 7 step 1 settled (contrast, icons, the large-text Home); criteria added to 7.1 to 7.3. Next: Sonnet
-  builds 7.1, then 7.2 and 7.3.
-- Known gap: the small-phone audit setup recorded nothing on 57f9d4e (failed to build or run). 7.1's walk needs it.
+- 2026-11-19: epic 7 step 1 settled (contrast, icons, the large-text Home); criteria added to 7.1 to 7.3.
+- 2026-11-19: 7.1 merged (#56), reviewed by Opus. The small-phone audit runs again. 1.1 now carries epics 1 and 7
+  to 11 under Graham's written exception. Story 1.2 rewritten (a missed alarm keeps ringing). Next: Opus builds 7.2,
+  7.3 and story 1.2, a different model reviews.
 
 ## Release scope
-- **1.1 (approved and frozen 2026-11-16, reopened and frozen again 2026-11-18):** epic 1 "Ring only when it
-  matters", stories 1.1 to 1.4, and epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5, in one release.
-  New ideas go to 1.2.
-- **Waits for 1.2:** items 2 to 6 and 8 to 11 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
+- **1.1 (approved 2026-11-16, reopened 2026-11-18 and 2026-11-19, frozen):** epic 1 "Ring only when it matters",
+  stories 1.1 to 1.4; epic 7 "Home and the alarm work for everyone", items 7.1 to 7.5; epic 8 design polish; epic 9
+  widgets; item 10 Settings as a native Form (one page first); item 11 demo mode saves nothing. One release. New
+  ideas go to 1.2.
+- **Waits for 1.2:** items 2 to 6 (theme polish, "Pop for fun" feel, Mood ring pop, travel buffer, Watch and Mac).
 - **Purchases approved:** none new.
-- **Go-aheads:** merge, standing for all 1.1 items (epic 7 included, 2026-11-18) as each passes review, when the merge uploads and deploys nothing
-  (2026-11-16). Test build: none yet. Ship: none yet.
+- **Go-aheads:** merge, standing for all 1.1 items as each passes review, when the merge uploads and deploys nothing
+  (2026-11-16, 2026-11-18). From 2026-11-19, Graham's written exception (decision log) lets Opus also make 1.1
+  test builds and, after the go-live verdict from a different model (Fable), run the release triggers, each named
+  with its commit in a PR, once Graham has confirmed that allowance in his own message. Submit for Review and
+  Release stay Graham's.
 - **Target:** rough, not a deadline: after Fireworks drops on 2026-12-14.
 
 ## Dated checks
@@ -84,7 +93,7 @@ Newest first. Refined decisions only.
 
 ## Backlog
 
-Items 1 and 7 are in 1.1. Items 2 to 6 and 8 to 10 wait for 1.2.
+Items 1 and 7 to 11 are in 1.1. Items 2 to 6 wait for 1.2.
 
 ### 1. Epic: Ring only when it matters (approved 2026-11-16)
 **Goal:** Pop In rings only for a meeting that needs the user now. Meetings already handled, skipped or clashing
@@ -111,21 +120,53 @@ the meeting I choose rings.
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
 
-#### 1.2 Alarms stop on their own after 7 minutes
-As someone who sometimes joins from another device, I want an unanswered alarm to stop on its own, so my phone
-isn't ringing for a meeting I already handled.
-- Given an alarm has rung for 7 minutes without a pop, snooze or Not going, then it stops ringing.
-- Then the meeting stays on the Lock Screen and in the Live Activity as "Started · Join" until the meeting ends.
-- The meeting counts as missed under newest-meeting-wins, the same as today.
-- Settled 2026-11-16: 7 minutes is fixed in 1.1, not a setting.
+#### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
+As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my
+next meeting takes over, so a missed meeting never goes quiet on its own and never rings over the next one.
+- Given an alarm rang and nobody popped, snoozed, chose Not going or dismissed it, then it keeps ringing at one
+  steady volume. It never gets louder or softer. Given iOS mutes the alert on its own, then it rings again within
+  60 seconds, at the same volume.
+- The ring inside Pop In starts at full volume (the two-minute rise before the start is removed). Story 1.4's
+  quieter alarm, when it applies, stays steady at its own level.
+- Given the person taps Dismiss on the Lock Screen, then it stops and doesn't ring again for that meeting. The
+  meeting stays on Home until it's missed or over, as today. While Pop In is open, its alarm screen keeps ringing
+  until the bubble is popped, snoozed or Not going is chosen.
+- Given a later meeting that rings reaches its own ring time (the moment its bubble takes over on Home), then the
+  earlier alarm stops by itself, and the earlier meeting counts as missed (newest wins, as today).
+- Given the later meeting is skipped with Not going, paused, or set to a quiet notification, then it doesn't take
+  over: the earlier alarm keeps ringing. The later meeting's early heads-up alarm doesn't take over either; only its
+  own ring time does.
+- Given two meetings start in the same minute, then they share one alarm (as today), and it follows these rules as
+  one.
+- Given the person dismisses in the same minute the next alarm comes due, then the earlier alarm stops and the next
+  one rings normally.
+- Given a snooze, then the meeting rings again after 2 minutes and follows these rules from there.
+- Decision for Graham before the build: when no later meeting comes before the missed one ends, does it keep
+  ringing past its end (until dismissed), or stop when the meeting ends?
+- How it's built (assumptions to confirm on the phone, from Apple's developer forums, 2026-11-19): AlarmKit has no
+  setting for how long an alert sounds, and iOS mutes an alert after its own default; a later alarm that fires
+  while an earlier one still sounds can be silenced. So Pop In schedules repeat alarms for an unhandled meeting,
+  spaced so that none is still sounding when the next meeting's alarm is due. Dismiss on any repeat cancels the
+  rest (a stop intent). While Pop In is open it stops the old alarm itself at the handover. The phone check measures
+  iOS's default alert length and sets the spacing from it.
+- Build risks to cover: `stopAlerting()` stops every ringing alarm, so a stop at the handover must name the old
+  alarm only; `sync()` reschedules any missing alarm, so a dismissed meeting needs its own saved state ("dismissed,
+  not cleared"); repeats count against the planner's limit of 24; the one-minute safety backup becomes the first
+  repeat; Lock Screen Dismiss needs a stop intent (none today) and can only be checked on the phone.
+- Checked by: SimulatedDayTests for each line above (back-to-back meetings, two at the same time, a dismiss at the
+  handover, a later meeting skipped with Not going, a heads-up that doesn't take over); a unit test that no repeat
+  is planned to sound within the alert length of the next ring time; a unit test that the in-app ring has no
+  volume rise; Graham's phone check of a missed alarm, its repeat after iOS mutes it, a Lock Screen Dismiss, and
+  the handover to the next.
 
 #### 1.3 One alarm at a time
 As someone with back-to-back meetings, I want only one Pop In alarm ringing at a time, so when I come back to my
 phone I see what needs me now.
-- Given an older alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops.
+- Given an older alarm is still ringing, when a newer meeting's alarm fires, then the older alarm stops (1.2 says
+  how).
 - Given earlier meetings went unpopped, when the current alarm shows, then they appear as one quiet line
   ("Also missed: 1:00 Standup, 1:00 Design review"), each with Join while it's still running.
-- Given that stack, when the user pops or stops the current alarm, then the whole stack clears.
+- Given that stack, when the user pops the current alarm or chooses Not going, then the whole stack clears.
 - Given two meetings start at the same minute and no pick was made, then one alarm rings showing both, with a Join
   for each.
 
@@ -274,23 +315,23 @@ scrolling isn't enough at XXXL, and only with Graham's approval.
 3. Review each PR. (Opus.)
 4. Phone checks: card style, big text, Undo after the toast. (Graham.)
 
-### 8. Epic: Design polish (approved 2026-11-18, for 1.2, to shape)
+### 8. Epic: Design polish (approved 2026-11-18, in 1.1, to shape)
 - From the review: Settings rows and Pro row (M3), the Pro sheet (M4), the theme gallery (M6, keeping Surprise me and
   the groups), one shared ball highlight (D-11), haptics (D-14), empty state (D-16), pressed buttons (D-19), one PRO
   tag (GR-13), tap areas (GR-14), Pro sheet icons hidden from VoiceOver (GR-12), Add reminder chips (GR-10), iPad
   sizing (GR-15, GR-17), fixed sizes (GR-18), Calendars (D-17), copy on the site and support pages (GR-19).
 - Opus shapes; Sonnet builds.
 
-### 9. Epic: Widgets look like the app (approved 2026-11-18, for 1.2, to shape)
+### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, to shape)
 - M5: "8 min" as in the app, the big-bubble light, tinted and clear Home Screen modes, text styles (GR-11, D-12), and
   the Live Activity (D-13).
 - Opus shapes; Sonnet builds.
 
-### 10. Settings as a native Form: try one page (approved 2026-11-18, for 1.2)
+### 10. Settings as a native Form: try one page (approved 2026-11-18, in 1.1)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
 - Sonnet builds the trial; Opus and Graham decide.
 
-### 11. Requirement: demo mode saves nothing (approved 2026-11-18, for 1.2)
+### 11. Requirement: demo mode saves nothing (approved 2026-11-18, in 1.1)
 - Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise
   me. Today the theme is saved (the `gumColor` didSet runs in `init`) and a saved Surprise me is kept, though
   `docs/audit/ux-audit.md` says demo mode saves nothing.
