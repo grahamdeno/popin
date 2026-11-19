@@ -68,8 +68,10 @@ struct WidgetCount: View {
     var body: some View {
         let parts = CountText.parts(now: now, start: start)
         let ink = parts.unit.isEmpty ? (mode == .fullColor ? GumColors.dark : Color.primary) : (mode == .fullColor ? Color(white: 0.08) : Color.primary)
-        (Text(parts.big).font(big.monospacedDigit()).foregroundColor(ink)
-            + Text(parts.unit.isEmpty ? "" : " \(parts.unit)").font(unit).foregroundColor(mode == .fullColor ? Color(white: 0.42) : Color.secondary))
+        let bigText = Text(parts.big).font(big.monospacedDigit()).foregroundStyle(ink)
+        let unitText = Text(parts.unit.isEmpty ? "" : " \(parts.unit)").font(unit)
+            .foregroundStyle(mode == .fullColor ? Color(white: 0.42) : Color.secondary)
+        Text("\(bigText)\(unitText)")
             .lineLimit(1)
             .minimumScaleFactor(0.7)
             .widgetAccentable()

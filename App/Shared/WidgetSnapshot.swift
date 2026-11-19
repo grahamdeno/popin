@@ -43,19 +43,22 @@ enum NextMeetingKind {
 /// When the widget redraws. Pure, unit tested.
 enum WidgetTimeline {
     /// Story 9.1: one entry a minute, on the minute before the start (so "8 min" turns to "7 min" on time), then the
-    /// start and the end. No ticking seconds. `maxEntries` caps the list; the timeline reloads at its end.
+    /// start and the end. No ticking seconds. If `maxEntries` cuts the minutes short, the list ends there (no start or
+    /// end) and the timeline reloads at its end.
     static func entryDates(now: Date, start: Date?, end: Date?, maxEntries: Int = 90) -> [Date] {
         guard let start, let end, end > now else { return [now] }
         var dates: [Date] = [now]
         if start > now {
             // Minutes before the start, nearest to now first, at whole minutes from the start.
-            let firstK = Int((start.timeIntervalSince(now) / 60).rounded(.down))
-            var k = firstK
+            var k = Int((start.timeIntervalSince(now) / 60).rounded(.down))
             while k >= 1, dates.count < maxEntries {
                 let t = start.addingTimeInterval(-TimeInterval(k * 60))
                 if t > now { dates.append(t) }
                 k -= 1
             }
+            // Capped before the start: end the timeline at the last minute, so `.atEnd` reloads there instead of
+            // holding a stale count until the meeting.
+            if k >= 1 { return Array(Set(dates.filter { $0 >= now })).sorted() }
         }
         dates.append(start)
         dates.append(end)

@@ -149,9 +149,13 @@ final class WidgetTimelineTests: XCTestCase {
         for d in before { XCTAssertEqual(start.timeIntervalSince(d).truncatingRemainder(dividingBy: 60), 0) }
     }
 
-    func testEntriesAreCapped() {
+    /// A far meeting: the list stops at the cap with no jump to the start, so the count never goes stale.
+    func testCappedEntriesEndWithoutAGap() {
         let start = now.addingTimeInterval(5 * 3600)
-        XCTAssertLessThanOrEqual(WidgetTimeline.entryDates(now: now, start: start, end: start.addingTimeInterval(1800)).count, 92)
+        let dates = WidgetTimeline.entryDates(now: now, start: start, end: start.addingTimeInterval(1800))
+        XCTAssertLessThanOrEqual(dates.count, 90)
+        XCTAssertFalse(dates.contains(start))
+        for (a, b) in zip(dates, dates.dropFirst()) { XCTAssertLessThanOrEqual(b.timeIntervalSince(a), 60) }
     }
 
     /// The widget's count reads like Home's: number and unit, and the short Dynamic Island form.
