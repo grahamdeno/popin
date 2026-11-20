@@ -50,8 +50,8 @@ struct MeetingCountdownActivity: Widget {
             } compactLeading: {
                 GumBall().frame(width: 18, height: 18)
             } compactTrailing: {
-                // 9.3: short and self-updating ("8:00"); iOS can't refresh a plain "8m" on its own.
-                CountdownLabel(state: context.state, showsHours: false)
+                // 9.3: "8m", kept current by the system's own timer source.
+                ShortCount(state: context.state)
                     .font(.footnote.weight(.semibold).monospacedDigit())
                     .foregroundStyle(.white)
                     .frame(maxWidth: 52)
@@ -141,6 +141,26 @@ private struct ProgressBar: View {
             .tint(GumColors.accent)
             .frame(height: 4)
             .accessibilityHidden(true)
+        }
+    }
+}
+
+/// 9.3: the compact Dynamic Island's "8m". The system's timer source updates it without the app; minutes only,
+/// rounded up like Home's count, so it reads "1m" in the last minute and "Now" once it rings.
+private struct ShortCount: View {
+    let state: AlarmPresentationState
+
+    var body: some View {
+        switch state.mode {
+        case .countdown(let countdown):
+            let minutes = Text(.currentDate, format: .timer(countingDownIn: Date.now..<countdown.fireDate,
+                                                            showsHours: false, maxFieldCount: 1,
+                                                            maxPrecision: .seconds(60)))
+            Text("\(minutes)m")
+        case .alert:
+            Text("Now")
+        default:
+            Text("Soon")
         }
     }
 }
