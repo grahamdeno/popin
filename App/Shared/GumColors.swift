@@ -471,6 +471,8 @@ enum GumColors {
     static var light: Color { GumPalette.current.light }
     static var dark: Color { GumPalette.current.dark }
     static var accent: Color { GumPalette.current.accent }
+    /// Small words in the theme's color on white: tested at 4.5:1 or better for every theme.
+    static var accentText: Color { GumPalette.current.accentText }
 }
 
 /// A still gum ball with its gloss, for small places (Lock Screen card, Dynamic Island).
