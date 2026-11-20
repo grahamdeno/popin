@@ -7,6 +7,9 @@
 html { -webkit-text-size-adjust:100%; background:var(--paper); }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
 a { color:inherit; }
+/* GR-23: a visible ring for keyboard focus. */
+a:focus-visible, .btn:focus-visible { outline:3px solid var(--pink-ink); outline-offset:3px; border-radius:12px; }
+.band a:focus-visible { outline-color:var(--pink); }
 .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
 nav { display:flex; align-items:center; gap:12px; padding:20px 0; }
 nav .brand { display:flex; align-items:center; gap:10px; font-weight:600; font-size:18px; text-decoration:none; margin-right:auto; }
@@ -73,8 +76,12 @@ footer a { color:var(--muted); text-decoration:none; }
   .split { grid-template-columns:1fr; gap:36px; }
   .split.rev .txt { order:0; }
   .cols { grid-template-columns:1fr; }
-  .moves { grid-template-columns:repeat(3, 76%); overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:12px; }
-  .moves figure { scroll-snap-align:center; }
+  .moves { grid-template-columns:1fr; gap:48px; }
   section.s { padding:64px 0; }
-  nav a.link { display:none; }
+  nav { gap:4px; }
+  nav a { white-space:nowrap; }
+  nav a.link { padding:8px 6px; font-size:14px; }
+  nav .brand { font-size:16px; gap:8px; }
+  nav .brand img { width:30px; height:30px; }
+  nav .btn.sm { padding:0 12px; font-size:14px; }
 }
