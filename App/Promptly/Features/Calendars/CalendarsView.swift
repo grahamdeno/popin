@@ -24,10 +24,14 @@ struct CalendarsView: View {
                 CalendarsList()
                 Color.clear.frame(height: 90)
             }
+            // GR-9: a solid white backing under the pinned button, down to the bottom edge, so no words show below it.
             Button("Done", action: onDone)
                 .buttonStyle(PrimaryButtonStyle(height: 56))
                 .padding(.horizontal, 20)
+                .padding(.top, 12)
                 .padding(.bottom, 24)
+                .frame(maxWidth: .infinity)
+                .background(Color.white.ignoresSafeArea(edges: .bottom))
         }
         .task { await model.refresh() }
         .sheet(isPresented: Binding(get: { model.showPro }, set: { model.showPro = $0 })) {
