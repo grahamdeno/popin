@@ -123,6 +123,9 @@ the meeting I choose rings.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: the "Not ringing" line also has Undo
+  until the meeting starts, so a mis-tapped pick can be reversed, as Not going can (7.2); undone after its ring time,
+  its alarm comes up at once. A dropped meeting appears only on that line.
 
 #### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
 As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my
@@ -181,6 +184,11 @@ phone I see what needs me now.
 - Given that stack, when the user pops the current alarm or chooses Not going, then the whole stack clears.
 - Given two meetings start at the same minute and no pick was made, then one alarm rings showing both, with a Join
   for each.
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: popping or Not going on a shared alarm stops the same-minute
+  meetings ringing but doesn't clear them; they stay on Home as story 1.1's "Not ringing" line with Join, so a
+  meeting is never lost by answering its neighbour. Snooze snoozes them together. A meeting seconds later in the same
+  minute never takes over. Undo right after the pop brings everything back; Undo later on the quiet line brings back
+  only the skipped meeting.
 
 #### 1.4 Gentler alarms while in a meeting
 As someone already in a meeting, I want the next meeting's alarm to be gentle, so it doesn't startle me or
@@ -320,6 +328,9 @@ thinking.
 - The screenshot pipeline stores landscape iPad frames the right way round before they are published.
 - Checked by: the pictures from `screenshots.yml`; Grok on the live store after 1.1 is approved. Publishing and
   uploading happen under 1.1's ship go.
+- Checked 2026-11-19 (Opus): the pipeline already stores iPad frames upright (`screenshots.yml` turns sideways frames;
+  the `appstore-screenshots` branch from run 43700633526 holds 2752 x 2064 upright pictures). The live store still has
+  the older sideways ones; they are replaced with 1.1's pictures under the ship go (Grok).
 
 **Out of scope:** the rest of the design review (items 8 to 10, 1.2). A "Join" word on the card: only if 7.1's
 scrolling isn't enough at XXXL, and only with Graham's approval.
@@ -423,8 +434,10 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 #### 8.14 First run in fewer steps (GR-21, D-18)
 - Given a first run, then the hello screen and the calendar screen are one: "Never miss the start of a meeting", the
   reason Pop In needs the calendar, and "Allow calendar access". First run takes one tap fewer.
-- The card sits in the top third, and the bubble is fully visible above the buttons.
-- Checked by: J1 pictures; the walk's first-run tap count is one lower than today.
+- The card sits in the top third, and the bubble is fully visible above the buttons on the first screen at standard
+  text sizes; on later steps and at larger sizes the column scrolls.
+- Checked by: J1 pictures (including the small phone); the walk's "Finish first run" benchmark, 4 taps from the first
+  screen (5 before).
 
 #### 8.15 Theme in the ⋯ menu (GR-20)
 - Given the ⋯ menu, then "Theme" opens the theme gallery directly.
@@ -467,6 +480,8 @@ his phone with the test build. The audit walk doesn't reach widgets, so the phon
 ### 10. Settings as a native Form: try one page (approved 2026-11-18, in 1.1)
 - Rebuild the Alarm page as a `Form`, compare pictures with the current page, then decide (D-8).
 - Sonnet builds the trial; Opus and Graham decide.
+- The trial view and its `formtrial` demo scene are removed, or adopted, before the 1.1 go-live verdict, as with 7.1's
+  card switch (added 2026-11-19).
 
 ### 11. Requirement: demo mode saves nothing (approved 2026-11-18, in 1.1)
 - Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise

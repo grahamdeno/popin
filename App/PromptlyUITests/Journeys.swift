@@ -94,7 +94,7 @@ final class Journeys: XCTestCase {
         a.pause(1.0)
     }
 
-    // J1. First run: hello, calendars, alarms, choose calendars, covered, Home.
+    // J1. First run: hello with the calendar reason, alarms, choose calendars, covered, Home (8.14: one tap fewer).
     func test01_FirstRun() {
         let a = Audit("J1-first-run")
         defer { a.finish() }
@@ -103,10 +103,18 @@ final class Journeys: XCTestCase {
         a.accessibility("hello")
         a.labels("hello")
         a.check("hello says what Pop In does", a.text(containing: "rings before each meeting").exists, severity: 2)
-        a.tap("Get started", a.app.buttons["Get started"], severity: 4)
-        a.pause(0.8)
-        a.shot("calendars-why")
-        a.accessibility("calendars-why")
+        // 8.14: hello and the calendar reason are one screen, so first run takes one tap fewer (4: calendars,
+        // alarms, Done, Done).
+        a.check("hello says why Pop In needs the calendar", a.text(containing: "never changes them").exists, severity: 2)
+        a.check("hello has no separate Get started step", !a.app.buttons["Get started"].exists, severity: 3)
+        let allow = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Allow calendar")).firstMatch
+        let title = a.text(containing: "Never miss the start")
+        if allow.waitForExistence(timeout: 2), title.exists {
+            let card = title.frame
+            a.check("the card sits in the top third", card.minY < a.app.frame.height / 3, severity: 2,
+                    detail: "card top \(card.minY) of \(a.app.frame.height)")
+        }
+        a.begin("Finish first run")
         a.tap("Allow calendar access", a.button(startingWith: "Allow calendar"), severity: 4)
         a.pause(1.2)
         a.shot("alarms-why")
@@ -126,7 +134,7 @@ final class Journeys: XCTestCase {
         a.tap("Done (covered)", a.app.buttons["Done"], severity: 4)
         a.pause(1.5)
         a.shot("home-after-first-run")
-        a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4)
+        a.done("Finish first run", a.expect("Home shows the next meeting", a.any(containing: "Design review"), severity: 4))
     }
 
     // J2. Home with a meeting minutes away: read it, pop to join, Undo.
@@ -238,6 +246,12 @@ final class Journeys: XCTestCase {
         a.check("the hint is showing in the near scene", hint.exists, severity: 3)
         a.check("the countdown keeps its size when the hint appears", abs(farHeight - near.frame.height) < 1, severity: 3,
                 detail: "a day away \(farHeight) pt; 7 minutes with the hint \(near.frame.height) pt")
+        // 8.9: on a regular-width iPad the countdown starts at 110 pt (a line about 131 pt tall; iPhone's 88 pt is about
+        // 105). Centring beside the bubble is checked from the iPad pictures.
+        if UIDevice.current.userInterfaceIdiom == .pad, near.exists {
+            a.check("iPad countdown is at least 110 pt type", near.frame.height >= 125, severity: 2,
+                    detail: "countdown height \(near.frame.height) pt")
+        }
     }
 
     // J5. The takeover when it rings, then late with buds.
@@ -384,6 +398,11 @@ final class Journeys: XCTestCase {
         a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
                 detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
+        // Item 10: the Alarm group as a native Form, pictured beside today's Settings for the decision (D-8).
+        a.launch("formtrial")
+        a.pause(1.5)
+        a.shot("form-trial-alarm", note: "Item 10 trial: the Alarm group as a native Form")
+        a.accessibility("form-trial-alarm")
     }
 
     // J7. A long list of calendars: fold, search, turn a whole account off.
@@ -606,6 +625,18 @@ final class Journeys: XCTestCase {
             }
             a.tap("Cancel", a.app.buttons["Cancel"].firstMatch, severity: 1)
             a.pause(0.6)
+        }
+        // 1.1: two meetings at the same minute: Home says so and offers a pick; picking leaves a quiet line.
+        a.launch("clash")
+        a.shot("clash-pick", note: "Two meetings at the same minute: Pick one")
+        let pick = a.app.buttons["clash-pick"].firstMatch
+        if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
+            a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
+            if a.tap("Pick one", pick, severity: 2), a.tap("Design review", a.app.buttons["Design review"].firstMatch, severity: 2, timeout: 2) {
+                a.pause(1)
+                a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
+                a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
+            }
         }
         a.launch("dupes")
         a.shot("duplicate-merged", note: "Design review and its FW copy show as one meeting")
