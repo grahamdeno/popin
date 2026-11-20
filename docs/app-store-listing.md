@@ -70,3 +70,34 @@ Pop In reads the iPhone's calendars (read only) and sets meeting alarms with Ala
 6. Settings, per calendar: "Smart alarms. Nothing leaves your iPhone"
 
 Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752).
+
+## 1.1 draft (Opus, 2026-11-19; for Graham's review at Stage 6, nothing changes in App Store Connect until the ship go)
+
+**What's New (4000):**
+Pop In 1.1 makes the alarm harder to miss and easier to read.
+
+• A missed alarm keeps ringing: if you don't answer, it rings again about every 15 minutes until you dismiss it, the meeting ends, or your next meeting's alarm is due.
+• Two meetings at the same time? Home tells you ahead of time and lets you pick the one that rings. The other stays on Home with Join.
+• One alarm at a time: answering the current alarm clears the meetings it took over from.
+• Already in a meeting you popped? The next alarm still fills the screen, but rings more softly.
+• A new Home card that works at every text size, with a bigger countdown on iPad.
+• Changed your mind about Not going? Bring the meeting back from Home until it starts.
+• Your own reminders say Skip instead of Not going.
+• Widgets read "8 min" like the app, and look right on tinted and clear Home Screens.
+• A clearer Pro sheet, theme gallery and Settings, and a shorter first run.
+
+**Promotional text (170):** unchanged.
+
+**Description, lines to change:**
+• "Alarms for meetings with a video link, gentle notifications for the rest" → "Smart rings for meetings with a video link and sends a quiet notification for the rest"
+• "Per calendar: always ring, link or not, or keep it quiet" → "Per calendar: Always rings or Quiet"
+• Add under FREE: "A missed alarm rings again until you answer it, or until the meeting ends"
+• Add under FREE: "Two meetings at once? Pick the one that rings"
+• "When your phone is locked, the alarm fills the screen." → "When your phone is locked, the alarm fills the screen with Join and Dismiss."
+
+**Review notes, lines to add:**
+A missed alarm repeats about every 15 minutes until it is dismissed, its meeting ends, or the next meeting's alarm is due. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
+
+**Screenshots:** retake from 1.1's screenshot run; iPad pictures are upright (7.5). Same captions; check caption 6 against the new Settings.
+
+**Unchanged:** name, subtitle, keywords, price, age rating, privacy label (Data Not Collected), URLs.
