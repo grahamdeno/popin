@@ -140,20 +140,6 @@ enum BallStyle: String, CaseIterable, Sendable {
     case steady
 }
 
-/// How cards on Home are drawn. The white plate is the default; glass is behind the debug switch in Settings,
-/// Diagnostics, for Graham's phone check, and is removed before release.
-enum CardStyle: String, CaseIterable, Sendable {
-    case plate
-    case glass
-
-    static let key = "cardStyle"
-
-    /// The stored choice, or the plate.
-    static var current: CardStyle {
-        Prefs.current.defaults.string(forKey: key).flatMap(CardStyle.init(rawValue:)) ?? .plate
-    }
-}
-
 /// Settings and small state, kept in the shared App Group so the widget (next sprint) can read them.
 final class Prefs: @unchecked Sendable {
     static let suite = SettingsSuite.real
@@ -192,11 +178,6 @@ final class Prefs: @unchecked Sendable {
     var ballStyle: BallStyle {
         get { BallStyle(rawValue: defaults.string(forKey: "ballStyle") ?? "") ?? .bubble }
         set { defaults.set(newValue.rawValue, forKey: "ballStyle") }
-    }
-
-    var cardStyle: CardStyle {
-        get { CardStyle(rawValue: defaults.string(forKey: CardStyle.key) ?? "") ?? .plate }
-        set { defaults.set(newValue.rawValue, forKey: CardStyle.key) }
     }
 
     /// Countdown card on the Lock Screen and in the Dynamic Island for ten minutes before the alarm. Default on.

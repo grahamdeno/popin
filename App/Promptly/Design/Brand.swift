@@ -44,19 +44,15 @@ struct Plate: ViewModifier {
     }
 }
 
-/// A card: keeps text readable when the bubble rises behind it. The white plate by default; glass only when the
-/// debug switch in Settings, Diagnostics asks for it (Graham's phone check).
+/// A card: keeps text readable when the bubble rises behind it. Always the white plate (7.1; the glass option was
+/// removed before 1.1 shipped).
 struct GlassCard: ViewModifier {
     func body(content: Content) -> some View {
-        let padded = content
+        content
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
-        if CardStyle.current == .glass {
-            padded.glassEffect(.regular, in: .rect(cornerRadius: 24))
-        } else {
-            padded.plate(cornerRadius: 24)
-        }
+            .plate(cornerRadius: 24)
     }
 }
 
