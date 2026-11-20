@@ -67,10 +67,10 @@ struct WidgetCount: View {
 
     var body: some View {
         let parts = CountText.parts(now: now, start: start)
-        let ink = parts.unit.isEmpty ? (mode == .fullColor ? GumColors.dark : Color.primary) : (mode == .fullColor ? Color(white: 0.08) : Color.primary)
+        let ink = parts.unit.isEmpty ? (mode == .fullColor ? GumColors.dark : Color.primary) : (mode == .fullColor ? Tokens.ink : Color.primary)
         let bigText = Text(parts.big).font(big.monospacedDigit()).foregroundStyle(ink)
         let unitText = Text(parts.unit.isEmpty ? "" : " \(parts.unit)").font(unit)
-            .foregroundStyle(mode == .fullColor ? Color(white: 0.42) : Color.secondary)
+            .foregroundStyle(mode == .fullColor ? Tokens.secondary : Color.secondary)
         Text("\(bigText)\(unitText)")
             .lineLimit(1)
             .minimumScaleFactor(0.7)
@@ -99,8 +99,8 @@ struct NextMeetingView: View {
     @Environment(\.widgetFamily) private var family
     @Environment(\.widgetRenderingMode) private var mode
 
-    private var ink: Color { mode == .fullColor ? Color(white: 0.08) : .primary }
-    private var secondary: Color { mode == .fullColor ? Color(white: 0.42) : .secondary }
+    private var ink: Color { mode == .fullColor ? Tokens.ink : .primary }
+    private var secondary: Color { mode == .fullColor ? Tokens.secondary : .secondary }
     private var timeColor: Color { mode == .fullColor ? GumColors.dark : .primary }
     /// Words over the gum: white on the colored ball, plain on the outline.
     private var onBall: Color { mode == .fullColor ? .white : .primary }
@@ -298,8 +298,8 @@ private struct UpcomingView: View {
     let entry: NextMeetingEntry
     @Environment(\.widgetFamily) private var family
     @Environment(\.widgetRenderingMode) private var mode
-    private var ink: Color { mode == .fullColor ? Color(white: 0.08) : .primary }
-    private var secondary: Color { mode == .fullColor ? Color(white: 0.42) : .secondary }
+    private var ink: Color { mode == .fullColor ? Tokens.ink : .primary }
+    private var secondary: Color { mode == .fullColor ? Tokens.secondary : .secondary }
 
     var body: some View {
         let items = ([entry.next].compactMap { $0 } + entry.then).prefix(family == .systemLarge ? 6 : 3)
