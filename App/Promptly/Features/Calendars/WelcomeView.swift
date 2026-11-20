@@ -147,11 +147,11 @@ struct WelcomeView: View {
 struct AlarmLooksPreview: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            look("Phone locked", "Full screen. Tap Open to join.") { LockedAlarmPreview() }
+            look("Phone locked", "Full screen. Tap Join to join the call.") { LockedAlarmPreview() }
             look("Using your phone", "A banner at the top. Tap it for the bubble.") { UnlockedBannerPreview() }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("When your phone is locked, the alarm fills the screen with Open and Stop. When you're using your phone, it shows as a banner at the top; tap it for the bubble.")
+        .accessibilityLabel("When your phone is locked, the alarm fills the screen with Join and Dismiss. When you're using your phone, it shows as a banner at the top; tap it for the bubble.")
     }
 
     private func look<Content: View>(_ label: String, _ caption: String, @ViewBuilder _ content: () -> Content) -> some View {
@@ -212,11 +212,11 @@ struct LockedAlarmPreview: View {
                 }
             }
             HStack(spacing: 10) {
-                Text("Open")
+                Text("Join Zoom")
                     .font(.subheadline.weight(.semibold)).foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 40)
                     .background(Capsule().fill(Brand.coralDark))
-                Text("Stop")
+                Text("Dismiss")
                     .font(.subheadline.weight(.semibold)).foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 40)
                     .background(Capsule().fill(.white.opacity(0.2)))
@@ -225,6 +225,6 @@ struct LockedAlarmPreview: View {
         .padding(16)
         .background(RoundedRectangle(cornerRadius: 22).fill(Color(white: 0.12)))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Example: the locked alarm shows the meeting, an Open button and a Stop button.")
+        .accessibilityLabel("Example: the locked alarm shows the meeting, a Join button and a Dismiss button.")
     }
 }
