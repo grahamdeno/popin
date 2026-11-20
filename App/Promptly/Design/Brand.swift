@@ -6,9 +6,9 @@ enum Brand {
     static var coral: Color { GumColors.accent }
     static var coralLight: Color { GumPalette.current.accentLight }
     static var coralDark: Color { GumPalette.current.accentDark }
-    static let ink = Color(red: 0x14 / 255, green: 0x14 / 255, blue: 0x14 / 255)
+    static let ink = Tokens.ink
     /// 8:1 on white; stays readable on the glass pane over the bubble.
-    static let secondary = Color(red: 0x4A / 255, green: 0x4A / 255, blue: 0x4A / 255)
+    static let secondary = Tokens.secondary
     /// Pink for small words on white (links, labels): the bubble pinks are too light to read at small sizes.
     static var accentText: Color { GumPalette.current.accentText }
     static let hairline = Color(red: 0xEF / 255, green: 0xEF / 255, blue: 0xEF / 255)

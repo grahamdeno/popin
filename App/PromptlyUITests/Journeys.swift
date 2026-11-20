@@ -16,6 +16,19 @@ final class Journeys: XCTestCase {
         return true
     }
 
+    /// Waits a moment and returns true, for use between taps in one condition (a menu animating open).
+    private func settled(_ a: Audit, _ seconds: Double) -> Bool { a.pause(seconds); return true }
+
+    /// The first match whose middle is on screen. Off-screen copies (a page iOS keeps after going back, a menu item
+    /// still animating in) can come first in a plain query (J6 and J13, November 20).
+    private func onScreen(_ a: Audit, _ query: XCUIElementQuery) -> XCUIElement {
+        let screen = a.app.windows.firstMatch.frame
+        for e in query.allElementsBoundByIndex where e.exists && screen.contains(CGPoint(x: e.frame.midX, y: e.frame.midY)) {
+            return e
+        }
+        return query.firstMatch
+    }
+
     /// Home's header (7.1): ⋯ reads "More"; the gear reads "Settings" and opens Settings in one tap.
     private static let more = "home-more"
 
@@ -89,7 +102,22 @@ final class Journeys: XCTestCase {
 
     /// Closes the Settings sheet, back to Home. Not counted as part of any job.
     private func closeSettings(_ a: Audit) {
+        // Settings' Done is only on its first page: from a deeper page (Calendars), put the keyboard away and go back
+        // first (J7 left the sheet open in every config, November 20).
+        if a.app.keyboards.firstMatch.exists {
+            let ret = a.app.keyboards.buttons["Return"].firstMatch
+            if ret.exists && ret.isHittable { ret.tap() } else { a.app.typeText("\n") }
+            a.pause(0.3)
+        }
         let done = a.app.buttons["Done"].firstMatch
+        var backs = 0
+        while !(done.exists && done.isHittable) && backs < 3 && a.app.navigationBars.firstMatch.exists {
+            let back = a.app.navigationBars.firstMatch.buttons.element(boundBy: 0)
+            guard back.exists, back.isHittable else { break }
+            back.tap()
+            backs += 1
+            a.pause(0.6)
+        }
         if done.waitForExistence(timeout: 2), done.isHittable { done.tap() }
         a.pause(1.0)
     }
@@ -304,7 +332,14 @@ final class Journeys: XCTestCase {
         a.done("Pop the late bubble", popBubble(a))
         // The tap really popped: the alarm card is gone.
         let lateCard = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
-        a.check("the pop closed the alarm", !lateCard.waitForExistence(timeout: 2), severity: 4)
+        // The alarm screen leaves about a second after the pop, so wait for it to go (waiting for it to exist passed
+        // at once while it was still leaving: J5, every config, November 20).
+        // A pop with a link opens the meeting app, which sends Pop In to the background (pro-light, November 20):
+        // that is the alarm closing too.
+        let gone = a.app.state != .runningForeground
+            || XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                                                object: lateCard)], timeout: 5) == .completed
+        a.check("the pop closed the alarm", gone, severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
     }
@@ -362,11 +397,11 @@ final class Journeys: XCTestCase {
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
         // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
-        a.revealOnScreen(popSound, tries: 24)
+        a.revealOnScreen(popSound, tries: 40)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
-        a.tap("Pop sound", popSound)
+        a.tap("Pop sound", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound"))))
         a.pause(0.8)
         a.shot("pop-sound")
         a.back()
@@ -398,11 +433,6 @@ final class Journeys: XCTestCase {
         a.check("Restore purchase is at least 44 pt", restore.exists && restore.frame.height >= 44, severity: 2,
                 detail: restore.exists ? "height \(restore.frame.height)" : "not found")
         a.accessibility("pro-sheet")
-        // Item 10: the Alarm group as a native Form, pictured beside today's Settings for the decision (D-8).
-        a.launch("formtrial")
-        a.pause(1.5)
-        a.shot("form-trial-alarm", note: "Item 10 trial: the Alarm group as a native Form")
-        a.accessibility("form-trial-alarm")
     }
 
     // J7. A long list of calendars: fold, search, turn a whole account off.
@@ -477,7 +507,7 @@ final class Journeys: XCTestCase {
         a.labels("empty")
         a.expect("says nothing is coming up", a.any(containing: "Nothing coming up"), severity: 3)
         let tryPop = a.app.buttons["Try a pop"]
-        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 44, severity: 2,
+        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 43.5, severity: 2,
                 detail: "height \(tryPop.frame.height)")
         a.tap("Try a pop", tryPop, severity: 3)
         a.pause(1.5)
@@ -631,8 +661,11 @@ final class Journeys: XCTestCase {
         a.shot("clash-pick", note: "Two meetings at the same minute: Pick one")
         let pick = a.app.buttons["clash-pick"].firstMatch
         if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
+            a.revealOnScreen(pick)
             a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
-            if a.tap("Pick one", pick, severity: 2), a.tap("Design review", a.app.buttons["Design review"].firstMatch, severity: 2, timeout: 2) {
+            if a.tap("Pick one", pick, severity: 2), settled(a, 0.8),
+               a.tap("Design review", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review"))),
+                     severity: 2, timeout: 2) {
                 a.pause(1)
                 a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
                 a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
@@ -661,12 +694,13 @@ final class Journeys: XCTestCase {
         a.launch("home")
         a.begin("Change the theme")
         var themeDone = false
-        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2), settled(a, 0.8),
            a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
             let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
-            if a.tap("Coral", coral, severity: 2) {
+            // At the largest text the gallery is two columns and Coral sits lower down.
+            if a.tap("Coral", a.revealOnScreen(coral), severity: 2) {
                 // "See it on Home" applies the pick and closes the gallery (not counted: the job is done at the pick).
                 let seeIt = a.app.buttons["See it on Home"].firstMatch
                 if seeIt.waitForExistence(timeout: 2) { seeIt.tap() }

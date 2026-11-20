@@ -9,8 +9,6 @@ struct HomeView: View {
     @State private var playing = false
     @State private var showGallery = false
     @State private var showCalendars = ScreenshotMode.scene.map { [ScreenshotScene.settings, .pro, .manycals].contains($0) } ?? false
-    /// Item 10's Form trial, shown only in its demo scene.
-    @State private var showFormTrial = ScreenshotMode.scene == .formtrial
 
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .largeTitle) private var titleSize: CGFloat = 32
@@ -124,7 +122,6 @@ struct HomeView: View {
         .sheet(isPresented: $addingReminder) {
             AddReminderSheet().environment(model)
         }
-        .sheet(isPresented: $showFormTrial) { AlarmFormTrial().environment(model) }
         .sheet(isPresented: $showCalendars, onDismiss: { model.applyPendingTheme() }) {
             SettingsView()
                 .environment(model)
@@ -283,6 +280,9 @@ struct HomeView: View {
         HStack(spacing: 8) {
             Wordmark()
             Spacer()
+            // D-6: ⋯ and the gear as two matching glass circles, at least 44 pt.
+            GlassEffectContainer(spacing: 8) {
+            HStack(spacing: 8) {
             Menu {
                 Button("Add a reminder", systemImage: "plus") { addingReminder = true }
                 Button("Pop for fun", systemImage: "circle.hexagongrid") { playing = true }
@@ -301,7 +301,7 @@ struct HomeView: View {
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(Brand.ink)
                     .frame(width: 44, height: 44)
-                    .background(Circle().fill(Brand.ink.opacity(0.07)))
+                    .glassEffect(.regular.interactive(), in: .circle)
                     .contentShape(Circle())
             }
             .accessibilityLabel("More")
@@ -309,15 +309,18 @@ struct HomeView: View {
             .accessibilityShowsLargeContentViewer()
             Button { showCalendars = true } label: {
                 Image(systemName: "gearshape")
-                    .font(.system(size: 20, weight: .regular))
+                    .font(.system(size: 18, weight: .regular))
                     .foregroundStyle(Brand.ink)
                     .frame(width: 44, height: 44)
-                    .contentShape(Rectangle())
+                    .glassEffect(.regular.interactive(), in: .circle)
+                    .contentShape(Circle())
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Settings")
             .accessibilityIdentifier("home-settings")
             .accessibilityShowsLargeContentViewer()
+            }
+            }
         }
         .dynamicTypeSize(.large)
         .padding(.horizontal, 24)

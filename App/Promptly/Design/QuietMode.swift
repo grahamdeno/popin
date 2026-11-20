@@ -40,33 +40,3 @@ enum QuietMode {
         return true
     }
 }
-
-/// Dims the screen a little while quiet, and puts the brightness back when quiet ends or the screen goes away.
-struct QuietBrightness: ViewModifier {
-    let quiet: Bool
-    @State private var saved: CGFloat?
-    @Environment(\.scenePhase) private var phase
-
-    func body(content: Content) -> some View {
-        content
-            .onChange(of: quiet) { _, now in now ? dim() : restore() }
-            .onChange(of: phase) { _, p in if p != .active { restore() } }
-            .onDisappear { restore() }
-    }
-
-    private var screen: UIScreen? {
-        UIApplication.shared.connectedScenes.compactMap { ($0 as? UIWindowScene)?.screen }.first
-    }
-
-    private func dim() {
-        guard saved == nil, let screen, !ScreenshotMode.isOn else { return }
-        saved = screen.brightness
-        screen.brightness = max(0.1, screen.brightness * 0.6)
-    }
-
-    private func restore() {
-        guard let saved, let screen else { return }
-        screen.brightness = saved
-        self.saved = nil
-    }
-}

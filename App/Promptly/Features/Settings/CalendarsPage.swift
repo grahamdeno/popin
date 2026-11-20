@@ -16,6 +16,7 @@ struct CalendarsList: View {
     @State private var query = ""
     @State private var expanded: Set<String> = []
     @State private var seeded = false
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     private static let foldAbove = 5
 
@@ -62,8 +63,11 @@ struct CalendarsList: View {
     private func accountGroup(_ group: CalendarGroup, open: Bool) -> some View {
         let on = group.onCount(disabled: model.disabledCalendarIDs)
         let allOn = on == group.calendars.count
+        // GR-9: at accessibility sizes "Turn all off" goes under the account name, so names don't break mid-word.
+        let header = typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
+                                                  : AnyLayout(HStackLayout(spacing: 10))
         return VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 10) {
+            header {
                 Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         if expanded.contains(group.source) { expanded.remove(group.source) } else { expanded.insert(group.source) }
@@ -97,7 +101,8 @@ struct CalendarsList: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(Brand.accentText)
                         .padding(.vertical, 12)
-                        .padding(.leading, 12)
+                        .padding(.leading, typeSize.isAccessibilitySize ? 0 : 12)
+                        .frame(minHeight: 44)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)

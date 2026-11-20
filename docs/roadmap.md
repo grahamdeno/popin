@@ -48,6 +48,8 @@ Newest first. Refined decisions only.
 | 2026-11-19 | Answering a shared alarm keeps its same-minute neighbour on Home as "Not ringing" with Join | Graham approved: one tap never loses a meeting (story 1.3) |
 | 2026-11-19 | A clash pick can be undone from the "Not ringing" line until the meeting starts | Graham approved: a mis-tapped pick is reversible, like Not going (story 1.1) |
 | 2026-11-19 | On a call on this phone, the alarm is the quiet full-screen one, not a nudge | iOS can't hold back a scheduled alarm or see calls while Pop In is closed; Graham approved (story 1.4) |
+| 2026-11-19 | Settings stays as built, not a native Form | Graham decided from the walk pictures (item 10); the trial is removed |
+| 2026-11-20 | Test build 1.1 from main at 2f2ecb6: `testflight.yml` run by hand (run 44677075012, upload on) | Under Graham's written exception for 1.1. The `testflight` branch is on 1.0's history and can't move without a force-push, so the workflow was run on main instead |
 | 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
@@ -459,6 +461,36 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - This deploys the site: it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
 - Checked by: a picture of the site at 1280 and 390 wide; review of `site/` and `docs/brand.md`.
 
+Added 2026-11-19 with Graham's approval: the review findings first set for later (GR-9, D-6, GR-23, GR-24, GR-25).
+
+#### 8.18 Calendars and first run at the largest text (GR-9)
+- Given an accessibility text size, then each account's "Turn all off" sits under the account name, so names don't
+  break mid-word, and stays at least 44 pt.
+- Given first run, then every pinned button (the calendar choices' Done and the welcome screens' buttons) has a solid
+  white backing to the bottom edge, so no words show behind or below it.
+- Checked by: big-text J1 and J7 pictures.
+
+#### 8.19 Home's top buttons (D-6)
+- Given Home, then ⋯ and the gear are two matching round glass buttons in one glass group, each at least 44 pt (not
+  the review's 40 pt, to keep the 44 pt rule). Names and VoiceOver labels are unchanged.
+- Checked by: J2 header checks and Home pictures.
+
+#### 8.20 One set of colors for the app and widgets (GR-24)
+- Given the app and the widgets, then ink and secondary come from one shared file, so the widgets' grey matches the
+  app's #4A4A4A. Unused code (the quiet-mode dimming) is removed. Corner radii and minimum heights stay as they are.
+- Checked by: the build; widget pictures on Graham's phone.
+
+#### 8.21 The site on phones (GR-23)
+- Given popin.tangomike.app on a phone, then "How it works" stacks with no sideways scroll, Support and Privacy stay
+  in the top bar (hidden under 360 px), links show a focus ring, and the unused `site/style.css` is removed.
+- This deploys the site: it ships with 8.12 and 8.17 under the ship go.
+- Checked by: the site pictures at 390 wide.
+
+#### 8.22 App Store accessibility labels (GR-25)
+- Given the App Store page, then it declares Larger Text, VoiceOver, Reduce Motion and Sufficient Contrast.
+- An App Store Connect change: Grok makes it at the ship, under the ship go.
+- Checked by: Grok's report of the live store page.
+
 ### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, shaped 2026-11-19)
 Goal: the widgets and the Live Activity read like Home, on every Home Screen look. From GR-11, D-12, D-13 (M5).
 The widgets stay light on a dark Home Screen (light only). Steps: Opus builds; Fable reviews; Graham checks them on
@@ -485,6 +517,9 @@ his phone with the test build. The audit walk doesn't reach widgets, so the phon
 - Sonnet builds the trial; Opus and Graham decide.
 - The trial view and its `formtrial` demo scene are removed, or adopted, before the 1.1 go-live verdict, as with 7.1's
   card switch (added 2026-11-19).
+- Decided 2026-11-19 (Graham): keep today's Settings. The walk pictures showed the two read much the same, and today's
+  keeps the Pro row and theme balls. The trial is removed. Revisit only if Settings gains several new pages or an
+  accessibility audit finds a problem a Form would fix.
 
 ### 11. Requirement: demo mode saves nothing (approved 2026-11-18, in 1.1)
 - Starting Pop In in demo mode (`-screenshots`) leaves the saved settings unchanged, including the theme and Surprise
