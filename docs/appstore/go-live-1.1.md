@@ -19,12 +19,12 @@ run on e9bfe11, Graham's quick open of the third build, his ship go, and Grok's 
 | Stored data | Additive only | New keys clashDroppedIDs, poppedMeetingIDs, snoozeRings, dismissedMeetingIDs, repeatAlarmIDs; older data lacks them |
 | Compiled-in dates | Unchanged | GumPalette.releaseDays identical to 1.0 (next: 2026-11-30) |
 | Version | 1.1 | project.yml at e9bfe11 |
-| Tests and guard on e9bfe11 | **Open** | build.yml run 44752973079 on e9bfe11; cdd049a passed (run 44704005583) |
+| Tests and guard on e9bfe11 | Passed | build.yml run 44752973079 on e9bfe11 (re-run after a cancel) |
 | UX audit | Passed for the app | Walk on 518d89e (same app code as build 1); #100 and #101 reviewed after; walk-only items in #96 and #99 |
 | Plate/Glass card switch (7.1) | Closed | Removed in #104 (Graham's go); Pop for fun's words also on the plate |
-| Phone checks | Passed (Graham, second build); third build: quick open pending | Graham: nothing in 1.1 needs correction (2026-11-20). The 15-minute repeat and Lock Screen Dismiss were in his checks |
+| Phone checks | Passed (Graham): second build tested; third build (1059) installed and looked over 2026-11-20 | Graham: nothing in 1.1 needs correction (2026-11-20). The 15-minute repeat and Lock Screen Dismiss were in his checks |
 | What's New, description, review notes | Ready | docs/app-store-listing.md "1.1 draft" (#94); Grok enters them |
-| Screenshots | **Open: Grok** | Retake from the shipping commit; captions five words or fewer (caption 1, "Lose track of time, not calls", matches the subtitle and stays) |
+| Screenshots | **Open: Grok** | Retaken from main (app code identical to e9bfe11), with the clash pick replacing Running late (#106); Graham asked for updated pictures |
 | Accessibility labels | **Open: Grok** | Larger Text, Reduce Motion, Sufficient Contrast. VoiceOver only after a hands-on pass |
 | Manual release | **Open: Grok** | Select manual release so approval doesn't release on its own |
 | Crash reports | **Open: Grok** | Check both test builds |
