@@ -46,6 +46,7 @@ Newest first. Refined decisions only.
 | 2026-11-19 | The seven findings first proposed for later (GR-16, GR-20, GR-21, GR-22, D-15, D-18, D-20) are in 1.1 as stories 8.13 to 8.17 | Graham: handle them in 1.1 |
 | 2026-11-19 | A missed alarm goes quiet for up to 15 minutes before the next meeting's alarm rather than risk silencing it | Graham chose the quiet gap (option A): the meeting he can still make always rings |
 | 2026-11-19 | Answering a shared alarm keeps its same-minute neighbour on Home as "Not ringing" with Join | Graham approved: one tap never loses a meeting (story 1.3) |
+| 2026-11-19 | A clash pick can be undone from the "Not ringing" line until the meeting starts | Graham approved: a mis-tapped pick is reversible, like Not going (story 1.1) |
 | 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
@@ -124,7 +125,7 @@ the meeting I choose rings.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
-- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: the "Not ringing" line also has Undo
+- Approved by Graham 2026-11-19: the "Not ringing" line also has Undo
   until the meeting starts, so a mis-tapped pick can be reversed, as Not going can (7.2); undone after its ring time,
   its alarm comes up at once. A dropped meeting appears only on that line.
 
