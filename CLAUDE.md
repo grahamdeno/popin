@@ -23,6 +23,8 @@ test only). If you find a trigger that isn't listed, stop and add it.
 ## Rules that must never be missed
 
 - **Graham presses Submit for Review and Release.** Agents stop right before them. Never automate either.
+  One-time exception for 1.1 only (Graham, 2026-11-20): Grok presses Submit for Review after reading it back and
+  getting Graham's yes. Release stays Graham's. Every other release follows the rule.
 - **Three go-aheads, never mixed:** "merge" allows merging named PRs that trigger nothing above; "test build" allows
   one TestFlight upload for testing; "ship [version] at [commit]" comes after the go-live verdict. None implies
   another. If unsure which applies, ask.
