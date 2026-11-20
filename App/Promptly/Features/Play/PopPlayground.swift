@@ -101,6 +101,7 @@ struct PopPlayground: View {
                 .foregroundStyle(Brand.ink)
                 .padding(.horizontal, 14)
                 .frame(minHeight: 36)
+                .background(Color.white.opacity(Brand.plateOpacity), in: .capsule)
                 .glassEffect(.regular, in: .capsule)
                 .accessibilityAddTraits(.updatesFrequently)
             if let game, game.combo >= PopGame.comboFrom, !over {
@@ -109,6 +110,7 @@ struct PopPlayground: View {
                     .foregroundStyle(Brand.accentText)
                     .padding(.horizontal, 12)
                     .frame(minHeight: 36)
+                    .background(Color.white.opacity(Brand.plateOpacity), in: .capsule)
                     .glassEffect(.regular, in: .capsule)
                     .accessibilityLabel("Combo \(game.combo)")
             }
@@ -119,6 +121,7 @@ struct PopPlayground: View {
                     .foregroundStyle(Brand.ink)
                     .frame(width: 44, height: 44)
             }
+            .background(Color.white.opacity(Brand.plateOpacity), in: .circle)
             .glassEffect(.regular, in: .circle)
             .accessibilityLabel("Done")
         }
@@ -146,6 +149,7 @@ struct PopPlayground: View {
         }
         .padding(.horizontal, 16)
         .frame(minHeight: 48)
+        .background(Color.white.opacity(Brand.plateOpacity), in: .capsule)
         .glassEffect(.regular, in: .capsule)
         .id(target)
         .transition(.scale.combined(with: .opacity))
@@ -168,6 +172,7 @@ struct PopPlayground: View {
         }
         .padding(18)
         .frame(maxWidth: 420)
+        .background(Color.white.opacity(Brand.plateOpacity), in: .rect(cornerRadius: 28))
         .glassEffect(.regular, in: .rect(cornerRadius: 28))
         .padding(.horizontal, 16)
     }
@@ -199,6 +204,7 @@ struct PopPlayground: View {
         }
         .padding(18)
         .frame(maxWidth: 420)
+        .background(Color.white.opacity(Brand.plateOpacity), in: .rect(cornerRadius: 28))
         .glassEffect(.regular, in: .rect(cornerRadius: 28))
         .padding(.horizontal, 16)
     }
