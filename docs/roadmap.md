@@ -47,6 +47,7 @@ Newest first. Refined decisions only.
 | 2026-11-19 | A missed alarm goes quiet for up to 15 minutes before the next meeting's alarm rather than risk silencing it | Graham chose the quiet gap (option A): the meeting he can still make always rings |
 | 2026-11-19 | Answering a shared alarm keeps its same-minute neighbour on Home as "Not ringing" with Join | Graham approved: one tap never loses a meeting (story 1.3) |
 | 2026-11-19 | A clash pick can be undone from the "Not ringing" line until the meeting starts | Graham approved: a mis-tapped pick is reversible, like Not going (story 1.1) |
+| 2026-11-19 | On a call on this phone, the alarm is the quiet full-screen one, not a nudge | iOS can't hold back a scheduled alarm or see calls while Pop In is closed; Graham approved (story 1.4) |
 | 2026-11-19 | Story 1.2 plans on a 15-minute alert (an iPhone alarm rings about 15 minutes, and AlarmKit alarms ring like Clock); no separate phone test | Published measurements; Graham asked not to be given a manual test |
 | 2026-11-19 | A missed alarm with no later meeting to hand over to stops when its meeting ends | Graham's decision; it never rings overnight |
 | 2026-11-19 | 1.1 carries every finding from Grok's design review: epics 8 to 11 join epics 1 and 7, in one release. Items 2 to 6 stay in 1.2. Epics 8 and 9 are still to shape; each is shaped and read back before it's built, and the scope stays frozen to what they list | Graham: one release; Pop In has no active users yet |
@@ -205,8 +206,8 @@ interrupt others while I'm speaking.
   alarm is a separate sound file (`quiet_alarm.wav`, the recorded pops at a quarter of the level). CallKit's call
   observer only reports while Pop In is running, and a scheduled AlarmKit alarm can't be held back at the moment it
   fires, so "no takeover while on a call on the phone" can't be built as written. Built: any alarm that rings while
-  a popped meeting is still running uses the quiet sound, full screen as usual. Open for Graham: accept that for the
-  on-the-phone case too, or keep it as a later item.
+  a popped meeting is still running uses the quiet sound, full screen as usual. Graham approved 2026-11-19: the quiet
+  full-screen alarm covers the on-the-phone case in 1.1.
 
 **Out of scope:** a "joined elsewhere" button. Revisit if this epic isn't enough.
 
