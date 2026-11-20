@@ -6,8 +6,6 @@ struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
     @State private var versionTaps = 0
-    /// Debug card switch (Diagnostics): "plate" or "glass". Home reads the same key through `CardStyle.current`.
-    @AppStorage(CardStyle.key, store: Prefs.current.defaults) private var cardStyleRaw = CardStyle.plate.rawValue
 
     var body: some View {
         NavigationStack {
@@ -240,13 +238,6 @@ struct SettingsView: View {
             Picker("Ball", selection: Binding(get: { model.ballStyle }, set: { model.ballStyle = $0 })) {
                 Text("Bubble").tag(BallStyle.bubble)
                 Text("Steady ball").tag(BallStyle.steady)
-            }
-            .pickerStyle(.segmented)
-            .padding(.vertical, 10)
-            // Debug switch for the phone check: the card as the white plate (default) or as glass.
-            Picker("Card", selection: $cardStyleRaw) {
-                Text("Plate").tag(CardStyle.plate.rawValue)
-                Text("Glass").tag(CardStyle.glass.rawValue)
             }
             .pickerStyle(.segmented)
             .padding(.vertical, 10)

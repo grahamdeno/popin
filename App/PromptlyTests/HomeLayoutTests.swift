@@ -106,19 +106,4 @@ final class HomeLayoutTests: XCTestCase {
         }
     }
 
-    // MARK: Card material
-
-    /// The card is the white plate unless the debug switch asks for glass.
-    func testCardStyleDefaultsToPlate() {
-        let defaults = UserDefaults(suiteName: "promptly.tests.\(UUID().uuidString)")!
-        let prefs = Prefs(defaults: defaults)
-        XCTAssertEqual(prefs.cardStyle, .plate)
-        prefs.cardStyle = .glass
-        XCTAssertEqual(prefs.cardStyle, .glass)
-        prefs.cardStyle = .plate
-        XCTAssertEqual(prefs.cardStyle, .plate)
-        // A stored value nobody wrote falls back to the plate.
-        defaults.set("frosted", forKey: CardStyle.key)
-        XCTAssertEqual(prefs.cardStyle, .plate)
-    }
 }
