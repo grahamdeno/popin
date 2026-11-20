@@ -700,7 +700,7 @@ final class Journeys: XCTestCase {
         a.begin("Change the theme")
         var themeDone = false
         if a.tap("More", a.app.buttons[Journeys.more], severity: 2), settled(a, 0.8),
-           a.tap("Theme", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Theme"))), severity: 2, timeout: 2) {
+           a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
             let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
