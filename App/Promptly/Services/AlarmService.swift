@@ -41,7 +41,7 @@ final class AlarmService {
     /// track of (say across an update), so a stale countdown can never linger in the Dynamic Island. An alarm that
     /// is ringing right now is left alone; stopAlerting handles those.
     /// `headsUp` marks early heads-up alarms: their Dismiss only stops them, so the main ring's repeats stay.
-    func sync(_ planned: [PlannedAlarm], keep: Set<UUID> = [], headsUp: Set<UUID> = []) async throws {
+    func sync(_ planned: [PlannedAlarm], keep: Set<UUID> = [], headsUp: Set<UUID> = [], quiet: Set<UUID> = []) async throws {
         let all = (try? manager.alarms) ?? []
         let existing = Set(all.map(\.id))
         let wanted = Dictionary(planned.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
@@ -51,7 +51,7 @@ final class AlarmService {
             owned.remove(alarm.id)
         }
         for (id, alarm) in wanted where !existing.contains(id) {
-            try await schedule(alarm, headsUp: headsUp.contains(id))
+            try await schedule(alarm, headsUp: headsUp.contains(id), quiet: quiet.contains(id))
             owned.insert(id)
         }
         ownedIDs = owned.intersection(Set(wanted.keys))
@@ -73,7 +73,7 @@ final class AlarmService {
         for alarm in (try? manager.alarms) ?? [] { try? manager.cancel(id: alarm.id) }
     }
 
-    private func schedule(_ planned: PlannedAlarm, headsUp: Bool = false) async throws {
+    private func schedule(_ planned: PlannedAlarm, headsUp: Bool = false, quiet: Bool = false) async throws {
         let meeting = planned.meeting
         let joinText = LocalizedStringResource(stringLiteral: meeting.service.map { "Join \($0.rawValue)" } ?? "Open")
         let minutes = Int((meeting.start.timeIntervalSince(planned.fireDate) / 60).rounded())
@@ -109,7 +109,8 @@ final class AlarmService {
             stopIntent: stopIntent,
             secondaryIntent: OpenMeetingIntent(meetingID: meeting.id, joinURL: meeting.joinURL?.absoluteString ?? "",
                                                alarmID: planned.id.uuidString),
-            sound: sound == .appleDefault ? .default : .named(sound.fileName)
+            // Story 1.4: quieter while a popped meeting is still running.
+            sound: quiet ? .named(InMeetingRule.quietSoundFile) : (sound == .appleDefault ? .default : .named(sound.fileName))
         )
         _ = try await manager.schedule(id: planned.id, configuration: configuration)
     }

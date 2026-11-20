@@ -199,9 +199,12 @@ interrupt others while I'm speaking.
   meeting app is on a call), when the next alarm comes due, then there is no full-screen takeover. It's a nudge
   instead: a soft sound or haptic with Join.
 - Given the earlier meeting has ended, then alarms return to normal.
-- Open (check before shaping the build): can Pop In tell that the phone is on a call without network or new data
-  collection (for example, through CallKit's call observer)? Can AlarmKit play a quieter alarm, or does it need a
-  separate quiet sound file?
+- Answered 2026-11-19 (Opus, from the code and Apple's documentation): AlarmKit has no volume setting, so the quiet
+  alarm is a separate sound file (`quiet_alarm.wav`, the recorded pops at a quarter of the level). CallKit's call
+  observer only reports while Pop In is running, and a scheduled AlarmKit alarm can't be held back at the moment it
+  fires, so "no takeover while on a call on the phone" can't be built as written. Built: any alarm that rings while
+  a popped meeting is still running uses the quiet sound, full screen as usual. Open for Graham: accept that for the
+  on-the-phone case too, or keep it as a later item.
 
 **Out of scope:** a "joined elsewhere" button. Revisit if this epic isn't enough.
 

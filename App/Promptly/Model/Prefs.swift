@@ -398,6 +398,13 @@ final class Prefs: @unchecked Sendable {
         set { defaults.set(Array(newValue).sorted(), forKey: "skippedMeetingIDs") }
     }
 
+    /// Meetings the owner popped themselves (story 1.4): the only ones that count as "in a meeting". Not the same as
+    /// cleared, which also holds Not going and meetings cleared along with another. Added in 1.1.
+    var poppedMeetingIDs: Set<String> {
+        get { Set(defaults.stringArray(forKey: "poppedMeetingIDs") ?? []) }
+        set { defaults.set(Array(newValue).sorted(), forKey: "poppedMeetingIDs") }
+    }
+
     /// Meetings whose alarm was dismissed on the Lock Screen: no more repeats for them (story 1.2). Not the same as
     /// cleared: the meeting stays on Home. Added in 1.1; older versions ignore it.
     var dismissedMeetingIDs: Set<String> {
