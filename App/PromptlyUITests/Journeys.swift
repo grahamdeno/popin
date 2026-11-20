@@ -16,6 +16,16 @@ final class Journeys: XCTestCase {
         return true
     }
 
+    /// The first match whose middle is on screen. Off-screen copies (a page iOS keeps after going back, a menu item
+    /// still animating in) can come first in a plain query (J6 and J13, November 20).
+    private func onScreen(_ a: Audit, _ query: XCUIElementQuery) -> XCUIElement {
+        let screen = a.app.windows.firstMatch.frame
+        for e in query.allElementsBoundByIndex where e.exists && screen.contains(CGPoint(x: e.frame.midX, y: e.frame.midY)) {
+            return e
+        }
+        return query.firstMatch
+    }
+
     /// Home's header (7.1): ⋯ reads "More"; the gear reads "Settings" and opens Settings in one tap.
     private static let more = "home-more"
 
@@ -321,8 +331,11 @@ final class Journeys: XCTestCase {
         let lateCard = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
         // The alarm screen leaves about a second after the pop, so wait for it to go (waiting for it to exist passed
         // at once while it was still leaving: J5, every config, November 20).
-        let gone = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
-                                                                    object: lateCard)], timeout: 5) == .completed
+        // A pop with a link opens the meeting app, which sends Pop In to the background (pro-light, November 20):
+        // that is the alarm closing too.
+        let gone = a.app.state != .runningForeground
+            || XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                                                object: lateCard)], timeout: 5) == .completed
         a.check("the pop closed the alarm", gone, severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
@@ -385,7 +398,7 @@ final class Journeys: XCTestCase {
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
-        a.tap("Pop sound", popSound)
+        a.tap("Pop sound", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound"))))
         a.pause(0.8)
         a.shot("pop-sound")
         a.back()
@@ -652,7 +665,9 @@ final class Journeys: XCTestCase {
         if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
             a.revealOnScreen(pick)
             a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
-            if a.tap("Pick one", pick, severity: 2), a.tap("Design review", a.app.buttons["Design review"].firstMatch, severity: 2, timeout: 2) {
+            if a.tap("Pick one", pick, severity: 2), { a.pause(0.8); return true }(),
+               a.tap("Design review", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review"))),
+                     severity: 2, timeout: 2) {
                 a.pause(1)
                 a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
                 a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
@@ -681,8 +696,8 @@ final class Journeys: XCTestCase {
         a.launch("home")
         a.begin("Change the theme")
         var themeDone = false
-        if a.tap("More", a.app.buttons[Journeys.more], severity: 2),
-           a.tap("Theme", a.app.buttons["Theme"], severity: 2, timeout: 2) {
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2), { a.pause(0.8); return true }(),
+           a.tap("Theme", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Theme"))), severity: 2, timeout: 2) {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
             let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
