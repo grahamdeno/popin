@@ -94,7 +94,7 @@ A missed alarm now keeps ringing.
 • Add under FREE: "A missed alarm keeps ringing until you answer it or the meeting ends"
 • Add under FREE: "Two meetings at once? Pick the one that rings"
 
-**Accessibility (new on the store page, 8.22):** declare Larger Text and Reduce Motion (backed by the walk and the code). Declare Sufficient Contrast only once the widgets' "Pop to join" sits on a white plate (held PR, white on pink is 2.4:1 today), and VoiceOver only after a hands-on VoiceOver pass of the common tasks on the phone. Grok sets these in App Store Connect at the ship.
+**Accessibility (new on the store page, 8.22):** declare Larger Text, Reduce Motion and Sufficient Contrast (backed by the walk, the code and the contrast tests; the widget words were fixed in #101 for the second test build). Declare VoiceOver only after a hands-on VoiceOver pass of the common tasks on the phone. Grok sets these in App Store Connect at the ship.
 
 **Review notes, lines to add:**
 A missed alarm keeps ringing until it is dismissed, its meeting ends, or the next meeting is about to ring. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
