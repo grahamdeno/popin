@@ -1,0 +1,129 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "6:34 AM to 7:04 AM",
+      "screen" : "moon-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "",
+      "screen" : "moon-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "moon-home",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "4",
+      "screen" : "moon-home",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "4",
+      "screen" : "grenade-home",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "grenade-home",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "pro-light",
+  "finished" : true,
+  "journey" : "J11-moon-grenade",
+  "pictures" : 4,
+  "seconds" : 46,
+  "steps" : [
+    {
+      "dt" : 9.4900000000000002,
+      "file" : "01-moon-home.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "moon-home",
+      "note" : "",
+      "t" : 9.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x101e478f0, {{-210.6, 345.8}, {823.9, 903.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x101e478f0, {{-210.6, 345.8}, {823.9, 903.5}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x101c7ff10, {{-213.1, 336.3}, {828.8, 913.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x101c7ff10, {{-213.1, 336.3}, {828.8, 913.4}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 9.9800000000000004,
+      "file" : "02-moon-pop.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "moon-pop",
+      "note" : "",
+      "t" : 19.5
+    },
+    {
+      "dt" : 8.3800000000000008,
+      "file" : "03-grenade-home.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "grenade-home",
+      "note" : "",
+      "t" : 27.800000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x1178cac60, {{-28.6, 578.5}, {459.6, 504.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1178cac60, {{-28.6, 578.5}, {459.6, 504.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1072756a0, {{-27.0, 585.3}, {456.4, 498.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1072756a0, {{-27.0, 585.3}, {456.4, 498.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 9.7899999999999991,
+      "file" : "04-grenade-pop.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "grenade-pop",
+      "note" : "",
+      "t" : 37.600000000000001
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "Moon says Next transmission",
+      "ok" : true,
+      "severity" : 0
+    }
+  ]
+}

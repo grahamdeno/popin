@@ -1,0 +1,315 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "ipad",
+  "finished" : true,
+  "journey" : "J2-home-soon",
+  "pictures" : 4,
+  "seconds" : 71,
+  "steps" : [
+    {
+      "dt" : 13.109999999999999,
+      "file" : "01-home.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "home",
+      "note" : "",
+      "t" : 13.1
+    },
+    {
+      "buttons" : [
+        "More",
+        "Settings",
+        "Not going",
+        "Pop the bubble to join Design review"
+      ],
+      "kind" : "labels",
+      "n" : 1,
+      "name" : "home",
+      "texts" : [
+        "pop in",
+        "Next · Zoom, Rings 2 min before, Design review",
+        "Next · Zoom",
+        "Rings 2 min before",
+        "Design review",
+        "8, min",
+        "8",
+        "min",
+        "6:25 AM to 6:55 AM",
+        "Pop the bubble to join",
+        "Later",
+        "7:20 AM",
+        "Team standup",
+        "9:25 AM",
+        "Lunch with Sam",
+        "Tomorrow 9:30 AM",
+        "Sprint planning"
+      ]
+    },
+    {
+      "detail" : "Attributes: Button, 0x10622bfd0, {{622.0, 604.5}, {676.5, 735.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x10622bfd0, {{622.0, 604.5}, {676.5, 735.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card names the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x1060da800, {{68.0, 316.5}, {408.0, 66.6}}, label: 'Next · Zoom, Rings 2 min before, Design review'\nElement subtree:\n →StaticText, 0x1060da800, {{68.0, 316.5}, {408.0, 66.6}},",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card says how long",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x10b2e3b90, {{68.0, 316.5}, {408.0, 66.6}}, label: 'Next · Zoom, Rings 2 min before, Design review'\nElement subtree:\n →StaticText, 0x10b2e3b90, {{68.0, 316.5}, {408.0, 66.6}},",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card says it will ring",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x10b391630, {{359.0, 570.0}, {117.0, 44.0}}, label: 'Not going'\nElement subtree:\n →Button, 0x10b391630, {{359.0, 570.0}, {117.0, 44.0}}, label: 'Not going'\nPath to element:\n →Appl",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Not going is visible",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x10b27f7c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x10b27f7c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Settings is reachable",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "More is on screen and hittable (column at the top)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the gear (Settings) is on screen and hittable (column at the top)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "label More",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "VoiceOver names the ⋯ button More (column at the top)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "label Settings",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "VoiceOver names the gear Settings (column at the top)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is hittable with the column at the top",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is hittable with the column at the bottom",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 21.890000000000001,
+      "file" : "02-home-column-bottom.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "home-column-bottom",
+      "note" : "The column scrolled to its end; the header stays at the top",
+      "t" : 35
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "More is on screen and hittable (column at the bottom)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the gear (Settings) is on screen and hittable (column at the bottom)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "label More",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "VoiceOver names the ⋯ button More (column at the bottom)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "label Settings",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "VoiceOver names the gear Settings (column at the bottom)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117124830, {{359.0, 570.0}, {117.0, 44.0}}, label: 'Not going'\nElement subtree:\n →Button, 0x117124830, {{359.0, 570.0}, {117.0, 44.0}}, label: 'Not going'\nPath to element:\n →Appl",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Not going exists (Home)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Not going is reachable by scrolling (Home)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Not going is at least 44 pt tall (Home)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11715cf10, {{618.7, 591.5}, {683.0, 748.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11715cf10, {{618.7, 591.5}, {683.0, 748.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1170e0a40, {{619.1, 592.8}, {682.4, 747.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1170e0a40, {{619.1, 592.8}, {682.4, 747.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 2,
+      "name" : "Join the next meeting",
+      "ok" : true,
+      "seconds" : 11.5,
+      "taps" : 1
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "job done: Join the next meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Undo is offered after the pop",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117427640, {{748.5, 956.0}, {44.0, 44.0}}, label: 'Undo'\nElement subtree:\n →Button, 0x117427640, {{748.5, 956.0}, {44.0, 44.0}}, label: 'Undo'\nPath to element:\n →Application, 0x1",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "can tap Undo",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 30.120000000000001,
+      "file" : "03-after-undo.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "after-undo",
+      "note" : "",
+      "t" : 65.099999999999994
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 3,
+      "name" : "Undo a pop",
+      "ok" : true,
+      "seconds" : 4.5999999999999996,
+      "taps" : 1
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "job done: Undo a pop",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11750d500, {{618.7, 591.4}, {683.1, 748.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11750d500, {{618.7, 591.4}, {683.1, 748.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117625ab0, {{620.3, 597.9}, {679.8, 742.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x117625ab0, {{620.3, 597.9}, {679.8, 742.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 6.0499999999999998,
+      "file" : "04-popping.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "popping",
+      "note" : "mid-pop",
+      "t" : 71.200000000000003
+    }
+  ]
+}

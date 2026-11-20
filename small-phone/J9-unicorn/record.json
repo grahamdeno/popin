@@ -1,0 +1,89 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "unicorn-home",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "unicorn-home",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "6:37 AM to 7:07 AM",
+      "screen" : "unicorn-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "Pop the bubble to join",
+      "screen" : "unicorn-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "Not going",
+      "screen" : "unicorn-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    }
+  ],
+  "config" : "small-phone",
+  "finished" : true,
+  "journey" : "J9-unicorn",
+  "pictures" : 3,
+  "seconds" : 16,
+  "steps" : [
+    {
+      "dt" : 7.96,
+      "file" : "01-unicorn-home.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "unicorn-home",
+      "note" : "",
+      "t" : 8
+    },
+    {
+      "detail" : "Attributes: Button, 0x103861840, {{-194.5, 353.0}, {779.0, 846.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x103861840, {{-194.5, 353.0}, {779.0, 846.3}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1039d08f0, {{-199.0, 335.2}, {788.0, 864.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1039d08f0, {{-199.0, 335.2}, {788.0, 864.2}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 7.2999999999999998,
+      "file" : "02-unicorn-pop-early.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "unicorn-pop-early",
+      "note" : "",
+      "t" : 15.300000000000001
+    },
+    {
+      "dt" : 0.44,
+      "file" : "03-unicorn-pop-late.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "unicorn-pop-late",
+      "note" : "",
+      "t" : 15.699999999999999
+    }
+  ]
+}

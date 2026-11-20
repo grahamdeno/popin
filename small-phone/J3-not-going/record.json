@@ -1,0 +1,152 @@
+{
+  "accessibility" : [
+
+  ],
+  "config" : "small-phone",
+  "finished" : true,
+  "journey" : "J3-not-going",
+  "pictures" : 4,
+  "seconds" : 32,
+  "steps" : [
+    {
+      "detail" : "Attributes: Button, 0x1037319e0, {{237.3, 362.0}, {116.7, 44.0}}, label: 'Not going'\nElement subtree:\n →Button, 0x1037319e0, {{237.3, 362.0}, {116.7, 44.0}}, label: 'Not going'\nPath to element:\n →Appl",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "can tap Not going",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 0,
+      "name" : "Skip a meeting",
+      "ok" : true,
+      "seconds" : 3.5,
+      "taps" : 1
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "job done: Skip a meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "Undo is offered",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x10372d0b0, {{271.7, 754.0}, {44.0, 44.0}}, label: 'Undo'\nElement subtree:\n →Button, 0x10372d0b0, {{271.7, 754.0}, {44.0, 44.0}}, label: 'Undo'\nPath to element:\n →Application, 0x1",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "can tap Undo",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 14.35,
+      "file" : "01-after-undo.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "after-undo",
+      "note" : "",
+      "t" : 14.4
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the meeting is back",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the toast names the skip",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Undo at (271.66666666666663, 754.0, 44.0, 44.0), screen (0.0, 0.0, 390.0, 844.0)",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the toast's Undo is inside the bottom quarter",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 3.1099999999999999,
+      "file" : "02-not-going.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "not-going",
+      "note" : "Toast: Not going to Design review · Undo",
+      "t" : 17.5
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the toast has gone after 5 seconds",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 10.27,
+      "file" : "03-not-going-line.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "not-going-line",
+      "note" : "Not going: [time] Design review · Undo, in the strip under the card",
+      "t" : 27.699999999999999
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the quiet line shows the skipped meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the quiet line's Undo is at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1038da450, {{314.0, 482.0}, {44.0, 44.0}}, identifier: 'undo-skip', label: 'Undo Not going, Design review'\nElement subtree:\n →Button, 0x1038da450, {{314.0, 482.0}, {44.0, 44.0}},",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap Undo on the quiet line, 10 seconds later",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the meeting is back after 10 seconds",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 4.1699999999999999,
+      "file" : "04-after-line-undo.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "after-line-undo",
+      "note" : "",
+      "t" : 31.899999999999999
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "",
+      "screen" : "unicorn-home",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "unicorn-home",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "unicorn-home",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "big-text",
+  "finished" : true,
+  "journey" : "J9-unicorn",
+  "pictures" : 3,
+  "seconds" : 21,
+  "steps" : [
+    {
+      "dt" : 9.4100000000000001,
+      "file" : "01-unicorn-home.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "unicorn-home",
+      "note" : "",
+      "t" : 9.4000000000000004
+    },
+    {
+      "detail" : "Attributes: Button, 0x106446330, {{-188.4, 383.5}, {778.8, 845.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x106446330, {{-188.4, 383.5}, {778.8, 845.9}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1064a0ed0, {{-190.6, 374.5}, {783.3, 854.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1064a0ed0, {{-190.6, 374.5}, {783.3, 854.8}}, label: 'Pop",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 11.44,
+      "file" : "02-unicorn-pop-early.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "unicorn-pop-early",
+      "note" : "",
+      "t" : 20.899999999999999
+    },
+    {
+      "dt" : 0.46999999999999997,
+      "file" : "03-unicorn-pop-late.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "unicorn-pop-late",
+      "note" : "",
+      "t" : 21.300000000000001
+    }
+  ]
+}

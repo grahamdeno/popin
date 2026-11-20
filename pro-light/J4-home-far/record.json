@@ -1,0 +1,107 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "1",
+      "screen" : "home-far",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-far",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "pro-light",
+  "finished" : true,
+  "journey" : "J4-home-far",
+  "pictures" : 1,
+  "seconds" : 29,
+  "steps" : [
+    {
+      "dt" : 9.3499999999999996,
+      "file" : "01-home-far.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "home-far",
+      "note" : "",
+      "t" : 9.4000000000000004
+    },
+    {
+      "buttons" : [
+        "Pop the bubble to join Sprint planning",
+        "More",
+        "Settings",
+        "Not going"
+      ],
+      "kind" : "labels",
+      "n" : 1,
+      "name" : "home-far",
+      "texts" : [
+        "pop in",
+        "Next · Meet, Rings 2 min before, Sprint planning",
+        "Next · Meet",
+        "Rings 2 min before",
+        "Sprint planning",
+        "1, day",
+        "1",
+        "day",
+        "Tomorrow 9:30 AM to 10:30 AM",
+        "Then Tomorrow 4:35 PM ·, Design review",
+        "Then Tomorrow 4:35 PM ·",
+        "Design review"
+      ]
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x101f4c320, {{36.0, 339.7}, {226.3, 19.3}}, label: 'Tomorrow 9:30 AM to 10:30 AM'\nElement subtree:\n →StaticText, 0x101f4c320, {{36.0, 339.7}, {226.3, 19.3}}, label: 'Tomorrow ",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the day is named",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x101f59920, {{249.3, 377.0}, {116.7, 44.0}}, label: 'Not going'\nElement subtree:\n →Button, 0x101f59920, {{249.3, 377.0}, {116.7, 44.0}}, label: 'Not going'\nPath to element:\n →Appl",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Not going is visible",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x101ecdbc0, {{36.0, 230.3}, {96.3, 105.3}}, identifier: 'countdown', label: '1, day'\nElement subtree:\n →StaticText, 0x101ecdbc0, {{36.0, 230.3}, {96.3, 105.3}}, identifier: 'c",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the countdown is named (a day away)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x101f61b00, {{36.0, 230.3}, {96.3, 105.3}}, identifier: 'countdown', label: '8, min'\nElement subtree:\n →StaticText, 0x101f61b00, {{36.0, 230.3}, {96.3, 105.3}}, identifier: 'c",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the countdown is named (7 minutes)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the hint is showing in the near scene",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "a day away 105.33332824707031 pt; 7 minutes with the hint 105.33332824707031 pt",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the countdown keeps its size when the hint appears",
+      "ok" : true,
+      "severity" : 0
+    }
+  ]
+}

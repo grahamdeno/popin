@@ -1,0 +1,491 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "",
+      "screen" : "missed",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "",
+      "screen" : "missed",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "2",
+      "screen" : "missed",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "Add",
+      "screen" : "add-reminder",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.",
+      "element" : "When",
+      "screen" : "add-reminder",
+      "summary" : "Contrast nearly passed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.",
+      "element" : "Reminders stay on this device and ring like a meeting.",
+      "screen" : "add-reminder",
+      "summary" : "Contrast nearly passed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "Cancel",
+      "screen" : "add-reminder",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "Add",
+      "screen" : "add-reminder",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "Reminders stay on this device and ring like a meeting.",
+      "screen" : "add-reminder",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.",
+      "element" : "Cancel",
+      "screen" : "add-reminder",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    },
+    {
+      "detail" : "Text of this UITextField may be clipped at larger Dynamic Type sizes.",
+      "element" : "",
+      "screen" : "add-reminder",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    },
+    {
+      "detail" : "Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.",
+      "element" : "Reminders stay on this device and ring like a meeting.",
+      "screen" : "add-reminder",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    },
+    {
+      "detail" : "Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.",
+      "element" : "Pop until Design review",
+      "screen" : "playground",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    },
+    {
+      "detail" : "Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.",
+      "element" : "Target round",
+      "screen" : "playground",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    }
+  ],
+  "config" : "small-phone",
+  "finished" : true,
+  "journey" : "J13-edge-cases",
+  "pictures" : 14,
+  "seconds" : 194,
+  "steps" : [
+    {
+      "dt" : 8.3000000000000007,
+      "file" : "01-missed-under-new-alarm.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "missed-under-new-alarm",
+      "note" : "New alarm up; the unpopped earlier meeting shows as Also missed with Join",
+      "t" : 8.3000000000000007
+    },
+    {
+      "detail" : "Attributes: StaticText, 0x10394c060, {{33.0, 330.9}, {237.0, 15.7}}, label: 'Also missed: 6:26 AM Weekly sync'\nElement subtree:\n →StaticText, 0x10394c060, {{33.0, 330.9}, {237.0, 15.7}}, label: 'Also ",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the missed line says Also missed",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x103742040, {{303.3, 317.0}, {54.7, 44.0}}, label: 'Join Weekly sync'\nElement subtree:\n →Button, 0x103742040, {{303.3, 317.0}, {54.7, 44.0}}, label: 'Join Weekly sync'\nPath to ele",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the missed meeting has its own Join",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the missed meeting's Join is at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 18.899999999999999,
+      "file" : "02-paused-home.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "paused-home",
+      "note" : "Paused until is the first row of the column; card says Paused until",
+      "t" : 27.199999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x11a983f50, {{16.0, 115.0}, {358.0, 44.0}}, label: 'Paused until 7:51 AM · Resume'\nElement subtree:\n →Button, 0x11a983f50, {{16.0, 115.0}, {358.0, 44.0}}, label: 'Paused until 7:5",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the Paused line is a button",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the Paused line is at least 44 pt tall",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "paused 115.0, card 347.54729133624005",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the Paused line is above the card",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 8.8900000000000006,
+      "file" : "03-outside-work-hours.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "outside-work-hours",
+      "note" : "Card says Outside work hours, quiet notification",
+      "t" : 36.100000000000001
+    },
+    {
+      "dt" : 7.2999999999999998,
+      "file" : "04-own-reminder-next.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "own-reminder-next",
+      "note" : "An own reminder is next: card label Reminder",
+      "t" : 43.399999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x11a9bd520, {{277.3, 362.0}, {76.7, 44.0}}, label: 'Skip'\nElement subtree:\n →Button, 0x11a9bd520, {{277.3, 362.0}, {76.7, 44.0}}, label: 'Skip'\nPath to element:\n →Application, 0x1",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "the reminder offers Skip",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "the reminder doesn't say Not going",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11b86a290, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', label: 'More'\nElement subtree:\n →Button, 0x11b86a290, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', l",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "can tap More",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1194e01f0, {{64.0, 65.0}, {250.0, 42.0}}, identifier: 'plus', label: 'Add a reminder'\nElement subtree:\n →Button, 0x1194e01f0, {{64.0, 65.0}, {250.0, 42.0}}, identifier: 'plus', l",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "can tap Add a reminder",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Query chain:\n →Find: Target Application 'com.grahamdeno.promptly'\n  ↪︎Find: Descendants matching type Button\n    ↪︎Find: Elements matching predicate '\"Edit\" IN identifiers'\n      ↪︎Find: First Match\nNo m",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "Edit on your reminders",
+      "ok" : false,
+      "severity" : 2
+    },
+    {
+      "detail" : "Attributes: Button, 0x11acc74b0, {{20.0, 67.0}, {76.7, 36.0}}, label: 'Cancel'\nElement subtree:\n →Button, 0x11acc74b0, {{20.0, 67.0}, {76.7, 36.0}}, label: 'Cancel'\nPath to element:\n →Application, 0x1",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "can tap Cancel",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 27.559999999999999,
+      "file" : "05-clash-pick.png",
+      "kind" : "shot",
+      "n" : 5,
+      "name" : "clash-pick",
+      "note" : "Two meetings at the same minute: Pick one",
+      "t" : 70.900000000000006
+    },
+    {
+      "detail" : "Attributes: Button, 0x1194bc0f0, {{16.0, 440.0}, {358.0, 44.0}}, identifier: 'clash-pick', label: '2 meetings at 6:59 AM · Pick one'\nElement subtree:\n →Button, 0x1194bc0f0, {{16.0, 440.0}, {358.0, 44.",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "Home offers a pick for the clash",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "Pick one is at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11ac5eed0, {{16.0, 440.0}, {358.0, 44.0}}, identifier: 'clash-pick', label: '2 meetings at 6:59 AM · Pick one'\nElement subtree:\n →Button, 0x11ac5eed0, {{16.0, 440.0}, {358.0, 44.",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "can tap Pick one",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11bbafda0, {{70.0, 432.0}, {250.0, 42.0}}, label: 'Design review'\nElement subtree:\n →Button, 0x11bbafda0, {{70.0, 432.0}, {250.0, 42.0}}, label: 'Design review'\nPath to element:\n",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "can tap Design review",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 11.220000000000001,
+      "file" : "06-clash-picked.png",
+      "kind" : "shot",
+      "n" : 6,
+      "name" : "clash-picked",
+      "note" : "Client call drops to a Not ringing line with Join",
+      "t" : 82.200000000000003
+    },
+    {
+      "detail" : "Query chain:\n →Find: Target Application 'com.grahamdeno.promptly'\n  ↪︎Find: Descendants matching type StaticText\n    ↪︎Find: Elements matching predicate 'label CONTAINS[c] \"Not ringing\"'\n      ↪︎Find: Fi",
+      "kind" : "check",
+      "n" : 6,
+      "name" : "the other meeting shows as Not ringing",
+      "ok" : false,
+      "severity" : 3
+    },
+    {
+      "dt" : 12.109999999999999,
+      "file" : "07-duplicate-merged.png",
+      "kind" : "shot",
+      "n" : 7,
+      "name" : "duplicate-merged",
+      "note" : "Design review and its FW copy show as one meeting",
+      "t" : 94.299999999999997
+    },
+    {
+      "detail" : "Attributes: Button, 0x1194e7cd0, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', label: 'More'\nElement subtree:\n →Button, 0x1194e7cd0, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', l",
+      "kind" : "check",
+      "n" : 7,
+      "name" : "can tap More",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.710000000000001,
+      "file" : "08-more-menu.png",
+      "kind" : "shot",
+      "n" : 8,
+      "name" : "more-menu",
+      "note" : "Add a reminder, Pop for fun, Pause alerts",
+      "t" : 107
+    },
+    {
+      "detail" : "Attributes: Button, 0x114aec3a0, {{64.0, 65.0}, {250.0, 42.0}}, identifier: 'plus', label: 'Add a reminder'\nElement subtree:\n →Button, 0x114aec3a0, {{64.0, 65.0}, {250.0, 42.0}}, identifier: 'plus', l",
+      "kind" : "check",
+      "n" : 8,
+      "name" : "can tap Add a reminder",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 6.3799999999999999,
+      "file" : "09-add-reminder-sheet.png",
+      "kind" : "shot",
+      "n" : 9,
+      "name" : "add-reminder-sheet",
+      "note" : "",
+      "t" : 113.40000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x108b9b1d0, {{38.7, 614.2}, {84.1, 42.2}}, label: 'In 15 min'\nElement subtree:\n →Button, 0x108b9b1d0, {{38.7, 614.2}, {84.1, 42.2}}, label: 'In 15 min'\nPath to element:\n →Applicat",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "the quick time In 15 min",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11bbf5350, {{111.6, 664.0}, {97.8, 42.2}}, label: 'Pick a time'\nElement subtree:\n →Button, 0x11bbf5350, {{111.6, 664.0}, {97.8, 42.2}}, label: 'Pick a time'\nPath to element:\n →Ap",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "Pick a time",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "Add is disabled until there's a title",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "the footer says this device",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x114a05d20, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', label: 'More'\nElement subtree:\n →Button, 0x114a05d20, {{270.0, 55.0}, {44.0, 44.0}}, identifier: 'home-more', l",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "can tap More",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11927ca00, {{64.0, 149.0}, {250.0, 42.0}}, identifier: 'paintpalette', label: 'Theme'\nElement subtree:\n →Button, 0x11927ca00, {{64.0, 149.0}, {250.0, 42.0}}, identifier: 'paintpa",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "can tap Theme",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 30.800000000000001,
+      "file" : "10-theme-from-menu.png",
+      "kind" : "shot",
+      "n" : 10,
+      "name" : "theme-from-menu",
+      "note" : "The theme gallery, opened from the ⋯ menu",
+      "t" : 144.19999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x108fe9330, {{143.3, 439.7}, {103.3, 105.7}}, label: 'Coral'\nElement subtree:\n →Button, 0x108fe9330, {{143.3, 439.7}, {103.3, 105.7}}, label: 'Coral'\n    Other, 0x108fe9450, {{168",
+      "kind" : "check",
+      "n" : 10,
+      "name" : "can tap Coral",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 10,
+      "name" : "the gallery closes",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 7.1500000000000004,
+      "file" : "11-theme-applied.png",
+      "kind" : "shot",
+      "n" : 11,
+      "name" : "theme-applied",
+      "note" : "Home after picking Coral from the ⋯ menu: the bubble should be Coral",
+      "t" : 151.30000000000001
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 11,
+      "name" : "Change the theme",
+      "ok" : true,
+      "seconds" : 16.899999999999999,
+      "taps" : 3
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 11,
+      "name" : "job done: Change the theme",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 8.3699999999999992,
+      "file" : "12-pop-for-fun.png",
+      "kind" : "shot",
+      "n" : 12,
+      "name" : "pop-for-fun",
+      "note" : "",
+      "t" : 159.69999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x11aa1b070, {{9.2, 139.0}, {159.7, 160.1}}, label: 'Basketball bubble'\nElement subtree:\n →Button, 0x11aa1b070, {{9.2, 139.0}, {159.7, 160.1}}, label: 'Basketball bubble'\n    Other",
+      "kind" : "check",
+      "n" : 12,
+      "name" : "can tap a playground bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 13.220000000000001,
+      "file" : "13-pop-for-fun-popped.png",
+      "kind" : "shot",
+      "n" : 13,
+      "name" : "pop-for-fun-popped",
+      "note" : "",
+      "t" : 172.90000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x114c513b0, {{34.0, 646.0}, {322.0, 58.0}}, label: 'Target round, 30 seconds. Pop only the theme shown.'\nElement subtree:\n →Button, 0x114c513b0, {{34.0, 646.0}, {322.0, 58.0}}, la",
+      "kind" : "check",
+      "n" : 13,
+      "name" : "can tap Target round",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 13,
+      "name" : "the target is named",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 21.5,
+      "file" : "14-pop-for-fun-target.png",
+      "kind" : "shot",
+      "n" : 14,
+      "name" : "pop-for-fun-target",
+      "note" : "",
+      "t" : 194.40000000000001
+    }
+  ]
+}

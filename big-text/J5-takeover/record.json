@@ -1,0 +1,215 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "6:27 AM to 6:57 AM · Zoom",
+      "screen" : "ringing",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "Pop the bubble to join",
+      "screen" : "ringing",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "",
+      "screen" : "ringing",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "2",
+      "screen" : "ringing",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "big-text",
+  "finished" : true,
+  "journey" : "J5-takeover",
+  "pictures" : 4,
+  "seconds" : 90,
+  "steps" : [
+    {
+      "dt" : 15.66,
+      "file" : "01-ringing.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "ringing",
+      "note" : "",
+      "t" : 15.699999999999999
+    },
+    {
+      "buttons" : [
+        "Pop the bubble to join Design review",
+        "Not going",
+        "Snooze 2 min"
+      ],
+      "kind" : "labels",
+      "n" : 1,
+      "name" : "ringing",
+      "texts" : [
+        "Starts in",
+        "Starts in 2 min",
+        "2",
+        "min",
+        "Design review",
+        "6:27 AM to 6:57 AM · Zoom",
+        "Pop the bubble to join",
+        "Snooze 2 min"
+      ]
+    },
+    {
+      "detail" : "Attributes: Button, 0x106452230, {{36.0, 945.0}, {330.0, 77.0}}, label: 'Not going'\nElement subtree:\n →Button, 0x106452230, {{36.0, 945.0}, {330.0, 77.0}}, label: 'Not going'\nPath to element:\n →Applic",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Not going on the takeover",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x106558f00, {{-269.5, 256.0}, {938.4, 1042.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x106558f00, {{-269.5, 256.0}, {938.4, 1042.4}}, label: 'P",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the meeting title",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Other, 0x1064757e0, {{12.0, 86.0}, {378.0, 1028.7}}, identifier: 'alarm-card'\nElement subtree:\n →Other, 0x1064757e0, {{12.0, 86.0}, {378.0, 1028.7}}, identifier: 'alarm-card'\n    StaticTex",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the alarm card is shown",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card says Starts in",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card says how to join",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Snooze 2 min is the button's word and VoiceOver name",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Not going (32.0, 870.3333129882812, 338.0, 77.0)",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Not going is in the card, at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Snooze (32.0, 957.3333129882812, 338.0, 137.33331298828125)",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "Snooze 2 min is at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "time (32.0, 477.6666666666667, 245.66666666666663, 180.99999999999994), Not going (32.0, 870.3333129882812, 338.0, 77.0), Snooze (32.0, 957.3333129882812, 338.0, 137.33331298828125)",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "nothing overlaps the meeting time",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "scroll area (12.0, 86.0, 378.0, 569.6666666666666), screen (0.0, 0.0, 402.0, 874.0)",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card leaves the bottom quarter for the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.350000000000001,
+      "file" : "02-late-50s.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "late-50s",
+      "note" : "50 s after the ring: the first bud should be out",
+      "t" : 40
+    },
+    {
+      "dt" : 25.510000000000002,
+      "file" : "03-late-75s.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "late-75s",
+      "note" : "75 s after the ring: two or three buds",
+      "t" : 65.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x10ba3bb00, {{-267.0, 256.5}, {938.4, 1042.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x10ba3bb00, {{-267.0, 256.5}, {938.4, 1042.4}}, label: 'P",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117852bb0, {{-269.3, 255.8}, {938.4, 1042.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x117852bb0, {{-269.3, 255.8}, {938.4, 1042.4}}, label: 'P",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 3,
+      "name" : "Pop the late bubble",
+      "ok" : true,
+      "seconds" : 17.300000000000001,
+      "taps" : 1
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "job done: Pop the late bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the pop closed the alarm",
+      "ok" : false,
+      "severity" : 4
+    },
+    {
+      "dt" : 23.989999999999998,
+      "file" : "04-late-popping.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "late-popping",
+      "note" : "",
+      "t" : 89.5
+    }
+  ]
+}

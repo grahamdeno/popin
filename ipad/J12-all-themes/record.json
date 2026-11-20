@@ -1,0 +1,3218 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-snowball",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-snowball",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-ornament",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-ornament",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-pumpkin",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-pumpkin",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-disco",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-disco",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-soap",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-soap",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-planet",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-planet",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-basketball",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-basketball",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-donut",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-donut",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-waterBalloon",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-waterBalloon",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-eyeball",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-eyeball",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-fishbowl",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-fishbowl",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "Contrast failed for SwiftUI.AccessibilityNode",
+      "element" : "🐠",
+      "screen" : "home-fishbowl",
+      "summary" : "Contrast failed",
+      "type" : "contrast"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-moodRing",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-moodRing",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-lavaLamp",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-lavaLamp",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-soccer",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-soccer",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-hockey",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-hockey",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-tennis",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-tennis",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-golf",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-golf",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-baseball",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-baseball",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-bowling",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-bowling",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-pixel",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-pixel",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-gumball",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-gumball",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-cherry",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-cherry",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-orange",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-orange",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-macaron",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-macaron",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-cakePop",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-cakePop",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-earth",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-earth",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-sun",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-sun",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-dandelion",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-dandelion",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-atom",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-atom",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-geode",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-geode",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-yarn",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-yarn",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-arcadeButton",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-arcadeButton",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-clock",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-clock",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-marble",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-marble",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-duck",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-duck",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-easterEgg",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-easterEgg",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-valentine",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-valentine",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-fireworks",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-fireworks",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-beachBall",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-beachBall",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "8",
+      "screen" : "home-zen",
+      "summary" : "Dynamic Type font sizes are partially unsupported",
+      "type" : "dynamicType"
+    },
+    {
+      "detail" : "User will not be able to change the font size of this SwiftUI.AccessibilityNode",
+      "element" : "pop in",
+      "screen" : "home-zen",
+      "summary" : "Dynamic Type font sizes are unsupported",
+      "type" : "dynamicType"
+    }
+  ],
+  "config" : "ipad",
+  "finished" : true,
+  "journey" : "J12-all-themes",
+  "pictures" : 80,
+  "seconds" : 1803,
+  "steps" : [
+    {
+      "dt" : 12.869999999999999,
+      "file" : "01-snowball.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "snowball",
+      "note" : "",
+      "t" : 12.9
+    },
+    {
+      "detail" : "snowball",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x10624e7d0, {{620.8, 599.9}, {678.8, 740.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x10624e7d0, {{620.8, 599.9}, {678.8, 740.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x106276a80, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x106276a80, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 20.609999999999999,
+      "file" : "02-snowball-pop.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "snowball-pop",
+      "note" : "",
+      "t" : 33.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d08baa0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11d08baa0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11d044ea0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11d044ea0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for snowball (Snowball); Settings says \"Theme, Snowball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 22.539999999999999,
+      "file" : "03-ornament.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "ornament",
+      "note" : "",
+      "t" : 56
+    },
+    {
+      "detail" : "ornament",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1170f2920, {{619.9, 596.2}, {680.7, 743.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1170f2920, {{619.9, 596.2}, {680.7, 743.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d54a0b0, {{619.0, 592.6}, {682.5, 747.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11d54a0b0, {{619.0, 592.6}, {682.5, 747.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 10.65,
+      "file" : "04-ornament-pop.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "ornament-pop",
+      "note" : "",
+      "t" : 66.700000000000003
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d525360, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11d525360, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11e0c2cf0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11e0c2cf0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for ornament (Ornament); Settings says \"Theme, Ornament\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 4,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 22.649999999999999,
+      "file" : "05-pumpkin.png",
+      "kind" : "shot",
+      "n" : 5,
+      "name" : "pumpkin",
+      "note" : "",
+      "t" : 89.299999999999997
+    },
+    {
+      "detail" : "pumpkin",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11e0fdc50, {{620.8, 599.7}, {678.9, 740.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11e0fdc50, {{620.8, 599.7}, {678.9, 740.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11ec8c480, {{619.9, 596.3}, {680.6, 743.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11ec8c480, {{619.9, 596.3}, {680.6, 743.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 5,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 17.309999999999999,
+      "file" : "06-pumpkin-pop.png",
+      "kind" : "shot",
+      "n" : 6,
+      "name" : "pumpkin-pop",
+      "note" : "",
+      "t" : 106.59999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x117469390, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x117469390, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 6,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11d6e2b30, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11d6e2b30, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 6,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for pumpkin (Pumpkin spice); Settings says \"Theme, Pumpkin spice\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 6,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 21.879999999999999,
+      "file" : "07-disco.png",
+      "kind" : "shot",
+      "n" : 7,
+      "name" : "disco",
+      "note" : "",
+      "t" : 128.5
+    },
+    {
+      "detail" : "disco",
+      "kind" : "check",
+      "n" : 7,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d664dc0, {{620.9, 600.1}, {678.7, 739.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11d664dc0, {{620.9, 600.1}, {678.7, 739.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 7,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11e477920, {{621.8, 603.5}, {677.0, 736.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11e477920, {{621.8, 603.5}, {677.0, 736.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 7,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 8.9199999999999999,
+      "file" : "08-disco-pop.png",
+      "kind" : "shot",
+      "n" : 8,
+      "name" : "disco-pop",
+      "note" : "",
+      "t" : 137.40000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x11eb65b70, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11eb65b70, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 8,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11eba1150, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11eba1150, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 8,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for disco (Disco); Settings says \"Theme, Disco\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 8,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 27.390000000000001,
+      "file" : "09-soap.png",
+      "kind" : "shot",
+      "n" : 9,
+      "name" : "soap",
+      "note" : "",
+      "t" : 164.80000000000001
+    },
+    {
+      "detail" : "soap",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1176e40b0, {{622.2, 605.3}, {676.1, 734.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1176e40b0, {{622.2, 605.3}, {676.1, 734.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d73d280, {{618.6, 590.8}, {683.4, 749.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11d73d280, {{618.6, 590.8}, {683.4, 749.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 9,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.98,
+      "file" : "10-soap-pop.png",
+      "kind" : "shot",
+      "n" : 10,
+      "name" : "soap-pop",
+      "note" : "",
+      "t" : 191.80000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x117622610, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x117622610, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 10,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11edf6ca0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11edf6ca0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 10,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for soap (Soap bubble); Settings says \"Theme, Soap bubble\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 10,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 27.969999999999999,
+      "file" : "11-planet.png",
+      "kind" : "shot",
+      "n" : 11,
+      "name" : "planet",
+      "note" : "",
+      "t" : 219.80000000000001
+    },
+    {
+      "detail" : "planet",
+      "kind" : "check",
+      "n" : 11,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11ee45dc0, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11ee45dc0, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 11,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11753ff80, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11753ff80, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 11,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.41,
+      "file" : "12-planet-pop.png",
+      "kind" : "shot",
+      "n" : 12,
+      "name" : "planet-pop",
+      "note" : "",
+      "t" : 232.19999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x117b211c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x117b211c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 12,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x117c6b600, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x117c6b600, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 12,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for planet (Planet); Settings says \"Theme, Planet\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 12,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.5,
+      "file" : "13-basketball.png",
+      "kind" : "shot",
+      "n" : 13,
+      "name" : "basketball",
+      "note" : "",
+      "t" : 257.69999999999999
+    },
+    {
+      "detail" : "basketball",
+      "kind" : "check",
+      "n" : 13,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117d1f0c0, {{619.1, 593.0}, {682.3, 747.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x117d1f0c0, {{619.1, 593.0}, {682.3, 747.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 13,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1191357b0, {{620.0, 596.4}, {680.6, 743.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1191357b0, {{620.0, 596.4}, {680.6, 743.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 13,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 14.08,
+      "file" : "14-basketball-pop.png",
+      "kind" : "shot",
+      "n" : 14,
+      "name" : "basketball-pop",
+      "note" : "",
+      "t" : 271.80000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x1191bc560, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1191bc560, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 14,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1190f9af0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1190f9af0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 14,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for basketball (Basketball); Settings says \"Theme, Basketball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 14,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 23.600000000000001,
+      "file" : "15-donut.png",
+      "kind" : "shot",
+      "n" : 15,
+      "name" : "donut",
+      "note" : "",
+      "t" : 295.39999999999998
+    },
+    {
+      "detail" : "donut",
+      "kind" : "check",
+      "n" : 15,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1192681c0, {{620.3, 597.8}, {679.9, 742.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1192681c0, {{620.3, 597.8}, {679.9, 742.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 15,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1193ac370, {{621.5, 602.4}, {677.5, 737.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1193ac370, {{621.5, 602.4}, {677.5, 737.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 15,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 17.120000000000001,
+      "file" : "16-donut-pop.png",
+      "kind" : "shot",
+      "n" : 16,
+      "name" : "donut-pop",
+      "note" : "",
+      "t" : 312.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x1197304e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1197304e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 16,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1196974e0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1196974e0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 16,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for donut (Donut); Settings says \"Theme, Donut\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 16,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 23.219999999999999,
+      "file" : "17-waterBalloon.png",
+      "kind" : "shot",
+      "n" : 17,
+      "name" : "waterBalloon",
+      "note" : "",
+      "t" : 335.69999999999999
+    },
+    {
+      "detail" : "waterBalloon",
+      "kind" : "check",
+      "n" : 17,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1196c31f0, {{622.4, 606.0}, {675.7, 734.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1196c31f0, {{622.4, 606.0}, {675.7, 734.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 17,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1197f9730, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1197f9730, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 17,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 14.66,
+      "file" : "18-waterBalloon-pop.png",
+      "kind" : "shot",
+      "n" : 18,
+      "name" : "waterBalloon-pop",
+      "note" : "",
+      "t" : 350.39999999999998
+    },
+    {
+      "detail" : "Attributes: Button, 0x119d130a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x119d130a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 18,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x119b0da80, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x119b0da80, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 18,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for waterBalloon (Water balloon); Settings says \"Theme, Water balloon\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 18,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.850000000000001,
+      "file" : "19-eyeball.png",
+      "kind" : "shot",
+      "n" : 19,
+      "name" : "eyeball",
+      "note" : "",
+      "t" : 376.19999999999999
+    },
+    {
+      "detail" : "eyeball",
+      "kind" : "check",
+      "n" : 19,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x119dd8910, {{619.7, 595.2}, {681.2, 744.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x119dd8910, {{619.7, 595.2}, {681.2, 744.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 19,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x119e589d0, {{621.9, 604.2}, {676.7, 735.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x119e589d0, {{621.9, 604.2}, {676.7, 735.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 19,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 19.41,
+      "file" : "20-eyeball-pop.png",
+      "kind" : "shot",
+      "n" : 20,
+      "name" : "eyeball-pop",
+      "note" : "",
+      "t" : 395.60000000000002
+    },
+    {
+      "detail" : "Attributes: Button, 0x11aad5030, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11aad5030, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 20,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11ac1a1d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11ac1a1d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 20,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for eyeball (Eyeball); Settings says \"Theme, Eyeball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 20,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.190000000000001,
+      "file" : "21-fishbowl.png",
+      "kind" : "shot",
+      "n" : 21,
+      "name" : "fishbowl",
+      "note" : "",
+      "t" : 419.80000000000001
+    },
+    {
+      "detail" : "fishbowl",
+      "kind" : "check",
+      "n" : 21,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11aaf6bb0, {{621.2, 601.4}, {678.0, 738.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11aaf6bb0, {{621.2, 601.4}, {678.0, 738.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 21,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11acf45b0, {{622.2, 605.4}, {676.1, 734.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11acf45b0, {{622.2, 605.4}, {676.1, 734.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 21,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.359999999999999,
+      "file" : "22-fishbowl-pop.png",
+      "kind" : "shot",
+      "n" : 22,
+      "name" : "fishbowl-pop",
+      "note" : "",
+      "t" : 444.19999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x11acf5640, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11acf5640, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 22,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11abed490, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11abed490, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 22,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for fishbowl (Fishbowl); Settings says \"Theme, Fishbowl\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 22,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 33.729999999999997,
+      "file" : "23-moodRing.png",
+      "kind" : "shot",
+      "n" : 23,
+      "name" : "moodRing",
+      "note" : "",
+      "t" : 477.89999999999998
+    },
+    {
+      "detail" : "moodRing",
+      "kind" : "check",
+      "n" : 23,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11b8e10c0, {{621.7, 603.2}, {677.2, 736.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11b8e10c0, {{621.7, 603.2}, {677.2, 736.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 23,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11be636b0, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11be636b0, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 23,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 17.120000000000001,
+      "file" : "24-moodRing-pop.png",
+      "kind" : "shot",
+      "n" : 24,
+      "name" : "moodRing-pop",
+      "note" : "",
+      "t" : 495
+    },
+    {
+      "detail" : "Attributes: Button, 0x11baa5770, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11baa5770, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 24,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11bf7e1f0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11bf7e1f0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 24,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for moodRing (Mood ring); Settings says \"Theme, Mood ring\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 24,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.460000000000001,
+      "file" : "25-lavaLamp.png",
+      "kind" : "shot",
+      "n" : 25,
+      "name" : "lavaLamp",
+      "note" : "",
+      "t" : 520.5
+    },
+    {
+      "detail" : "lavaLamp",
+      "kind" : "check",
+      "n" : 25,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11bfcfc10, {{619.6, 594.8}, {681.4, 745.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11bfcfc10, {{619.6, 594.8}, {681.4, 745.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 25,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d3a3920, {{621.8, 603.9}, {676.8, 736.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11d3a3920, {{621.8, 603.9}, {676.8, 736.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 25,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 23.77,
+      "file" : "26-lavaLamp-pop.png",
+      "kind" : "shot",
+      "n" : 26,
+      "name" : "lavaLamp-pop",
+      "note" : "",
+      "t" : 544.29999999999995
+    },
+    {
+      "detail" : "Attributes: Button, 0x11d262a80, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11d262a80, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 26,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11e68b530, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11e68b530, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 26,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for lavaLamp (Lava lamp); Settings says \"Theme, Lava lamp\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 26,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 29.010000000000002,
+      "file" : "27-soccer.png",
+      "kind" : "shot",
+      "n" : 27,
+      "name" : "soccer",
+      "note" : "",
+      "t" : 573.29999999999995
+    },
+    {
+      "detail" : "soccer",
+      "kind" : "check",
+      "n" : 27,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11e78d540, {{619.6, 594.9}, {681.3, 745.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11e78d540, {{619.6, 594.9}, {681.3, 745.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 27,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x11ef46f30, {{618.6, 591.2}, {683.2, 748.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x11ef46f30, {{618.6, 591.2}, {683.2, 748.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 27,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 23.219999999999999,
+      "file" : "28-soccer-pop.png",
+      "kind" : "shot",
+      "n" : 28,
+      "name" : "soccer-pop",
+      "note" : "",
+      "t" : 596.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x11ef8ab50, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x11ef8ab50, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 28,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x11e8a3120, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x11e8a3120, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 28,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for soccer (Soccer); Settings says \"Theme, Soccer\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 28,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.239999999999998,
+      "file" : "29-hockey.png",
+      "kind" : "shot",
+      "n" : 29,
+      "name" : "hockey",
+      "note" : "",
+      "t" : 621.70000000000005
+    },
+    {
+      "detail" : "hockey",
+      "kind" : "check",
+      "n" : 29,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12198ff00, {{620.5, 598.4}, {679.6, 741.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12198ff00, {{620.5, 598.4}, {679.6, 741.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 29,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x121d129b0, {{618.7, 591.3}, {683.2, 748.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x121d129b0, {{618.7, 591.3}, {683.2, 748.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 29,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 17.02,
+      "file" : "30-hockey-pop.png",
+      "kind" : "shot",
+      "n" : 30,
+      "name" : "hockey-pop",
+      "note" : "",
+      "t" : 638.79999999999995
+    },
+    {
+      "detail" : "Attributes: Button, 0x121d42d10, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x121d42d10, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 30,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x121f2a170, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x121f2a170, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 30,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for hockey (Hockey puck); Settings says \"Theme, Hockey puck\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 30,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.800000000000001,
+      "file" : "31-tennis.png",
+      "kind" : "shot",
+      "n" : 31,
+      "name" : "tennis",
+      "note" : "",
+      "t" : 663.60000000000002
+    },
+    {
+      "detail" : "tennis",
+      "kind" : "check",
+      "n" : 31,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x121fc0cc0, {{621.4, 602.1}, {677.7, 737.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x121fc0cc0, {{621.4, 602.1}, {677.7, 737.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 31,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12440be40, {{621.7, 603.2}, {677.2, 736.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12440be40, {{621.7, 603.2}, {677.2, 736.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 31,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 19.18,
+      "file" : "32-tennis-pop.png",
+      "kind" : "shot",
+      "n" : 32,
+      "name" : "tennis-pop",
+      "note" : "",
+      "t" : 682.70000000000005
+    },
+    {
+      "detail" : "Attributes: Button, 0x124529850, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x124529850, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 32,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12440b600, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12440b600, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 32,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for tennis (Tennis ball); Settings says \"Theme, Tennis ball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 32,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.300000000000001,
+      "file" : "33-golf.png",
+      "kind" : "shot",
+      "n" : 33,
+      "name" : "golf",
+      "note" : "",
+      "t" : 707
+    },
+    {
+      "detail" : "golf",
+      "kind" : "check",
+      "n" : 33,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1244def70, {{619.5, 594.7}, {681.4, 745.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1244def70, {{619.5, 594.7}, {681.4, 745.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 33,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12468e700, {{618.5, 590.4}, {683.6, 749.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12468e700, {{618.5, 590.4}, {683.6, 749.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 33,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.449999999999999,
+      "file" : "34-golf-pop.png",
+      "kind" : "shot",
+      "n" : 34,
+      "name" : "golf-pop",
+      "note" : "",
+      "t" : 719.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x1253161a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1253161a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 34,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1247f71b0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1247f71b0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 34,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for golf (Golf ball); Settings says \"Theme, Golf ball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 34,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.48,
+      "file" : "35-baseball.png",
+      "kind" : "shot",
+      "n" : 35,
+      "name" : "baseball",
+      "note" : "",
+      "t" : 745
+    },
+    {
+      "detail" : "baseball",
+      "kind" : "check",
+      "n" : 35,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x125645e10, {{620.9, 600.0}, {678.8, 740.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x125645e10, {{620.9, 600.0}, {678.8, 740.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 35,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1253f1f30, {{619.4, 594.0}, {681.8, 746.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1253f1f30, {{619.4, 594.0}, {681.8, 746.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 35,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.850000000000001,
+      "file" : "36-baseball-pop.png",
+      "kind" : "shot",
+      "n" : 36,
+      "name" : "baseball-pop",
+      "note" : "",
+      "t" : 770.79999999999995
+    },
+    {
+      "detail" : "Attributes: Button, 0x1254f5320, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1254f5320, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 36,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1254fd160, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1254fd160, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 36,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for baseball (Baseball); Settings says \"Theme, Baseball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 36,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.789999999999999,
+      "file" : "37-bowling.png",
+      "kind" : "shot",
+      "n" : 37,
+      "name" : "bowling",
+      "note" : "",
+      "t" : 796.60000000000002
+    },
+    {
+      "detail" : "bowling",
+      "kind" : "check",
+      "n" : 37,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x125ac6e40, {{622.5, 606.3}, {675.6, 733.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x125ac6e40, {{622.5, 606.3}, {675.6, 733.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 37,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x125f34300, {{621.5, 602.4}, {677.6, 737.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x125f34300, {{621.5, 602.4}, {677.6, 737.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 37,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 13.43,
+      "file" : "38-bowling-pop.png",
+      "kind" : "shot",
+      "n" : 38,
+      "name" : "bowling-pop",
+      "note" : "",
+      "t" : 810
+    },
+    {
+      "detail" : "Attributes: Button, 0x125fa14c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x125fa14c0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 38,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x125fcda40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x125fcda40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 38,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for bowling (Bowling ball); Settings says \"Theme, Bowling ball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 38,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.809999999999999,
+      "file" : "39-pixel.png",
+      "kind" : "shot",
+      "n" : 39,
+      "name" : "pixel",
+      "note" : "",
+      "t" : 836.89999999999998
+    },
+    {
+      "detail" : "pixel",
+      "kind" : "check",
+      "n" : 39,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1263178d0, {{618.7, 591.5}, {683.0, 748.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1263178d0, {{618.7, 591.5}, {683.0, 748.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 39,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12617e890, {{622.3, 605.8}, {675.8, 734.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12617e890, {{622.3, 605.8}, {675.8, 734.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 39,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 35.439999999999998,
+      "file" : "40-pixel-pop.png",
+      "kind" : "shot",
+      "n" : 40,
+      "name" : "pixel-pop",
+      "note" : "",
+      "t" : 872.29999999999995
+    },
+    {
+      "detail" : "Attributes: Button, 0x1266c96d0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1266c96d0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 40,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1263ff540, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1263ff540, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 40,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for pixel (8-bit); Settings says \"Theme, 8-bit\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 40,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 28.390000000000001,
+      "file" : "41-gumball.png",
+      "kind" : "shot",
+      "n" : 41,
+      "name" : "gumball",
+      "note" : "",
+      "t" : 900.70000000000005
+    },
+    {
+      "detail" : "gumball",
+      "kind" : "check",
+      "n" : 41,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12713d8c0, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12713d8c0, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 41,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1270d0e00, {{619.7, 595.5}, {681.0, 744.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1270d0e00, {{619.7, 595.5}, {681.0, 744.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 41,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 9.6400000000000006,
+      "file" : "42-gumball-pop.png",
+      "kind" : "shot",
+      "n" : 42,
+      "name" : "gumball-pop",
+      "note" : "",
+      "t" : 910.29999999999995
+    },
+    {
+      "detail" : "Attributes: Button, 0x12715bb60, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12715bb60, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 42,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1274da5d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1274da5d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 42,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for gumball (Gumball machine); Settings says \"Theme, Gumball machine\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 42,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.93,
+      "file" : "43-cherry.png",
+      "kind" : "shot",
+      "n" : 43,
+      "name" : "cherry",
+      "note" : "",
+      "t" : 935.29999999999995
+    },
+    {
+      "detail" : "cherry",
+      "kind" : "check",
+      "n" : 43,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1276b78c0, {{622.2, 605.4}, {676.1, 734.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1276b78c0, {{622.2, 605.4}, {676.1, 734.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 43,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x128b0bf50, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x128b0bf50, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 43,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 13.26,
+      "file" : "44-cherry-pop.png",
+      "kind" : "shot",
+      "n" : 44,
+      "name" : "cherry-pop",
+      "note" : "",
+      "t" : 948.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x128c131e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x128c131e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 44,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x128b9d430, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x128b9d430, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 44,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for cherry (Cherry); Settings says \"Theme, Cherry\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 44,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 30.149999999999999,
+      "file" : "45-orange.png",
+      "kind" : "shot",
+      "n" : 45,
+      "name" : "orange",
+      "note" : "",
+      "t" : 978.70000000000005
+    },
+    {
+      "detail" : "orange",
+      "kind" : "check",
+      "n" : 45,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x128bf4820, {{619.5, 594.4}, {681.6, 745.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x128bf4820, {{619.5, 594.4}, {681.6, 745.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 45,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12981a780, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12981a780, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 45,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.84,
+      "file" : "46-orange-pop.png",
+      "kind" : "shot",
+      "n" : 46,
+      "name" : "orange-pop",
+      "note" : "",
+      "t" : 991.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x129983990, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x129983990, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 46,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1299a6890, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1299a6890, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 46,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for orange (Orange); Settings says \"Theme, Orange\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 46,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.25,
+      "file" : "47-macaron.png",
+      "kind" : "shot",
+      "n" : 47,
+      "name" : "macaron",
+      "note" : "",
+      "t" : 1017.8
+    },
+    {
+      "detail" : "macaron",
+      "kind" : "check",
+      "n" : 47,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x129b4a3b0, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x129b4a3b0, {{618.5, 590.5}, {683.5, 749.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 47,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1299cbf60, {{620.9, 600.1}, {678.7, 739.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1299cbf60, {{620.9, 600.1}, {678.7, 739.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 47,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 19.84,
+      "file" : "48-macaron-pop.png",
+      "kind" : "shot",
+      "n" : 48,
+      "name" : "macaron-pop",
+      "note" : "",
+      "t" : 1037.5999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x129be18d0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x129be18d0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 48,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12a063c40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12a063c40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 48,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for macaron (Macaron); Settings says \"Theme, Macaron\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 48,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25,
+      "file" : "49-cakePop.png",
+      "kind" : "shot",
+      "n" : 49,
+      "name" : "cakePop",
+      "note" : "",
+      "t" : 1062.5999999999999
+    },
+    {
+      "detail" : "cakePop",
+      "kind" : "check",
+      "n" : 49,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x129fb4c90, {{620.4, 598.1}, {679.7, 741.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x129fb4c90, {{620.4, 598.1}, {679.7, 741.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 49,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12a2c76d0, {{621.3, 601.9}, {677.8, 738.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12a2c76d0, {{621.3, 601.9}, {677.8, 738.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 49,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 16.77,
+      "file" : "50-cakePop-pop.png",
+      "kind" : "shot",
+      "n" : 50,
+      "name" : "cakePop-pop",
+      "note" : "",
+      "t" : 1079.4000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x12a74d9a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12a74d9a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 50,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12a6b9f90, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12a6b9f90, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 50,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for cakePop (Cake pop); Settings says \"Theme, Cake pop\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 50,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.489999999999998,
+      "file" : "51-earth.png",
+      "kind" : "shot",
+      "n" : 51,
+      "name" : "earth",
+      "note" : "",
+      "t" : 1104.9000000000001
+    },
+    {
+      "detail" : "earth",
+      "kind" : "check",
+      "n" : 51,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12a5fe8b0, {{620.9, 600.2}, {678.7, 739.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12a5fe8b0, {{620.9, 600.2}, {678.7, 739.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 51,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12bc6f580, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12bc6f580, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 51,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 18.539999999999999,
+      "file" : "52-earth-pop.png",
+      "kind" : "shot",
+      "n" : 52,
+      "name" : "earth-pop",
+      "note" : "",
+      "t" : 1123.4000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x12a796c70, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12a796c70, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 52,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12b9a9fe0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12b9a9fe0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 52,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for earth (Earth); Settings says \"Theme, Earth\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 52,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.02,
+      "file" : "53-sun.png",
+      "kind" : "shot",
+      "n" : 53,
+      "name" : "sun",
+      "note" : "",
+      "t" : 1149.4000000000001
+    },
+    {
+      "detail" : "sun",
+      "kind" : "check",
+      "n" : 53,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12bd3d910, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12bd3d910, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 53,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12cc490d0, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12cc490d0, {{620.0, 596.6}, {680.5, 743.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 53,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 18.120000000000001,
+      "file" : "54-sun-pop.png",
+      "kind" : "shot",
+      "n" : 54,
+      "name" : "sun-pop",
+      "note" : "",
+      "t" : 1167.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x12cb57920, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12cb57920, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 54,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12cb2c650, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12cb2c650, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 54,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for sun (Sun); Settings says \"Theme, Sun\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 54,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.359999999999999,
+      "file" : "55-dandelion.png",
+      "kind" : "shot",
+      "n" : 55,
+      "name" : "dandelion",
+      "note" : "",
+      "t" : 1192.9000000000001
+    },
+    {
+      "detail" : "dandelion",
+      "kind" : "check",
+      "n" : 55,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12cdc4c00, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12cdc4c00, {{622.5, 606.4}, {675.5, 733.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 55,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12cecf6c0, {{620.7, 599.3}, {679.1, 740.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12cecf6c0, {{620.7, 599.3}, {679.1, 740.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 55,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 39.380000000000003,
+      "file" : "56-dandelion-pop.png",
+      "kind" : "shot",
+      "n" : 56,
+      "name" : "dandelion-pop",
+      "note" : "",
+      "t" : 1232.3
+    },
+    {
+      "detail" : "Attributes: Button, 0x12da2e320, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12da2e320, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 56,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12dba9050, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12dba9050, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 56,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for dandelion (Dandelion); Settings says \"Theme, Dandelion\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 56,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 27.739999999999998,
+      "file" : "57-atom.png",
+      "kind" : "shot",
+      "n" : 57,
+      "name" : "atom",
+      "note" : "",
+      "t" : 1260
+    },
+    {
+      "detail" : "atom",
+      "kind" : "check",
+      "n" : 57,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12df387d0, {{619.7, 595.4}, {681.1, 744.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12df387d0, {{619.7, 595.4}, {681.1, 744.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 57,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12df6b790, {{618.5, 590.6}, {683.5, 749.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12df6b790, {{618.5, 590.6}, {683.5, 749.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 57,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 17.960000000000001,
+      "file" : "58-atom-pop.png",
+      "kind" : "shot",
+      "n" : 58,
+      "name" : "atom-pop",
+      "note" : "",
+      "t" : 1278
+    },
+    {
+      "detail" : "Attributes: Button, 0x12dced940, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12dced940, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 58,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12eaf9070, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12eaf9070, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 58,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for atom (Atom); Settings says \"Theme, Atom\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 58,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.579999999999998,
+      "file" : "59-geode.png",
+      "kind" : "shot",
+      "n" : 59,
+      "name" : "geode",
+      "note" : "",
+      "t" : 1304.5999999999999
+    },
+    {
+      "detail" : "geode",
+      "kind" : "check",
+      "n" : 59,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12eb8f640, {{622.1, 605.0}, {676.3, 735.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12eb8f640, {{622.1, 605.0}, {676.3, 735.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 59,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12ecb8150, {{619.3, 593.7}, {681.9, 746.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12ecb8150, {{619.3, 593.7}, {681.9, 746.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 59,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 20.649999999999999,
+      "file" : "60-geode-pop.png",
+      "kind" : "shot",
+      "n" : 60,
+      "name" : "geode-pop",
+      "note" : "",
+      "t" : 1325.2
+    },
+    {
+      "detail" : "Attributes: Button, 0x12fc30830, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12fc30830, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 60,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x12fc61880, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x12fc61880, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 60,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for geode (Geode); Settings says \"Theme, Geode\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 60,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.109999999999999,
+      "file" : "61-yarn.png",
+      "kind" : "shot",
+      "n" : 61,
+      "name" : "yarn",
+      "note" : "",
+      "t" : 1350.3
+    },
+    {
+      "detail" : "yarn",
+      "kind" : "check",
+      "n" : 61,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12fca6ac0, {{622.3, 605.7}, {675.9, 734.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12fca6ac0, {{622.3, 605.7}, {675.9, 734.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 61,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x12ff6e3a0, {{619.8, 595.8}, {680.9, 744.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x12ff6e3a0, {{619.8, 595.8}, {680.9, 744.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 61,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 19.780000000000001,
+      "file" : "62-yarn-pop.png",
+      "kind" : "shot",
+      "n" : 62,
+      "name" : "yarn-pop",
+      "note" : "",
+      "t" : 1370.0999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x12fa817e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x12fa817e0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 62,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1308e9100, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1308e9100, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 62,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for yarn (Ball of yarn); Settings says \"Theme, Ball of yarn\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 62,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 27.129999999999999,
+      "file" : "63-arcadeButton.png",
+      "kind" : "shot",
+      "n" : 63,
+      "name" : "arcadeButton",
+      "note" : "",
+      "t" : 1397.3
+    },
+    {
+      "detail" : "arcadeButton",
+      "kind" : "check",
+      "n" : 63,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x130c37110, {{618.6, 591.0}, {683.3, 749.0}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x130c37110, {{618.6, 591.0}, {683.3, 749.0}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 63,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x130c6af20, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x130c6af20, {{618.6, 591.1}, {683.2, 748.9}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 63,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 20.48,
+      "file" : "64-arcadeButton-pop.png",
+      "kind" : "shot",
+      "n" : 64,
+      "name" : "arcadeButton-pop",
+      "note" : "",
+      "t" : 1417.7
+    },
+    {
+      "detail" : "Attributes: Button, 0x130a87a60, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x130a87a60, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 64,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x13214c9d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x13214c9d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 64,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for arcadeButton (Big red button); Settings says \"Theme, Big red button\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 64,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.77,
+      "file" : "65-clock.png",
+      "kind" : "shot",
+      "n" : 65,
+      "name" : "clock",
+      "note" : "",
+      "t" : 1444.5
+    },
+    {
+      "detail" : "clock",
+      "kind" : "check",
+      "n" : 65,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x13090ba00, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x13090ba00, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 65,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1322ec2a0, {{619.3, 593.6}, {682.0, 746.4}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1322ec2a0, {{619.3, 593.6}, {682.0, 746.4}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 65,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 19.600000000000001,
+      "file" : "66-clock-pop.png",
+      "kind" : "shot",
+      "n" : 66,
+      "name" : "clock-pop",
+      "note" : "",
+      "t" : 1464.0999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x132752d00, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x132752d00, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 66,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1325ec290, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1325ec290, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 66,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for clock (Clock); Settings says \"Theme, Clock\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 66,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.309999999999999,
+      "file" : "67-marble.png",
+      "kind" : "shot",
+      "n" : 67,
+      "name" : "marble",
+      "note" : "",
+      "t" : 1489.4000000000001
+    },
+    {
+      "detail" : "marble",
+      "kind" : "check",
+      "n" : 67,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1328d6a10, {{621.2, 601.3}, {678.1, 738.7}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1328d6a10, {{621.2, 601.3}, {678.1, 738.7}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 67,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x132995b60, {{621.6, 602.8}, {677.4, 737.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x132995b60, {{621.6, 602.8}, {677.4, 737.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 67,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 32.439999999999998,
+      "file" : "68-marble-pop.png",
+      "kind" : "shot",
+      "n" : 68,
+      "name" : "marble-pop",
+      "note" : "",
+      "t" : 1521.9000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x132cd5730, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x132cd5730, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 68,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1327ece40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1327ece40, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 68,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for marble (Marble); Settings says \"Theme, Marble\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 68,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 31.149999999999999,
+      "file" : "69-duck.png",
+      "kind" : "shot",
+      "n" : 69,
+      "name" : "duck",
+      "note" : "",
+      "t" : 1553
+    },
+    {
+      "detail" : "duck",
+      "kind" : "check",
+      "n" : 69,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x13421a980, {{622.4, 606.2}, {675.6, 733.8}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x13421a980, {{622.4, 606.2}, {675.6, 733.8}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 69,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1342847b0, {{620.0, 596.7}, {680.4, 743.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1342847b0, {{620.0, 596.7}, {680.4, 743.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 69,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.539999999999999,
+      "file" : "70-duck-pop.png",
+      "kind" : "shot",
+      "n" : 70,
+      "name" : "duck-pop",
+      "note" : "",
+      "t" : 1565.5999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x134291870, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x134291870, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 70,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1345b0e70, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1345b0e70, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 70,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for duck (Rubber duck); Settings says \"Theme, Rubber duck\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 70,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 28.16,
+      "file" : "71-easterEgg.png",
+      "kind" : "shot",
+      "n" : 71,
+      "name" : "easterEgg",
+      "note" : "",
+      "t" : 1593.7
+    },
+    {
+      "detail" : "easterEgg",
+      "kind" : "check",
+      "n" : 71,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1345e6e00, {{621.7, 603.5}, {677.0, 736.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1345e6e00, {{621.7, 603.5}, {677.0, 736.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 71,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x135260210, {{619.2, 593.4}, {682.1, 746.6}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x135260210, {{619.2, 593.4}, {682.1, 746.6}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 71,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 28.100000000000001,
+      "file" : "72-easterEgg-pop.png",
+      "kind" : "shot",
+      "n" : 72,
+      "name" : "easterEgg-pop",
+      "note" : "",
+      "t" : 1621.8
+    },
+    {
+      "detail" : "Attributes: Button, 0x135398850, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x135398850, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 72,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1353cb0d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1353cb0d0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 72,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for easterEgg (Easter egg); Settings says \"Theme, Easter egg\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 72,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 26.030000000000001,
+      "file" : "73-valentine.png",
+      "kind" : "shot",
+      "n" : 73,
+      "name" : "valentine",
+      "note" : "",
+      "t" : 1647.8
+    },
+    {
+      "detail" : "valentine",
+      "kind" : "check",
+      "n" : 73,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1354c8800, {{619.5, 594.7}, {681.4, 745.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1354c8800, {{619.5, 594.7}, {681.4, 745.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 73,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x136208690, {{621.9, 603.9}, {676.8, 736.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x136208690, {{621.9, 603.9}, {676.8, 736.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 73,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 11.119999999999999,
+      "file" : "74-valentine-pop.png",
+      "kind" : "shot",
+      "n" : 74,
+      "name" : "valentine-pop",
+      "note" : "",
+      "t" : 1659
+    },
+    {
+      "detail" : "Attributes: Button, 0x1357bcf50, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1357bcf50, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 74,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x13637a4e0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x13637a4e0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 74,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for valentine (Valentine); Settings says \"Theme, Valentine\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 74,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.629999999999999,
+      "file" : "75-fireworks.png",
+      "kind" : "shot",
+      "n" : 75,
+      "name" : "fireworks",
+      "note" : "",
+      "t" : 1684.5999999999999
+    },
+    {
+      "detail" : "fireworks",
+      "kind" : "check",
+      "n" : 75,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1363c9a30, {{620.6, 598.8}, {679.4, 741.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1363c9a30, {{620.6, 598.8}, {679.4, 741.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 75,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x137051960, {{620.0, 596.7}, {680.4, 743.3}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x137051960, {{620.0, 596.7}, {680.4, 743.3}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 75,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 18.469999999999999,
+      "file" : "76-fireworks-pop.png",
+      "kind" : "shot",
+      "n" : 76,
+      "name" : "fireworks-pop",
+      "note" : "",
+      "t" : 1703.0999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x13655b7a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x13655b7a0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 76,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x137421900, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x137421900, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 76,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for fireworks (Fireworks); Settings says \"Theme, Fireworks\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 76,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 24.760000000000002,
+      "file" : "77-beachBall.png",
+      "kind" : "shot",
+      "n" : 77,
+      "name" : "beachBall",
+      "note" : "",
+      "t" : 1727.8
+    },
+    {
+      "detail" : "beachBall",
+      "kind" : "check",
+      "n" : 77,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1372a48b0, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1372a48b0, {{622.1, 604.9}, {676.3, 735.1}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 77,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1374e0d30, {{622.3, 605.8}, {675.8, 734.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1374e0d30, {{622.3, 605.8}, {675.8, 734.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 77,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 12.82,
+      "file" : "78-beachBall-pop.png",
+      "kind" : "shot",
+      "n" : 78,
+      "name" : "beachBall-pop",
+      "note" : "",
+      "t" : 1740.5999999999999
+    },
+    {
+      "detail" : "Attributes: Button, 0x1373c2b00, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1373c2b00, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 78,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1380c15f0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1380c15f0, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 78,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for beachBall (Beach ball); Settings says \"Theme, Beach ball\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 78,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 29.07,
+      "file" : "79-zen.png",
+      "kind" : "shot",
+      "n" : 79,
+      "name" : "zen",
+      "note" : "",
+      "t" : 1769.7
+    },
+    {
+      "detail" : "zen",
+      "kind" : "check",
+      "n" : 79,
+      "name" : "the card shows no fortune (only Fortune does)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1380e4110, {{622.3, 605.8}, {675.9, 734.2}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x1380e4110, {{622.3, 605.8}, {675.9, 734.2}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 79,
+      "name" : "the bubble is a button named for the meeting",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x13873cf60, {{622.0, 604.5}, {676.5, 735.5}}, label: 'Pop the bubble to join Design review'\nElement subtree:\n →Button, 0x13873cf60, {{622.0, 604.5}, {676.5, 735.5}}, label: 'Pop t",
+      "kind" : "check",
+      "n" : 79,
+      "name" : "can tap the bubble",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 13.75,
+      "file" : "80-zen-pop.png",
+      "kind" : "shot",
+      "n" : 80,
+      "name" : "zen-pop",
+      "note" : "",
+      "t" : 1783.5
+    },
+    {
+      "detail" : "Attributes: Button, 0x1385608b0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x1385608b0, {{444.0, 40.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 80,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x1387d7110, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x1387d7110, {{398.0, 196.0}, {580.0, 106.0}}, identifier: 'Settings'",
+      "kind" : "check",
+      "n" : 80,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "asked for zen (Zen stone); Settings says \"Theme, Zen stone\" (same launch as the pictures)",
+      "kind" : "check",
+      "n" : 80,
+      "name" : "the theme shown is the one asked for",
+      "ok" : true,
+      "severity" : 0
+    }
+  ]
+}

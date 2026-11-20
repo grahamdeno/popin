@@ -1,0 +1,301 @@
+{
+  "accessibility" : [
+    {
+      "detail" : "Text of this UITextField may be clipped at larger Dynamic Type sizes.",
+      "element" : "",
+      "screen" : "calendars",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    },
+    {
+      "detail" : "Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.",
+      "element" : "Anniversaries",
+      "screen" : "calendars",
+      "summary" : "Text clipped",
+      "type" : "textClipped"
+    }
+  ],
+  "config" : "pro-light",
+  "finished" : true,
+  "journey" : "J7-many-calendars",
+  "pictures" : 4,
+  "seconds" : 104,
+  "steps" : [
+    {
+      "detail" : "Attributes: Button, 0x101e55fa0, {{334.0, 70.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x101e55fa0, {{334.0, 70.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x101e84790, {{0.0, 78.0}, {402.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x101e84790, {{0.0, 78.0}, {402.0, 106.0}}, identifier: 'Settings'\n    O",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x101cce620, {{36.0, 309.7}, {330.0, 52.0}}, label: 'Calendars, All 22'\nElement subtree:\n →Button, 0x101cce620, {{36.0, 309.7}, {330.0, 52.0}}, label: 'Calendars, All 22'\n    Stati",
+      "kind" : "check",
+      "n" : 0,
+      "name" : "can tap Calendars",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 36.509999999999998,
+      "file" : "01-calendars.png",
+      "kind" : "shot",
+      "n" : 1,
+      "name" : "calendars",
+      "note" : "",
+      "t" : 36.5
+    },
+    {
+      "buttons" : [
+        "Settings",
+        "Exchange, 6 of 6 calendars on",
+        "Turn all off",
+        "Gmail, 4 of 4 calendars on",
+        "Turn all off",
+        "Band alerts: Smart",
+        "Personal alerts: Smart",
+        "School alerts: Smart",
+        "Soccer alerts: Smart",
+        "iCloud, 5 of 5 calendars on",
+        "Turn all off",
+        "Anniversaries alerts: Smart",
+        "Birthdays alerts: Smart",
+        "Family alerts: Smart",
+        "Home alerts: Smart",
+        "Kids alerts: Smart",
+        "Other, 3 of 3 calendars on",
+        "Turn all off",
+        "Found in Mail alerts: Smart",
+        "Scheduled Reminders alerts: Smart",
+        "Siri Suggestions alerts: Smart",
+        "Subscribed, 4 of 4 calendars on",
+        "Turn all off",
+        "Hockey schedule alerts: Smart",
+        "Moon phases alerts: Smart",
+        "Sunrise and sunset alerts: Smart",
+        "US Holidays alerts: Smart"
+      ],
+      "kind" : "labels",
+      "n" : 1,
+      "name" : "calendars",
+      "texts" : [
+        "Calendars",
+        "Exchange",
+        "6 of 6 on",
+        "Gmail",
+        "4 of 4 on",
+        "Band",
+        "Smart",
+        "Personal",
+        "Smart",
+        "School",
+        "Smart",
+        "Soccer",
+        "Smart",
+        "iCloud",
+        "5 of 5 on",
+        "Anniversaries",
+        "Smart",
+        "Birthdays",
+        "Smart",
+        "Family",
+        "Smart",
+        "Home",
+        "Smart",
+        "Kids",
+        "Smart",
+        "Other",
+        "3 of 3 on",
+        "Found in Mail",
+        "Smart",
+        "Scheduled Reminders",
+        "Smart",
+        "Siri Suggestions",
+        "Smart",
+        "Subscribed",
+        "4 of 4 on",
+        "Hockey schedule",
+        "Smart",
+        "Moon phases",
+        "Smart",
+        "Sunrise and sunset",
+        "Smart",
+        "US Holidays",
+        "Smart",
+        "Smart rings full screen for meetings with a video link and sends a quiet notification for the rest. Pick Always rings or Quiet for a whole calendar."
+      ]
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "no (Pro) in the alert menu",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "no ✦ in the alert menu",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "the alert menu closed",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: TextField, 0x1075490d0, {{60.3, 151.0}, {309.7, 22.0}}, placeholderValue: 'Find a calendar', value: Find a calendar\nElement subtree:\n →TextField, 0x1075490d0, {{60.3, 151.0}, {309.7, 22.0}",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "search shows with many calendars",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: TextField, 0x1177708c0, {{60.3, 151.0}, {309.7, 22.0}}, placeholderValue: 'Find a calendar', value: Find a calendar\nElement subtree:\n →TextField, 0x1177708c0, {{60.3, 151.0}, {309.7, 22.0}",
+      "kind" : "check",
+      "n" : 1,
+      "name" : "can tap search",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 25.559999999999999,
+      "file" : "02-search-soccer.png",
+      "kind" : "shot",
+      "n" : 2,
+      "name" : "search-soccer",
+      "note" : "",
+      "t" : 62.100000000000001
+    },
+    {
+      "detail" : "Attributes: Button, 0x10758ff40, {{58.0, 284.7}, {76.7, 44.0}}, label: 'Soccer alerts: Smart'\nElement subtree:\n →Button, 0x10758ff40, {{58.0, 284.7}, {76.7, 44.0}}, label: 'Soccer alerts: Smart'\n    B",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "Soccer's mode menu is shown",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "height 44.0",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "the mode menu is at least 44 pt",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Switch, 0x1071d8000, {{305.0, 281.7}, {61.0, 28.0}}, label: 'Soccer', value: 1\nElement subtree:\n →Switch, 0x1071d8000, {{305.0, 281.7}, {61.0, 28.0}}, label: 'Soccer', value: 1\n    Switch,",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "can tap Soccer switch",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 2,
+      "name" : "Find and turn off one calendar",
+      "ok" : true,
+      "seconds" : 48.299999999999997,
+      "taps" : 4
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 2,
+      "name" : "job done: Find and turn off one calendar",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 10.01,
+      "file" : "03-soccer-off.png",
+      "kind" : "shot",
+      "n" : 3,
+      "name" : "soccer-off",
+      "note" : "",
+      "t" : 72.099999999999994
+    },
+    {
+      "detail" : "Attributes: Button, 0x11798ad30, {{350.3, 152.7}, {19.7, 19.0}}, identifier: 'xmark.circle.fill', label: 'Clear search'\nElement subtree:\n →Button, 0x11798ad30, {{350.3, 152.7}, {19.7, 19.0}}, identifi",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap clear search",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117e488f0, {{334.0, 70.0}, {44.0, 44.0}}, identifier: 'home-settings', label: 'Settings'\nElement subtree:\n →Button, 0x117e488f0, {{334.0, 70.0}, {44.0, 44.0}}, identifier: 'home-",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap Settings (gear)",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: NavigationBar, 0x117efccc0, {{0.0, 78.0}, {402.0, 106.0}}, identifier: 'Settings'\nElement subtree:\n →NavigationBar, 0x117efccc0, {{0.0, 78.0}, {402.0, 106.0}}, identifier: 'Settings'\n    O",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "Settings opens",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x1073e28b0, {{36.0, 309.7}, {330.0, 52.0}}, label: 'Calendars, 21 of 22'\nElement subtree:\n →Button, 0x1073e28b0, {{36.0, 309.7}, {330.0, 52.0}}, label: 'Calendars, 21 of 22'\n    S",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap Calendars",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "detail" : "Attributes: Button, 0x117633690, {{278.7, 212.0}, {87.3, 44.0}}, label: 'Turn all off'\nElement subtree:\n →Button, 0x117633690, {{278.7, 212.0}, {87.3, 44.0}}, label: 'Turn all off'\nPath to element:\n →",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "can tap Turn all off",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "kind" : "benchmark",
+      "n" : 3,
+      "name" : "Turn off a whole account",
+      "ok" : true,
+      "seconds" : 17,
+      "taps" : 3
+    },
+    {
+      "detail" : "",
+      "kind" : "check",
+      "n" : 3,
+      "name" : "job done: Turn off a whole account",
+      "ok" : true,
+      "severity" : 0
+    },
+    {
+      "dt" : 32.380000000000003,
+      "file" : "04-account-off.png",
+      "kind" : "shot",
+      "n" : 4,
+      "name" : "account-off",
+      "note" : "",
+      "t" : 104.5
+    }
+  ]
+}
