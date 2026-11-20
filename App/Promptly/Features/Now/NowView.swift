@@ -36,7 +36,8 @@ struct NowView: View {
                     minSize: 920, maxSize: 920, steadySize: 560,
                     onPop: {
                         let url = model.join(meeting)
-                        leave { if let url { openURL(url) } }
+                        // Demo mode (pictures) never opens a real meeting link, as Home's bubble doesn't.
+                        leave { if let url, !ScreenshotMode.isOn { openURL(url) } }
                     }
                 )
                 .environment(\.themeStill, PowerWatch.shared.strained)
