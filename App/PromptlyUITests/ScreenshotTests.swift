@@ -40,6 +40,18 @@ final class ScreenshotTests: XCTestCase {
 
     func test8Fortune() { _ = launch("fortune"); snap("8-fortune") }
 
+    /// 1.1's store picture of a clash: two meetings at the same time, with the "Pick one" menu open (story 1.1).
+    func test9Clash() {
+        let app = launch("clash")
+        Thread.sleep(forTimeInterval: 2)
+        let pick = app.buttons["clash-pick"].firstMatch
+        if pick.waitForExistence(timeout: 5), pick.isHittable {
+            pick.tap()
+            Thread.sleep(forTimeInterval: 1)
+        }
+        snap("9-clash")
+    }
+
     /// For App Store Connect's in-app purchase review screenshot.
     func test7Pro() { _ = launch("pro"); snap("7-pro", after: 4) }
 
