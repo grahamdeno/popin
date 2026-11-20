@@ -136,16 +136,38 @@ final class CountdownCardAndBuzzTests: XCTestCase {
 final class WidgetTimelineTests: XCTestCase {
     private let now = Date(timeIntervalSince1970: 1_800_000_000)
 
-    func testMinuteStepsInTheLastHourAndFiveMinuteStepsBefore() {
-        let start = now.addingTimeInterval(90 * 60)
+    /// Story 9.1: one entry a minute, on whole minutes before the start, then the start and the end.
+    func testEntriesComeAMinuteApartOnTheMinute() {
+        let start = now.addingTimeInterval(30 * 60 + 20)
         let dates = WidgetTimeline.entryDates(now: now, start: start, end: start.addingTimeInterval(1800))
         XCTAssertEqual(dates.first, now)
         XCTAssertTrue(dates.contains(start))
         XCTAssertTrue(dates.contains(start.addingTimeInterval(1800)))
-        XCTAssertEqual(dates[1].timeIntervalSince(dates[0]), 300)
-        let lastHour = dates.filter { $0 > start.addingTimeInterval(-3600) && $0 < start }
-        XCTAssertGreaterThanOrEqual(lastHour.count, 55)
-        XCTAssertLessThanOrEqual(dates.count, 92)
+        let before = dates.dropFirst().filter { $0 < start }
+        XCTAssertEqual(before.count, 30)
+        for (a, b) in zip(before, before.dropFirst()) { XCTAssertEqual(b.timeIntervalSince(a), 60) }
+        for d in before { XCTAssertEqual(start.timeIntervalSince(d).truncatingRemainder(dividingBy: 60), 0) }
+    }
+
+    /// A far meeting: the list stops at the cap with no jump to the start, so the count never goes stale.
+    func testCappedEntriesEndWithoutAGap() {
+        let start = now.addingTimeInterval(5 * 3600)
+        let dates = WidgetTimeline.entryDates(now: now, start: start, end: start.addingTimeInterval(1800))
+        XCTAssertLessThanOrEqual(dates.count, 90)
+        XCTAssertFalse(dates.contains(start))
+        for (a, b) in zip(dates, dates.dropFirst()) { XCTAssertLessThanOrEqual(b.timeIntervalSince(a), 60) }
+    }
+
+    /// The widget's count reads like Home's: number and unit, and the short Dynamic Island form.
+    func testCountText() {
+        XCTAssertTrue(CountText.parts(now: now, start: now.addingTimeInterval(8 * 60)) == ("8", "min"))
+        XCTAssertTrue(CountText.parts(now: now, start: now.addingTimeInterval(7 * 60 + 1)) == ("8", "min"))
+        XCTAssertTrue(CountText.parts(now: now, start: now.addingTimeInterval(125 * 60)) == ("2 h", "05"))
+        XCTAssertTrue(CountText.parts(now: now, start: now) == ("Now", ""))
+        XCTAssertEqual(CountText.short(now: now, start: now.addingTimeInterval(8 * 60)), "8m")
+        XCTAssertEqual(CountText.short(now: now, start: now.addingTimeInterval(3 * 3600)), "3h")
+        XCTAssertEqual(CountText.short(now: now, start: now.addingTimeInterval(50 * 3600)), "2d")
+        XCTAssertEqual(CountText.short(now: now, start: now.addingTimeInterval(-5)), "Now")
     }
 
     func testNothingUpcoming() {
