@@ -104,7 +104,7 @@ A missed alarm keeps ringing until it is dismissed, its meeting ends, or the nex
 2. Locked alarm, full screen: "Missed it? It rings again" (was "A real alarm, even on silent")
 3. Pop mid-burst: "Pop it. You're in." (unchanged)
 4. Late, extra bubbles: "Running late? It notices" (unchanged)
-5. Theme grid: "Twelve themes, more all year (Pro)" (unchanged; count the themes in the gallery on the ship date and change the number if it differs)
-6. Settings, per calendar: "Each calendar: ring or stay quiet" (was "Smart alarms. Nothing leaves your iPhone"; the privacy line stays in the promotional text)
+5. Theme grid: "New themes all year (Pro)" (was "Twelve themes, more all year (Pro)", six words; no count to go stale)
+6. Settings, per calendar: "Pick which calendars ring" (was "Smart alarms. Nothing leaves your iPhone"; the privacy line stays in the promotional text)
 
 **Unchanged:** name, subtitle, keywords, price, age rating, privacy label (Data Not Collected), URLs.
