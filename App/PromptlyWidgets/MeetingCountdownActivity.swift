@@ -85,7 +85,7 @@ private struct LockScreenCard: View {
                         .lineLimit(1)
                     Text("Tap to pop it")
                         .font(.caption.weight(.medium))
-                        .foregroundStyle(GumColors.dark)
+                        .foregroundStyle(GumColors.accentText)
                 }
                 Spacer(minLength: 8)
                 CountdownLabel(state: state)

@@ -101,9 +101,9 @@ struct NextMeetingView: View {
 
     private var ink: Color { mode == .fullColor ? Tokens.ink : .primary }
     private var secondary: Color { mode == .fullColor ? Tokens.secondary : .secondary }
-    private var timeColor: Color { mode == .fullColor ? GumColors.dark : .primary }
-    /// Words over the gum: white on the colored ball, plain on the outline.
-    private var onBall: Color { mode == .fullColor ? .white : .primary }
+    private var timeColor: Color { mode == .fullColor ? GumColors.accentText : .primary }
+    /// Words over the gum: ink on their white plate, plain on the outline.
+    private var onBall: Color { mode == .fullColor ? Tokens.ink : .primary }
 
     var body: some View {
         if family == .accessoryRectangular || family == .accessoryCircular || family == .accessoryInline {
@@ -170,7 +170,11 @@ struct NextMeetingView: View {
                     Text(next.hasLink ? "Pop to join" : "Pop")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(onBall)
-                        .shadow(color: .black.opacity(0.2), radius: 3, y: 1)
+                        // Words never sit on the gum (docs/brand.md): a small white plate keeps them at 4.5:1 or
+                        // better on every theme. On tinted screens the plate is clear and the words take the tint.
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(mode == .fullColor ? Color.white.opacity(0.92) : Color.clear))
                         .padding(.bottom, 24 + 40 * progress)
                 }
                 .frame(width: 140)
@@ -187,7 +191,11 @@ struct NextMeetingView: View {
                     Text(next.hasLink ? "Pop to join" : "Pop")
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(onBall)
-                        .shadow(color: .black.opacity(0.2), radius: 3, y: 1)
+                        // Words never sit on the gum (docs/brand.md): a small white plate keeps them at 4.5:1 or
+                        // better on every theme. On tinted screens the plate is clear and the words take the tint.
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(mode == .fullColor ? Color.white.opacity(0.92) : Color.clear))
                         .padding(.bottom, 36 + 60 * progress)
                 }
             }
@@ -315,7 +323,7 @@ private struct UpcomingView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text(item.start.formatted(date: .omitted, time: .shortened))
                         .font(.footnote.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(mode == .fullColor ? GumColors.dark : .primary)
+                        .foregroundStyle(mode == .fullColor ? GumColors.accentText : .primary)
                         .frame(minWidth: 72, alignment: .leading)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(item.title).font(i == 0 ? .subheadline.weight(.semibold) : .footnote)

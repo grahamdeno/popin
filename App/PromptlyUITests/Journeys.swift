@@ -336,9 +336,13 @@ final class Journeys: XCTestCase {
         // at once while it was still leaving: J5, every config, November 20).
         // A pop with a link opens the meeting app, which sends Pop In to the background (pro-light, November 20):
         // that is the alarm closing too.
-        let gone = a.app.state != .runningForeground
-            || XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
-                                                                object: lateCard)], timeout: 5) == .completed
+        // Poll for up to 6 seconds: either Pop In has gone to the background (the link opened) or the card is gone.
+        var gone = false
+        for _ in 0..<30 {
+            // Background only (the link opened); not running at all would be a crash, which must fail.
+            if a.app.state == .runningBackground || a.app.state == .runningBackgroundSuspended || !lateCard.exists { gone = true; break }
+            a.pause(0.2)
+        }
         a.check("the pop closed the alarm", gone, severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
@@ -667,6 +671,12 @@ final class Journeys: XCTestCase {
                a.tap("Design review", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review"))),
                      severity: 2, timeout: 2) {
                 a.pause(1)
+                // On the small phone the first tap can land while the menu is still settling; try once more.
+                let item = onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review")))
+                if !a.text(containing: "Not ringing").exists, item.exists, item.isHittable {
+                    a.check("the pick took on the first tap", false, severity: 1)
+                    item.tap(); a.pause(1)
+                }
                 a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
                 a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
             }
