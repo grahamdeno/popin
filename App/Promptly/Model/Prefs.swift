@@ -397,6 +397,33 @@ final class Prefs: @unchecked Sendable {
         get { Set(defaults.stringArray(forKey: "skippedMeetingIDs") ?? []) }
         set { defaults.set(Array(newValue).sorted(), forKey: "skippedMeetingIDs") }
     }
+
+    /// Meetings whose alarm was dismissed on the Lock Screen: no more repeats for them (story 1.2). Not the same as
+    /// cleared: the meeting stays on Home. Added in 1.1; older versions ignore it.
+    var dismissedMeetingIDs: Set<String> {
+        get { Set(defaults.stringArray(forKey: "dismissedMeetingIDs") ?? []) }
+        set { defaults.set(Array(newValue).sorted(), forKey: "dismissedMeetingIDs") }
+    }
+
+    /// When each snoozed meeting's snooze rang (or will), kept after it fires so its repeats stay anchored there
+    /// (story 1.2). Pruned when the meeting is cleared, over or gone.
+    var snoozeRings: [String: Date] {
+        get { ((defaults.dictionary(forKey: "snoozeRings") as? [String: Double]) ?? [:]).mapValues { Date(timeIntervalSince1970: $0) } }
+        set { defaults.set(newValue.mapValues(\.timeIntervalSince1970), forKey: "snoozeRings") }
+    }
+
+    /// The repeat alarms scheduled for each meeting, so Dismiss can cancel them even when Pop In isn't running.
+    var repeatAlarmIDs: [String: [String]] {
+        get { (defaults.dictionary(forKey: "repeatAlarmIDs") as? [String: [String]]) ?? [:] }
+        set { defaults.set(newValue, forKey: "repeatAlarmIDs") }
+    }
+
+    /// Meetings dropped by picking another at the same minute (story 1.1): no alarm, a quiet line with Join. Added in
+    /// 1.1; older versions ignore it.
+    var clashDroppedIDs: Set<String> {
+        get { Set(defaults.stringArray(forKey: "clashDroppedIDs") ?? []) }
+        set { defaults.set(Array(newValue).sorted(), forKey: "clashDroppedIDs") }
+    }
 }
 
 /// Written by the alarm's Join button (OpenMeetingIntent) and read when the app opens.

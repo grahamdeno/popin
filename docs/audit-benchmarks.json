@@ -8,7 +8,8 @@
     "Find and turn off one calendar": {"taps": 4},
     "Turn off a whole account": {"taps": 1},
     "Change the theme": {"taps": 3},
-    "Pop the late bubble": {"taps": 1}
+    "Pop the late bubble": {"taps": 1},
+    "Finish first run": {"taps": 4, "from": "the first screen"}
   },
   "responses": {"default": 1.5}
 }

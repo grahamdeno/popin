@@ -39,6 +39,8 @@ final class AppModel {
     var cleared: Set<String>
     /// The cleared meetings that were skipped with Not going, so they can come back until they start (item 7.2).
     var skipped: Set<String> = []
+    /// Story 1.1: meetings dropped by a clash pick. No alarm; a quiet line with Join on Home.
+    var clashDropped: Set<String> = []
     /// The meeting shown full screen on the Now screen.
     var arrived: Meeting?
     /// A meeting link waiting for the view to open it.
@@ -329,6 +331,7 @@ final class AppModel {
         nudges = prefs.nudges
         cleared = prefs.clearedMeetingIDs
         skipped = prefs.skippedMeetingIDs.intersection(prefs.clearedMeetingIDs)
+        clashDropped = ScreenshotMode.isOn ? [] : prefs.clashDroppedIDs
         taughtPop = prefs.taughtPop
         calendarAuthorized = calendarService.isAuthorized
         alarmsAuthorized = alarmService.isAuthorized
@@ -419,13 +422,43 @@ final class AppModel {
     /// Meetings not yet cleared that haven't ended.
     func upcoming(at now: Date) -> [Meeting] {
         let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
-        return open.filter { !isMissed($0, among: open, now: now) }.sorted { $0.start < $1.start }
+        // A meeting dropped by a clash pick lives only on the quiet line (story 1.1).
+        return open.filter { !isMissed($0, among: open, now: now) && !clashDropped.contains($0.id) }.sorted { $0.start < $1.start }
     }
 
     /// The rules the alarm screen runs by right now.
     func screenConfig(_ now: Date) -> AlarmScreenRule.Config {
         AlarmScreenRule.Config(lead: TimeInterval(leadMinutes * 60), rings: { self.ringsFully($0) },
                                paused: { self.isPaused($0, now: now) })
+    }
+
+    /// Story 1.1: the clash `meeting` is in (two or more ringing meetings in the same minute, no pick yet).
+    func clash(for meeting: Meeting, now: Date = .now) -> [Meeting]? {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        let groups = ClashRule.groups(open, rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
+        return ClashRule.group(for: meeting, in: groups)
+    }
+
+    /// Story 1.1: only the picked meeting rings; the others drop to a quiet line with Join. The calendar is untouched.
+    func pick(_ meeting: Meeting, from group: [Meeting]) {
+        clashDropped.formUnion(ClashRule.dropped(picking: meeting, from: group))
+        clashDropped.remove(meeting.id)
+        if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        writeWidgetSnapshot()
+        Task { await syncAlarms() }
+    }
+
+    /// Story 1.1: Undo on the "Not ringing" line: the meeting rings again (and clashes again, so the pick shows).
+    func unpick(_ meeting: Meeting) {
+        clashDropped.remove(meeting.id)
+        if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        writeWidgetSnapshot()
+        Task { await syncAlarms() }
+    }
+
+    /// Story 1.1: meetings dropped by a pick, for Home's quiet line.
+    func droppedLines(at now: Date) -> [Meeting] {
+        ClashRule.droppedLines(meetings + testMeetings, dropped: clashDropped, cleared: cleared, now: now)
     }
 
     /// Superseded by a later meeting whose alarm has come due (see NewestWins).
@@ -438,6 +471,27 @@ final class AppModel {
     func missed(before meeting: Meeting, now: Date = .now) -> [Meeting] {
         let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
         return open.filter { $0.start < meeting.start && isMissed($0, among: open, now: now) }.sorted { $0.start < $1.start }
+    }
+
+    /// Story 1.3: ringing meetings in the same minute as this one, which share its alarm screen, each with a Join.
+    func sameMinute(as meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return open.filter { $0.id != meeting.id && NewestWins.sameMinute($0.start, meeting.start)
+            && ringsFully($0) && !isPaused($0, now: now) }
+    }
+
+    /// Story 1.3: same-minute meetings sharing this meeting's alarm (see NewestWins.twins).
+    func twins(of meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return NewestWins.twins(of: meeting, among: open, now: now, lead: TimeInterval(leadMinutes * 60),
+                                rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
+    }
+
+    /// Story 1.3: what clears with this meeting's alarm (see NewestWins.stack).
+    func stack(clearingWith meeting: Meeting, now: Date = .now) -> [Meeting] {
+        let open = (meetings + testMeetings).filter { !cleared.contains($0.id) && $0.end > now }
+        return NewestWins.stack(for: meeting, among: open, now: now, lead: TimeInterval(leadMinutes * 60),
+                                rings: { self.ringsFully($0) && !self.isPaused($0, now: now) })
     }
 
     // MARK: Permissions and first run
@@ -482,6 +536,7 @@ final class AppModel {
 
     /// Whether this meeting gets the full alarm (and Pop In's takeover) rather than a gentle notification.
     func ringsFully(_ meeting: Meeting) -> Bool {
+        if clashDropped.contains(meeting.id) { return false }
         if meeting.calendarID == "test" || meeting.calendarID == OwnReminder.calendarID
             || meeting.calendarID == CalendarService.remindersCalendarID { return true }
         guard workHours.contains(meeting.start) else { return false }
@@ -506,8 +561,13 @@ final class AppModel {
         AlarmLoop.stop()
         let when = Date.now.addingTimeInterval(Snooze.length)
         snoozedUntil[meeting.id] = when
+        // Same-minute twins share the alarm, so they snooze with it (story 1.3).
+        for twin in sameMinute(as: meeting) { snoozedUntil[twin.id] = when }
         snoozePlanned.removeAll { $0.meeting.id == meeting.id }
         snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: meeting, fireDate: when, countdownSeconds: nil))
+        // Story 1.2: repeats follow the rules from the snooze ring, and a snooze undoes a Lock Screen Dismiss.
+        prefs.snoozeRings[meeting.id] = when
+        prefs.dismissedMeetingIDs.remove(meeting.id)
         arrived = nil
         Task { await syncAlarms() }
     }
@@ -529,10 +589,20 @@ final class AppModel {
     var lastCleared: Meeting?
     /// True when `lastCleared` was skipped with Not going, false when it was popped. The toast says which.
     var lastClearedSkipped = false
+    /// The meetings that cleared along with `lastCleared` (story 1.3), so Undo brings them back too.
+    @ObservationIgnored var lastClearedStack: [Meeting] = []
+    /// Same-minute twins dropped along with `lastCleared`, so Undo lets them ring again.
+    @ObservationIgnored var lastClearedTwins: [Meeting] = []
 
     func undoClear() {
         guard let meeting = lastCleared else { return }
         lastCleared = nil
+        // The stack that cleared with it comes back too (story 1.3).
+        for m in lastClearedStack { cleared.remove(m.id) }
+        lastClearedStack = []
+        for m in lastClearedTwins { clashDropped.remove(m.id) }
+        if !lastClearedTwins.isEmpty, !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        lastClearedTwins = []
         bringBack(meeting)
     }
 
@@ -661,8 +731,15 @@ final class AppModel {
         let liveIDs = Set((meetings + testMeetings).map(\.id))
         let pruned = cleared.intersection(liveIDs)
         if pruned != cleared { cleared = pruned; prefs.clearedMeetingIDs = pruned }
+        let keptDrops = clashDropped.intersection(liveIDs)
+        if keptDrops != clashDropped { clashDropped = keptDrops; if !ScreenshotMode.isOn { prefs.clashDroppedIDs = keptDrops } }
         let keptSkips = skipped.intersection(pruned)
         if keptSkips != skipped { skipped = keptSkips; if !ScreenshotMode.isOn { prefs.skippedMeetingIDs = keptSkips } }
+        // Dismissals only matter while their meeting is still on the calendar (story 1.2).
+        let keptDismissals = prefs.dismissedMeetingIDs.intersection(liveIDs)
+        if keptDismissals != prefs.dismissedMeetingIDs { prefs.dismissedMeetingIDs = keptDismissals }
+        let keptSnoozes = prefs.snoozeRings.filter { liveIDs.contains($0.key) }
+        if keptSnoozes.count != prefs.snoozeRings.count { prefs.snoozeRings = keptSnoozes }
         writeWidgetSnapshot()
         await syncAlarms()
     }
@@ -675,11 +752,18 @@ final class AppModel {
         let open = meetings.filter { !cleared.contains($0.id) && $0.end > now }
         let live = meetings.filter { !isPaused($0, now: now) && !isMissed($0, among: open, now: now) }
         let alarmMeetings = live.filter { ringsFully($0) }
-        let gentleMeetings = live.filter { !ringsFully($0) }
+        // A meeting dropped by a clash pick gets no alarm and no notification (story 1.1).
+        let gentleMeetings = live.filter { !ringsFully($0) && !clashDropped.contains($0.id) }
         let planned = AlarmPlanner.plan(meetings: alarmMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared,
                                         countdown: countdownCard)
         let gentlePlanned = AlarmPlanner.plan(meetings: gentleMeetings, leadMinutes: leadMinutes, now: now, cleared: cleared)
         testPlanned = testPlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
+        // A snooze still to ring survives Pop In being killed: rebuild it from the saved snooze time.
+        for (id, when) in prefs.snoozeRings where when > now && !snoozePlanned.contains(where: { $0.meeting.id == id }) {
+            if let m = meetings.first(where: { $0.id == id }) {
+                snoozePlanned.append(PlannedAlarm(id: UUID(), meeting: m, fireDate: when, countdownSeconds: nil))
+            }
+        }
         snoozePlanned = snoozePlanned.filter { $0.fireDate > now && !cleared.contains($0.meeting.id) }
         // A snoozed meeting's original alarm is replaced by the snooze.
         let snoozedIDs = Set(snoozePlanned.map(\.meeting.id))
@@ -703,9 +787,21 @@ final class AppModel {
         } else {
             toSchedule = all
         }
-        toSchedule += early
+        // Story 1.2: a missed alarm keeps ringing through repeats until it's dismissed, the next ringing meeting's
+        // ring time, or its meeting's end, with a quiet gap rather than an overlap. Planned in Model/ and tested there.
+        let snoozeRings = prefs.snoozeRings.filter { id, _ in !cleared.contains(id) && meetings.contains { $0.id == id && $0.end > now } }
+        if snoozeRings.count != prefs.snoozeRings.count { prefs.snoozeRings = snoozeRings }
+        let anchors = MissedAlarmRule.anchors(meetings: alarmMeetings, cleared: cleared, snoozeRings: snoozeRings,
+                                              leadMinutes: leadMinutes, now: now)
+        let plan = MissedAlarmRule.schedule(firstRings: toSchedule + early, anchors: anchors,
+                                            dismissed: prefs.dismissedMeetingIDs, now: now, limit: AlarmPlanner.defaultLimit,
+                                            openUntil: isForeground ? now.addingTimeInterval(Self.openQuietWindow) : nil,
+                                            showing: shownNowFor)
+        let headsUp = Set(early.map(\.id))
+        toSchedule = plan.firstRings + plan.repeats
+        prefs.repeatAlarmIDs = Dictionary(grouping: plan.repeats, by: { $0.meeting.id }).mapValues { $0.map(\.id.uuidString) }
         do {
-            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)))
+            try await alarmService.sync(toSchedule, keep: Set((testPlanned + snoozePlanned).map(\.id)), headsUp: headsUp)
             syncProblem = nil
             scheduledAlarms = alarmService.scheduledCount
         } catch {
@@ -793,7 +889,8 @@ final class AppModel {
     private func writeWidgetSnapshot() {
         // Demo meetings never reach the real widget (item 11).
         if ScreenshotMode.isOn { return }
-        let items = meetings.filter { !cleared.contains($0.id) }.prefix(12).map {
+        // Dropped by a clash pick: not the widget's next either (story 1.1).
+        let items = meetings.filter { !cleared.contains($0.id) && !clashDropped.contains($0.id) }.prefix(12).map {
             WidgetSnapshot.Item(id: $0.id, title: $0.title, start: $0.start, end: $0.end,
                                 service: $0.service?.rawValue ?? "", hasLink: $0.joinURL != nil)
         }
@@ -834,6 +931,18 @@ final class AppModel {
     private func markCleared(_ meeting: Meeting, skipped: Bool) {
         alarmService.stopAlerting()
         AlarmLoop.stop()
+        // Story 1.3: popping or Not going on the ringing alarm clears the whole stack with it.
+        let alongWith = stack(clearingWith: meeting)
+        for m in alongWith { cleared.insert(m.id); self.skipped.remove(m.id) }
+        lastClearedStack = alongWith
+        // Same-minute twins stop ringing but stay on Home with Join (stories 1.1 and 1.3).
+        let sharing = twins(of: meeting)
+        lastClearedTwins = sharing.filter { !clashDropped.contains($0.id) }
+        if !sharing.isEmpty {
+            clashDropped.formUnion(sharing.map(\.id))
+            for m in sharing { snoozedUntil[m.id] = nil }
+            if !ScreenshotMode.isOn { prefs.clashDroppedIDs = clashDropped }
+        }
         cleared.insert(meeting.id)
         if skipped { self.skipped.insert(meeting.id) } else { self.skipped.remove(meeting.id) }
         if meeting.calendarID == "test" { testPlanned.removeAll { $0.meeting.id == meeting.id } }

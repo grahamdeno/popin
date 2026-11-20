@@ -69,4 +69,17 @@ final class SkipRuleTests: XCTestCase {
             XCTAssertEqual(shows, minute < 10, "minute \(minute)")
         }
     }
+
+    /// Story 8.13: your own reminders say Skip; meetings keep Not going.
+    func testRemindersSaySkipMeetingsKeepNotGoing() {
+        XCTAssertEqual(SkipRule.skipWord(reminder: true), "Skip")
+        XCTAssertEqual(SkipRule.skipWord(reminder: false), "Not going")
+        XCTAssertEqual(SkipRule.toast(title: "Pick up Nora", skipped: true, reminder: true), "Skipped Pick up Nora")
+        XCTAssertEqual(SkipRule.toast(title: "Design review", skipped: true), "Not going to Design review")
+        XCTAssertEqual(SkipRule.line(title: "Pick up Nora", time: "3:00 PM", reminder: true), "Skipped: 3:00 PM Pick up Nora")
+        let own = Meeting(id: "r@1", eventID: "r", title: "Pick up Nora", start: now, end: now.addingTimeInterval(60),
+                          calendarID: OwnReminder.calendarID, joinURL: nil)
+        XCTAssertTrue(SkipRule.isReminder(own))
+        XCTAssertFalse(SkipRule.isReminder(meeting("m", inMinutes: 10)))
+    }
 }

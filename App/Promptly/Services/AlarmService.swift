@@ -1,4 +1,5 @@
 import ActivityKit
+import AppIntents
 import AlarmKit
 import SwiftUI
 
@@ -39,7 +40,8 @@ final class AlarmService {
     /// `keep` protects test alarms. Any other alarm that isn't wanted is cancelled, even one this service has lost
     /// track of (say across an update), so a stale countdown can never linger in the Dynamic Island. An alarm that
     /// is ringing right now is left alone; stopAlerting handles those.
-    func sync(_ planned: [PlannedAlarm], keep: Set<UUID> = []) async throws {
+    /// `headsUp` marks early heads-up alarms: their Dismiss only stops them, so the main ring's repeats stay.
+    func sync(_ planned: [PlannedAlarm], keep: Set<UUID> = [], headsUp: Set<UUID> = []) async throws {
         let all = (try? manager.alarms) ?? []
         let existing = Set(all.map(\.id))
         let wanted = Dictionary(planned.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
@@ -49,7 +51,7 @@ final class AlarmService {
             owned.remove(alarm.id)
         }
         for (id, alarm) in wanted where !existing.contains(id) {
-            try await schedule(alarm)
+            try await schedule(alarm, headsUp: headsUp.contains(id))
             owned.insert(id)
         }
         ownedIDs = owned.intersection(Set(wanted.keys))
@@ -71,7 +73,7 @@ final class AlarmService {
         for alarm in (try? manager.alarms) ?? [] { try? manager.cancel(id: alarm.id) }
     }
 
-    private func schedule(_ planned: PlannedAlarm) async throws {
+    private func schedule(_ planned: PlannedAlarm, headsUp: Bool = false) async throws {
         let meeting = planned.meeting
         let joinText = LocalizedStringResource(stringLiteral: meeting.service.map { "Join \($0.rawValue)" } ?? "Open")
         let minutes = Int((meeting.start.timeIntervalSince(planned.fireDate) / 60).rounded())
@@ -97,11 +99,14 @@ final class AlarmService {
                                             countdownSeconds: planned.countdownSeconds ?? 0)
         let attributes = AlarmAttributes<MeetingAlarmMetadata>(presentation: presentation, metadata: metadata,
                                                                tintColor: Brand.coral)
+        // Dismiss on the Lock Screen ends this meeting's repeats too (story 1.2), except on the early heads-up.
+        let stopIntent: (any LiveActivityIntent)? = headsUp
+            ? nil : DismissMeetingIntent(meetingID: meeting.id, alarmID: planned.id.uuidString)
         let configuration = AlarmManager.AlarmConfiguration<MeetingAlarmMetadata>(
             countdownDuration: planned.countdownSeconds.map { Alarm.CountdownDuration(preAlert: $0, postAlert: nil) },
             schedule: .fixed(planned.scheduleDate),
             attributes: attributes,
-            stopIntent: nil,
+            stopIntent: stopIntent,
             secondaryIntent: OpenMeetingIntent(meetingID: meeting.id, joinURL: meeting.joinURL?.absoluteString ?? "",
                                                alarmID: planned.id.uuidString),
             sound: sound == .appleDefault ? .default : .named(sound.fileName)

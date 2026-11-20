@@ -683,9 +683,11 @@ struct FortuneWords: View {
     let text: String
     let w: CGFloat
     let amount: Double
+    /// The words grow with text size, up to 1.6 times (story 8.8).
+    @ScaledMetric(relativeTo: .body) private var textScale: CGFloat = 1
 
     var body: some View {
-        let size: CGFloat = min(30, max(15, w * 0.045))
+        let size: CGFloat = min(30, max(15, w * 0.045)) * min(textScale, 1.6)
         GeometryReader { geo in
             ZStack {
                 Circle().fill(GumPalette.violet.opacity(0.4 * amount))

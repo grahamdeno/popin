@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// Story 1.2 (docs/roadmap.md): a missed alarm keeps ringing, at one steady volume, until it's dismissed, a later
@@ -8,8 +9,8 @@ import Foundation
 /// ringing is built from repeats: each starts `regap` after the one before goes quiet, and none is planned to still
 /// be sounding when the stop time comes (a later alarm that fires over an earlier one can be silenced).
 enum MissedAlarmRule {
-    /// How long iOS lets one alert sound before muting it. An assumption until Graham's phone check measures it.
-    static let alertLength: TimeInterval = 60
+    /// How long iOS lets one alert sound before muting it: about 15 minutes, like the Clock app (roadmap story 1.2).
+    static let alertLength: TimeInterval = 15 * 60
     /// A muted alarm rings again this soon (the story says within 60 seconds).
     static let regap: TimeInterval = 30
     /// At most this many future repeats are planned at once, so they fit the planner's budget of alarms. Each sync
@@ -61,5 +62,84 @@ enum MissedAlarmRule {
     /// itself at the handover).
     static func shouldRing(firstRing: Date, stop: Date, dismissed: Bool, now: Date) -> Bool {
         !dismissed && now >= firstRing && now < stop
+    }
+
+    /// A meeting that rings fully, and when it first rang (or will): its ring time, or its snooze ring.
+    struct Anchor: Equatable, Sendable {
+        var meeting: Meeting
+        var firstRing: Date
+    }
+
+    /// Story 1.2 part 2: the repeat alarms to schedule now. Same-minute meetings share one chain (as they share one
+    /// alarm). Each chain stops at its meeting's end or the next anchor's first ring, whichever is first, with no
+    /// repeat still sounding then (the quiet gap Graham chose). Dismissed meetings get none. Soonest first, at most
+    /// `budget` (first rings are planned before any repeats, so repeats never crowd one out).
+    static func repeatAlarms(anchors: [Anchor], dismissed: Set<String>, now: Date, budget: Int) -> [PlannedAlarm] {
+        guard budget > 0 else { return [] }
+        // Merge anchors that ring in the same minute, as the planner merges their alarms.
+        var merged: [Anchor] = []
+        for a in anchors.sorted(by: { $0.firstRing < $1.firstRing }) {
+            if let last = merged.last, abs(last.firstRing.timeIntervalSince(a.firstRing)) < 60 {
+                let m = last.meeting
+                merged[merged.count - 1].meeting = Meeting(id: m.id, eventID: m.eventID, title: "\(m.title) + \(a.meeting.title)",
+                                                           start: min(m.start, a.meeting.start), end: max(m.end, a.meeting.end),
+                                                           calendarID: m.calendarID, joinURL: m.joinURL ?? a.meeting.joinURL)
+            } else {
+                merged.append(a)
+            }
+        }
+        var out: [PlannedAlarm] = []
+        for (i, a) in merged.enumerated() {
+            let later = merged[(i + 1)...].map { Later(meeting: $0.meeting, ringTime: $0.firstRing) }
+            let stop = stopTime(for: a.meeting, firstRing: a.firstRing, later: later, rings: { _ in true })
+            let isDismissed = dismissed.contains(a.meeting.id)
+            for date in repeats(firstRing: a.firstRing, stop: stop, dismissed: isDismissed, after: now) {
+                out.append(PlannedAlarm(id: repeatID(meetingID: a.meeting.id, at: date), meeting: a.meeting,
+                                        fireDate: date, countdownSeconds: nil))
+            }
+        }
+        return Array(out.sorted { $0.fireDate < $1.fireDate }.prefix(budget))
+    }
+
+    /// The anchors for every meeting still to ring or ringing: open (not cleared, not over), first ring at its snooze
+    /// ring if it was snoozed (the chain follows the rules from there), otherwise at its ring time.
+    static func anchors(meetings: [Meeting], cleared: Set<String>, snoozeRings: [String: Date], leadMinutes: Int,
+                        now: Date) -> [Anchor] {
+        meetings.filter { $0.end > now && !cleared.contains($0.id) }.map { m in
+            Anchor(meeting: m, firstRing: snoozeRings[m.id] ?? m.start.addingTimeInterval(-TimeInterval(leadMinutes * 60)))
+        }
+    }
+
+    /// Slots kept for the soonest repeats even when first rings fill the budget, so a missed alarm today is never
+    /// crowded out by alarms planned for tomorrow.
+    static let reservedSlots = 4
+
+    /// What to hand AlarmKit: first rings plus repeats. Repeats fill what's left of `limit`, and at least
+    /// `reservedSlots` of them are kept, displacing as many of the latest first rings. Repeats inside the open window are left out
+    /// only for meetings Pop In is showing (its own loop is ringing them); every other repeat stays scheduled, so a
+    /// killed Pop In still has Apple's alarms. First rings beyond `limit` with no repeats to displace them are kept
+    /// (main rings and heads-ups are capped separately by the planner).
+    static func schedule(firstRings: [PlannedAlarm], anchors: [Anchor], dismissed: Set<String>, now: Date, limit: Int,
+                         openUntil: Date?, showing: Set<String>) -> (firstRings: [PlannedAlarm], repeats: [PlannedAlarm]) {
+        var candidates = repeatAlarms(anchors: anchors, dismissed: dismissed, now: now, budget: limit)
+        if let openUntil {
+            candidates = candidates.filter { !($0.scheduleDate <= openUntil && showing.contains($0.meeting.id)) }
+        }
+        let room = max(0, limit - firstRings.count)
+        let repeats = Array(candidates.prefix(max(room, min(reservedSlots, candidates.count))))
+        // Only the first rings the reserved repeats displace wait; the planner's own caps decide the rest.
+        let displaced = max(0, repeats.count - room)
+        let kept = Array(firstRings.sorted { $0.scheduleDate < $1.scheduleDate }.dropLast(displaced))
+        return (kept, repeats)
+    }
+
+    /// The same meeting and time give the same ID, so a re-sync never duplicates a repeat.
+    static func repeatID(meetingID: String, at date: Date) -> UUID {
+        let key = meetingID + "|repeat|" + String(Int(date.timeIntervalSince1970))
+        var b = Array(SHA256.hash(data: Data(key.utf8)).prefix(16))
+        b[6] = (b[6] & 0x0F) | 0x50
+        b[8] = (b[8] & 0x3F) | 0x80
+        return UUID(uuid: (b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7],
+                           b[8], b[9], b[10], b[11], b[12], b[13], b[14], b[15]))
     }
 }

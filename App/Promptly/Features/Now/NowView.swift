@@ -113,6 +113,12 @@ struct NowView: View {
 
             ForEach(model.missed(before: meeting)) { old in missedRow(old) }
                 .padding(.top, 10)
+            // Story 1.3: meetings in the same minute share this alarm, each with its own Join.
+            ForEach(model.sameMinute(as: meeting)) { other in
+                missedRow(other, words: "Also at \(other.start.formatted(date: .omitted, time: .shortened)): \(other.title)",
+                          icon: "calendar")
+            }
+            .padding(.top, 10)
 
             Label(meeting.joinURL == nil ? "Pop the bubble when ready" : "Pop the bubble to join", systemImage: "hand.tap")
                 .font(.subheadline.weight(.medium))
@@ -129,11 +135,11 @@ struct NowView: View {
     }
 
     /// "Also missed: 1:00 PM Standup", wrapping, at least 44 pt, with its own Join while it has a link.
-    private func missedRow(_ old: Meeting) -> some View {
+    private func missedRow(_ old: Meeting, words text: String? = nil, icon: String = "clock.badge.exclamationmark") -> some View {
         let words = Label {
-            Text("Also missed: \(old.start.formatted(date: .omitted, time: .shortened)) \(old.title)")
+            Text(text ?? "Also missed: \(old.start.formatted(date: .omitted, time: .shortened)) \(old.title)")
         } icon: {
-            Image(systemName: "clock.badge.exclamationmark").accessibilityHidden(true)
+            Image(systemName: icon).accessibilityHidden(true)
         }
         .font(.footnote.weight(.medium))
         .foregroundStyle(Brand.secondary)
@@ -166,7 +172,7 @@ struct NowView: View {
             skips += 1
             model.clear(meeting)
             leave {}
-        } label: { Text("Not going") }
+        } label: { Text(SkipRule.skipWord(reminder: SkipRule.isReminder(meeting))) }
             .buttonStyle(SecondaryButtonStyle(height: 44, fill: stacked))
         let snooze = Button {
             model.snooze(meeting)
