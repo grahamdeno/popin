@@ -71,33 +71,40 @@ Pop In reads the iPhone's calendars (read only) and sets meeting alarms with Ala
 
 Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752).
 
-## 1.1 draft (Opus, 2026-11-19; for Graham's review at Stage 6, nothing changes in App Store Connect until the ship go)
+## 1.1 draft (Opus, revised 2026-11-20; Fable reviews, then Graham reads it before the ship go. Nothing changes in App Store Connect until then)
 
 **What's New (4000):**
-Pop In 1.1 makes the alarm harder to miss and easier to read.
+A missed alarm now keeps ringing.
 
-• A missed alarm keeps ringing: if you don't answer, it rings again about every 15 minutes until you dismiss it, the meeting ends, or your next meeting's alarm is due.
-• Two meetings at the same time? Home tells you ahead of time and lets you pick the one that rings. The other stays on Home with Join.
-• One alarm at a time: answering the current alarm clears the meetings it took over from.
-• Already in a meeting you popped? The next alarm still fills the screen, but rings more softly.
-• A new Home card that works at every text size, with a bigger countdown on iPad.
-• Changed your mind about Not going? Bring the meeting back from Home until it starts.
-• Your own reminders say Skip instead of Not going.
-• Widgets read "8 min" like the app, and look right on tinted and clear Home Screens.
-• A clearer Pro sheet, theme gallery and Settings, and a shorter first run.
+• Missed it? If you don't answer, the alarm rings again about every 15 minutes until you dismiss it, the meeting ends, or your next meeting's alarm is due.
+• Double-booked? When two meetings start at the same time, Home lets you pick the one that rings. The other stays on Home with a Join button.
+• Already on a call? If a meeting you joined is still running, the next alarm still fills the screen but rings more softly.
+• Clearer when meetings pile up: answering an alarm also clears the earlier meetings it replaced.
+• Changed your mind? Bring back a meeting you marked Not going until it starts.
+• A cleaner Home that stays readable at every text size, with a bigger countdown on iPad.
+• Widgets now say "8 min", like the app, and look right on tinted and clear Home Screens.
+• Shorter first run, clearer Settings and Pro screen, and your own reminders say Skip.
 
 **Promotional text (170):** unchanged.
 
 **Description, lines to change:**
 • "Alarms for meetings with a video link, gentle notifications for the rest" → "Smart rings for meetings with a video link and sends a quiet notification for the rest"
 • "Per calendar: always ring, link or not, or keep it quiet" → "Per calendar: Always rings or Quiet"
+• "When your phone is locked, the alarm fills the screen." → "When your phone is locked, the alarm fills the screen with Join and Dismiss."
 • Add under FREE: "A missed alarm rings again until you answer it, or until the meeting ends"
 • Add under FREE: "Two meetings at once? Pick the one that rings"
-• "When your phone is locked, the alarm fills the screen." → "When your phone is locked, the alarm fills the screen with Join and Dismiss."
+
+**Accessibility (new on the store page, 8.22):** declare Larger Text, VoiceOver, Reduce Motion and Sufficient Contrast. Grok sets these in App Store Connect at the ship.
 
 **Review notes, lines to add:**
 A missed alarm repeats about every 15 minutes until it is dismissed, its meeting ends, or the next meeting's alarm is due. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
 
-**Screenshots:** retake from 1.1's screenshot run; iPad pictures are upright (7.5). Same captions; check caption 6 against the new Settings.
+**Screenshots:** retake all six from 1.1's screenshot run (iPhone 6.9" and iPad 13"; iPad upright, 7.5). The pictures change because Home, the alarm screen and Settings changed. Captions:
+1. Home, growing bubble: "Lose track of time, not calls" (unchanged)
+2. Locked alarm, full screen: "Missed it? It rings again" (was "A real alarm, even on silent")
+3. Pop mid-burst: "Pop it. You're in." (unchanged)
+4. Late, extra bubbles: "Running late? It notices" (unchanged)
+5. Theme grid: "Twelve themes, more all year (Pro)" (unchanged; check the count against the gallery)
+6. Settings, per calendar: "Smart, Always rings or Quiet. Nothing leaves your iPhone" (was "Smart alarms. Nothing leaves your iPhone")
 
 **Unchanged:** name, subtitle, keywords, price, age rating, privacy label (Data Not Collected), URLs.
