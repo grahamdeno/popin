@@ -8,7 +8,7 @@ html { -webkit-text-size-adjust:100%; background:var(--paper); }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:"Geist",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
 a { color:inherit; }
 /* GR-23: a visible ring for keyboard focus. */
-a:focus-visible, .btn:focus-visible { outline:3px solid var(--pink-ink); outline-offset:3px; border-radius:12px; }
+a:focus-visible, .btn:focus-visible { outline:3px solid var(--pink-ink); outline-offset:3px; }
 .band a:focus-visible { outline-color:var(--pink); }
 .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
 nav { display:flex; align-items:center; gap:12px; padding:20px 0; }
@@ -78,10 +78,11 @@ footer a { color:var(--muted); text-decoration:none; }
   .cols { grid-template-columns:1fr; }
   .moves { grid-template-columns:1fr; gap:48px; }
   section.s { padding:64px 0; }
-  nav { gap:4px; }
+  nav { gap:4px; flex-wrap:wrap; }
   nav a { white-space:nowrap; }
   nav a.link { padding:8px 6px; font-size:14px; }
   nav .brand { font-size:16px; gap:8px; }
   nav .brand img { width:30px; height:30px; }
   nav .btn.sm { padding:0 12px; font-size:14px; }
 }
+@media (max-width:359px) { nav a.link { display:none; } }
