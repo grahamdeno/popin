@@ -76,13 +76,13 @@ Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752).
 **What's New (4000):**
 A missed alarm now keeps ringing.
 
-• Missed it? If you don't answer, the alarm rings again about every 15 minutes until you dismiss it, the meeting ends, or your next meeting's alarm is due.
+• Missed it? The alarm keeps ringing until you dismiss it, the meeting ends, or your next meeting is about to ring.
 • Double-booked? When two meetings start at the same time, Home lets you pick the one that rings. The other stays on Home with a Join button.
 • Already on a call? If a meeting you joined is still running, the next alarm still fills the screen but rings more softly.
 • Clearer when meetings pile up: answering an alarm also clears the earlier meetings it replaced.
 • Changed your mind? Bring back a meeting you marked Not going until it starts.
 • A cleaner Home that stays readable at every text size, with a bigger countdown on iPad.
-• Widgets now say "8 min", like the app, and look right on tinted and clear Home Screens.
+• Widgets now say "8 min", like the app, and work with tinted and clear Home Screens.
 • Shorter first run, clearer Settings and Pro screen, and your own reminders say Skip.
 
 **Promotional text (170):** unchanged.
@@ -91,20 +91,20 @@ A missed alarm now keeps ringing.
 • "Alarms for meetings with a video link, gentle notifications for the rest" → "Smart rings for meetings with a video link and sends a quiet notification for the rest"
 • "Per calendar: always ring, link or not, or keep it quiet" → "Per calendar: Always rings or Quiet"
 • "When your phone is locked, the alarm fills the screen." → "When your phone is locked, the alarm fills the screen with Join and Dismiss."
-• Add under FREE: "A missed alarm rings again until you answer it, or until the meeting ends"
+• Add under FREE: "A missed alarm keeps ringing until you answer it or the meeting ends"
 • Add under FREE: "Two meetings at once? Pick the one that rings"
 
-**Accessibility (new on the store page, 8.22):** declare Larger Text, VoiceOver, Reduce Motion and Sufficient Contrast. Grok sets these in App Store Connect at the ship.
+**Accessibility (new on the store page, 8.22):** declare Larger Text and Reduce Motion (backed by the walk and the code). Declare Sufficient Contrast only once the widgets' "Pop to join" sits on a white plate (held PR, white on pink is 2.4:1 today), and VoiceOver only after a hands-on VoiceOver pass of the common tasks on the phone. Grok sets these in App Store Connect at the ship.
 
 **Review notes, lines to add:**
-A missed alarm repeats about every 15 minutes until it is dismissed, its meeting ends, or the next meeting's alarm is due. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
+A missed alarm keeps ringing until it is dismissed, its meeting ends, or the next meeting is about to ring. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
 
 **Screenshots:** retake all six from 1.1's screenshot run (iPhone 6.9" and iPad 13"; iPad upright, 7.5). The pictures change because Home, the alarm screen and Settings changed. Captions:
 1. Home, growing bubble: "Lose track of time, not calls" (unchanged)
 2. Locked alarm, full screen: "Missed it? It rings again" (was "A real alarm, even on silent")
 3. Pop mid-burst: "Pop it. You're in." (unchanged)
 4. Late, extra bubbles: "Running late? It notices" (unchanged)
-5. Theme grid: "Twelve themes, more all year (Pro)" (unchanged; check the count against the gallery)
-6. Settings, per calendar: "Smart, Always rings or Quiet. Nothing leaves your iPhone" (was "Smart alarms. Nothing leaves your iPhone")
+5. Theme grid: "Twelve themes, more all year (Pro)" (unchanged; count the themes in the gallery on the ship date and change the number if it differs)
+6. Settings, per calendar: "Each calendar: ring or stay quiet" (was "Smart alarms. Nothing leaves your iPhone"; the privacy line stays in the promotional text)
 
 **Unchanged:** name, subtitle, keywords, price, age rating, privacy label (Data Not Collected), URLs.
