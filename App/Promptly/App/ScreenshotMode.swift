@@ -11,6 +11,8 @@ enum ScreenshotScene: String {
     case missed, paused, outside, reminder, dupes, playground
     /// Item 10: the Alarm group as a native Form, for comparing pictures with today's Settings.
     case formtrial
+    /// Story 1.1: two meetings at the same minute, so Home offers a pick.
+    case clash
 }
 
 enum ScreenshotMode {
@@ -58,6 +60,9 @@ enum ScreenshotMode {
                                  link: "https://zoom.us/j/5550100300"))
         case .reminder:
             extra.append(OwnReminder(id: "shot", title: "Pick up Nora", date: now.addingTimeInterval(4 * 60)).meeting)
+        case .clash:
+            extra.append(meeting("client", "Client call", firstStart, minutes: 30, calendar: "shot-home",
+                                 link: "https://teams.microsoft.com/l/meetup-join/client"))
         case .dupes:
             extra.append(meeting("design-fw", "FW: Design review", firstStart, minutes: 30, calendar: "shot-home",
                                  link: "https://zoom.us/j/5550100200?pwd=fw"))

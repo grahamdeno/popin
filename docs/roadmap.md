@@ -123,6 +123,9 @@ the meeting I choose rings.
 - Given the user doesn't pick, then the same-minute meetings ring once together (see 1.3).
 - Picking never changes the calendar. Calendar access stays read only.
 - Settled 2026-11-16: only meetings that start in the same minute clash. Partial overlaps are not a clash.
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: the "Not ringing" line also has Undo
+  until the meeting starts, so a mis-tapped pick can be reversed, as Not going can (7.2); undone after its ring time,
+  its alarm comes up at once. A dropped meeting appears only on that line.
 
 #### 1.2 A missed alarm keeps ringing until it's handled or the next meeting takes over (changed 2026-11-19)
 As someone who sometimes misses an alarm, I want it to keep ringing at the same volume until I deal with it or my
@@ -181,6 +184,11 @@ phone I see what needs me now.
 - Given that stack, when the user pops the current alarm or chooses Not going, then the whole stack clears.
 - Given two meetings start at the same minute and no pick was made, then one alarm rings showing both, with a Join
   for each.
+- Proposed 2026-11-19 (Opus, from Fable's review), waiting for Graham's yes: popping or Not going on a shared alarm stops the same-minute
+  meetings ringing but doesn't clear them; they stay on Home as story 1.1's "Not ringing" line with Join, so a
+  meeting is never lost by answering its neighbour. Snooze snoozes them together. A meeting seconds later in the same
+  minute never takes over. Undo right after the pop brings everything back; Undo later on the quiet line brings back
+  only the skipped meeting.
 
 #### 1.4 Gentler alarms while in a meeting
 As someone already in a meeting, I want the next meeting's alarm to be gentle, so it doesn't startle me or
