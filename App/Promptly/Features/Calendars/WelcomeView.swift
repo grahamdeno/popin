@@ -74,6 +74,9 @@ struct WelcomeView: View {
                     .frame(maxWidth: 640)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 16)
+                    .padding(.top, 8)
+                    // 8.18 (GR-9): a solid backing to the bottom edge, so large words don't show behind the button.
+                    .background(Color.white.ignoresSafeArea(edges: .bottom))
                 }
             }
         }

@@ -459,6 +459,36 @@ D-14, D-15, D-16, D-17, D-18, D-19, D-20; GR-10, GR-12 to GR-22). Every finding 
 - This deploys the site: it ships with 1.1 as a release trigger, after Graham confirms the ship allowance.
 - Checked by: a picture of the site at 1280 and 390 wide; review of `site/` and `docs/brand.md`.
 
+Added 2026-11-19 with Graham's approval: the review findings first set for later (GR-9, D-6, GR-23, GR-24, GR-25).
+
+#### 8.18 Calendars and first run at the largest text (GR-9)
+- Given an accessibility text size, then each account's "Turn all off" sits under the account name, so names don't
+  break mid-word, and stays at least 44 pt.
+- Given first run, then every pinned button (the calendar choices' Done and the welcome screens' buttons) has a solid
+  white backing to the bottom edge, so no words show behind or below it.
+- Checked by: big-text J1 and J7 pictures.
+
+#### 8.19 Home's top buttons (D-6)
+- Given Home, then ⋯ and the gear are two matching round glass buttons in one glass group, each at least 44 pt (not
+  the review's 40 pt, to keep the 44 pt rule). Names and VoiceOver labels are unchanged.
+- Checked by: J2 header checks and Home pictures.
+
+#### 8.20 One set of colors for the app and widgets (GR-24)
+- Given the app and the widgets, then ink and secondary come from one shared file, so the widgets' grey matches the
+  app's #4A4A4A. Unused code (the quiet-mode dimming) is removed. Corner radii and minimum heights stay as they are.
+- Checked by: the build; widget pictures on Graham's phone.
+
+#### 8.21 The site on phones (GR-23)
+- Given popin.tangomike.app on a phone, then "How it works" stacks with no sideways scroll, Support and Privacy stay
+  in the top bar (hidden under 360 px), links show a focus ring, and the unused `site/style.css` is removed.
+- This deploys the site: it ships with 8.12 and 8.17 under the ship go.
+- Checked by: the site pictures at 390 wide.
+
+#### 8.22 App Store accessibility labels (GR-25)
+- Given the App Store page, then it declares Larger Text, VoiceOver, Reduce Motion and Sufficient Contrast.
+- An App Store Connect change: Grok makes it at the ship, under the ship go.
+- Checked by: Grok's report of the live store page.
+
 ### 9. Epic: Widgets look like the app (approved 2026-11-18, in 1.1, shaped 2026-11-19)
 Goal: the widgets and the Live Activity read like Home, on every Home Screen look. From GR-11, D-12, D-13 (M5).
 The widgets stay light on a dark Home Screen (light only). Steps: Opus builds; Fable reviews; Graham checks them on
