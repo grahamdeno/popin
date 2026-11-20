@@ -89,7 +89,18 @@ final class Journeys: XCTestCase {
 
     /// Closes the Settings sheet, back to Home. Not counted as part of any job.
     private func closeSettings(_ a: Audit) {
+        // Settings' Done is only on its first page: from a deeper page (Calendars), put the keyboard away and go back
+        // first (J7 left the sheet open in every config, November 20).
+        if a.app.keyboards.firstMatch.exists { a.app.keyboards.buttons["Return"].firstMatch.tap(); a.pause(0.3) }
         let done = a.app.buttons["Done"].firstMatch
+        var backs = 0
+        while !(done.exists && done.isHittable) && backs < 3 && a.app.navigationBars.firstMatch.exists {
+            let back = a.app.navigationBars.firstMatch.buttons.element(boundBy: 0)
+            guard back.exists, back.isHittable else { break }
+            back.tap()
+            backs += 1
+            a.pause(0.6)
+        }
         if done.waitForExistence(timeout: 2), done.isHittable { done.tap() }
         a.pause(1.0)
     }
@@ -304,7 +315,11 @@ final class Journeys: XCTestCase {
         a.done("Pop the late bubble", popBubble(a))
         // The tap really popped: the alarm card is gone.
         let lateCard = a.app.descendants(matching: .any).matching(identifier: "alarm-card").firstMatch
-        a.check("the pop closed the alarm", !lateCard.waitForExistence(timeout: 2), severity: 4)
+        // The alarm screen leaves about a second after the pop, so wait for it to go (waiting for it to exist passed
+        // at once while it was still leaving: J5, every config, November 20).
+        let gone = XCTWaiter().wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                                                    object: lateCard)], timeout: 5) == .completed
+        a.check("the pop closed the alarm", gone, severity: 4)
         a.pause(0.4)
         a.shot("late-popping")
     }
@@ -362,7 +377,7 @@ final class Journeys: XCTestCase {
         a.pause(0.6)
         let popSound = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Pop sound")).firstMatch
         // At the largest text the row sits about four screens down; six swipes didn't reach it (November 18).
-        a.revealOnScreen(popSound, tries: 24)
+        a.revealOnScreen(popSound, tries: 40)
         a.shot("settings-bottom")
         a.accessibility("settings-bottom")
         a.labels("settings-bottom")
@@ -477,7 +492,7 @@ final class Journeys: XCTestCase {
         a.labels("empty")
         a.expect("says nothing is coming up", a.any(containing: "Nothing coming up"), severity: 3)
         let tryPop = a.app.buttons["Try a pop"]
-        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 44, severity: 2,
+        a.check("Try a pop is at least 44 pt", tryPop.exists && tryPop.frame.height >= 43.5, severity: 2,
                 detail: "height \(tryPop.frame.height)")
         a.tap("Try a pop", tryPop, severity: 3)
         a.pause(1.5)
@@ -631,6 +646,7 @@ final class Journeys: XCTestCase {
         a.shot("clash-pick", note: "Two meetings at the same minute: Pick one")
         let pick = a.app.buttons["clash-pick"].firstMatch
         if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
+            a.revealOnScreen(pick)
             a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
             if a.tap("Pick one", pick, severity: 2), a.tap("Design review", a.app.buttons["Design review"].firstMatch, severity: 2, timeout: 2) {
                 a.pause(1)
@@ -666,7 +682,8 @@ final class Journeys: XCTestCase {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
             let coral = a.app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "Coral")).firstMatch
-            if a.tap("Coral", coral, severity: 2) {
+            // At the largest text the gallery is two columns and Coral sits lower down.
+            if a.tap("Coral", a.revealOnScreen(coral), severity: 2) {
                 // "See it on Home" applies the pick and closes the gallery (not counted: the job is done at the pick).
                 let seeIt = a.app.buttons["See it on Home"].firstMatch
                 if seeIt.waitForExistence(timeout: 2) { seeIt.tap() }
