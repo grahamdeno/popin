@@ -101,7 +101,7 @@ struct NextMeetingView: View {
 
     private var ink: Color { mode == .fullColor ? Tokens.ink : .primary }
     private var secondary: Color { mode == .fullColor ? Tokens.secondary : .secondary }
-    private var timeColor: Color { mode == .fullColor ? GumColors.dark : .primary }
+    private var timeColor: Color { mode == .fullColor ? GumColors.accentText : .primary }
     /// Words over the gum: ink on their white plate, plain on the outline.
     private var onBall: Color { mode == .fullColor ? Tokens.ink : .primary }
 
@@ -323,7 +323,7 @@ private struct UpcomingView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text(item.start.formatted(date: .omitted, time: .shortened))
                         .font(.footnote.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(mode == .fullColor ? GumColors.dark : .primary)
+                        .foregroundStyle(mode == .fullColor ? GumColors.accentText : .primary)
                         .frame(minWidth: 72, alignment: .leading)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(item.title).font(i == 0 ? .subheadline.weight(.semibold) : .footnote)
