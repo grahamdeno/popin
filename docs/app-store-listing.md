@@ -70,3 +70,41 @@ Pop In reads the iPhone's calendars (read only) and sets meeting alarms with Ala
 6. Settings, per calendar: "Smart alarms. Nothing leaves your iPhone"
 
 Sizes: iPhone 6.9" (1320 × 2868) and iPad 13" (2064 × 2752).
+
+## 1.1 draft (Opus, revised 2026-11-20; Fable reviews, then Graham reads it before the ship go. Nothing changes in App Store Connect until then)
+
+**What's New (4000):**
+A missed alarm now keeps ringing.
+
+• Missed it? The alarm keeps ringing until you dismiss it, the meeting ends, or your next meeting is about to ring.
+• Double-booked? When two meetings start at the same time, Home lets you pick the one that rings. The other stays on Home with a Join button.
+• Already on a call? If a meeting you joined is still running, the next alarm still fills the screen but rings more softly.
+• Clearer when meetings pile up: answering an alarm also clears the earlier meetings it replaced.
+• Changed your mind? Bring back a meeting you marked Not going until it starts.
+• A cleaner Home that stays readable at every text size, with a bigger countdown on iPad.
+• Widgets now say "8 min", like the app, and work with tinted and clear Home Screens.
+• Shorter first run, clearer Settings and Pro screen, and your own reminders say Skip.
+
+**Promotional text (170):** unchanged.
+
+**Description, lines to change:**
+• "Alarms for meetings with a video link, gentle notifications for the rest" → "Smart rings for meetings with a video link and sends a quiet notification for the rest"
+• "Per calendar: always ring, link or not, or keep it quiet" → "Per calendar: Always rings or Quiet"
+• "When your phone is locked, the alarm fills the screen." → "When your phone is locked, the alarm fills the screen with Join and Dismiss."
+• Add under FREE: "A missed alarm keeps ringing until you answer it or the meeting ends"
+• Add under FREE: "Two meetings at once? Pick the one that rings"
+
+**Accessibility (new on the store page, 8.22):** declare Larger Text, Reduce Motion and Sufficient Contrast (backed by the walk, the code and the contrast tests; the widget words were fixed in #101 for the second test build). Declare VoiceOver only after a hands-on VoiceOver pass of the common tasks on the phone. Grok sets these in App Store Connect at the ship.
+
+**Review notes, lines to add:**
+A missed alarm keeps ringing until it is dismissed, its meeting ends, or the next meeting is about to ring. Dismiss on the Lock Screen ends the repeats. When two meetings start at the same minute, Home offers "Pick one"; the other meeting gets no alarm and stays on Home with Join. All of this is planned on the device; there is still no network use and no data collection.
+
+**Screenshots:** retake all six from 1.1's screenshot run (iPhone 6.9" and iPad 13"; iPad upright, 7.5). The pictures change because Home, the alarm screen and Settings changed. Captions:
+1. Home, growing bubble: "Lose track of time, not calls" (unchanged)
+2. Locked alarm, full screen: "Missed it? It rings again" (was "A real alarm, even on silent")
+3. Pop mid-burst: "Pop it. You're in." (unchanged)
+4. Two meetings at the same time, Pick one open (9-clash): "Double-booked? Pick one" (replaces Running late)
+5. Theme grid: "New themes all year (Pro)" (was "Twelve themes, more all year (Pro)", six words; no count to go stale)
+6. Settings, per calendar: "Pick which calendars ring" (was "Smart alarms. Nothing leaves your iPhone"; the privacy line stays in the promotional text)
+
+**Unchanged:** name, subtitle, keywords, price, age rating, privacy label (Data Not Collected), URLs.
