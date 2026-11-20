@@ -339,7 +339,8 @@ final class Journeys: XCTestCase {
         // Poll for up to 6 seconds: either Pop In has gone to the background (the link opened) or the card is gone.
         var gone = false
         for _ in 0..<30 {
-            if a.app.state != .runningForeground || !lateCard.exists { gone = true; break }
+            // Background only (the link opened); not running at all would be a crash, which must fail.
+            if a.app.state == .runningBackground || a.app.state == .runningBackgroundSuspended || !lateCard.exists { gone = true; break }
             a.pause(0.2)
         }
         a.check("the pop closed the alarm", gone, severity: 4)
@@ -672,7 +673,10 @@ final class Journeys: XCTestCase {
                 a.pause(1)
                 // On the small phone the first tap can land while the menu is still settling; try once more.
                 let item = onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review")))
-                if !a.text(containing: "Not ringing").exists, item.exists, item.isHittable { item.tap(); a.pause(1) }
+                if !a.text(containing: "Not ringing").exists, item.exists, item.isHittable {
+                    a.check("the pick took on the first tap", false, severity: 1)
+                    item.tap(); a.pause(1)
+                }
                 a.shot("clash-picked", note: "Client call drops to a Not ringing line with Join")
                 a.expect("the other meeting shows as Not ringing", a.text(containing: "Not ringing"), severity: 3)
             }
