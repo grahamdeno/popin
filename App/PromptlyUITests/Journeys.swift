@@ -91,7 +91,11 @@ final class Journeys: XCTestCase {
     private func closeSettings(_ a: Audit) {
         // Settings' Done is only on its first page: from a deeper page (Calendars), put the keyboard away and go back
         // first (J7 left the sheet open in every config, November 20).
-        if a.app.keyboards.firstMatch.exists { a.app.keyboards.buttons["Return"].firstMatch.tap(); a.pause(0.3) }
+        if a.app.keyboards.firstMatch.exists {
+            let ret = a.app.keyboards.buttons["Return"].firstMatch
+            if ret.exists && ret.isHittable { ret.tap() } else { a.app.typeText("\n") }
+            a.pause(0.3)
+        }
         let done = a.app.buttons["Done"].firstMatch
         var backs = 0
         while !(done.exists && done.isHittable) && backs < 3 && a.app.navigationBars.firstMatch.exists {
