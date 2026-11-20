@@ -16,6 +16,9 @@ final class Journeys: XCTestCase {
         return true
     }
 
+    /// Waits a moment and returns true, for use between taps in one condition (a menu animating open).
+    private func settled(_ a: Audit, _ seconds: Double) -> Bool { a.pause(seconds); return true }
+
     /// The first match whose middle is on screen. Off-screen copies (a page iOS keeps after going back, a menu item
     /// still animating in) can come first in a plain query (J6 and J13, November 20).
     private func onScreen(_ a: Audit, _ query: XCUIElementQuery) -> XCUIElement {
@@ -665,7 +668,7 @@ final class Journeys: XCTestCase {
         if a.expect("Home offers a pick for the clash", pick, timeout: 3, severity: 3) {
             a.revealOnScreen(pick)
             a.check("Pick one is at least 44 pt", pick.frame.height >= 44, severity: 2, detail: "height \(pick.frame.height)")
-            if a.tap("Pick one", pick, severity: 2), { a.pause(0.8); return true }(),
+            if a.tap("Pick one", pick, severity: 2), settled(a, 0.8),
                a.tap("Design review", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Design review"))),
                      severity: 2, timeout: 2) {
                 a.pause(1)
@@ -696,7 +699,7 @@ final class Journeys: XCTestCase {
         a.launch("home")
         a.begin("Change the theme")
         var themeDone = false
-        if a.tap("More", a.app.buttons[Journeys.more], severity: 2), { a.pause(0.8); return true }(),
+        if a.tap("More", a.app.buttons[Journeys.more], severity: 2), settled(a, 0.8),
            a.tap("Theme", onScreen(a, a.app.buttons.matching(NSPredicate(format: "label == %@", "Theme"))), severity: 2, timeout: 2) {
             a.pause(0.8)
             a.shot("theme-from-menu", note: "The theme gallery, opened from the ⋯ menu")
